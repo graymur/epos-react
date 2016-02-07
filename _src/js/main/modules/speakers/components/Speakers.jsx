@@ -3,6 +3,8 @@ import Item from './Item.jsx';
 import PageLayout from '../../../components/PageLayout.jsx';
 
 const Speakers = ({ speakers }) => {
+    if (speakers.speakers.length === 0) return <span></span>;
+
     return (
         <PageLayout title={speakers.title}>
             <ul className="speakers__list">

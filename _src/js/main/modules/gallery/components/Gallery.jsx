@@ -4,6 +4,8 @@ import PageLayout from '../../../components/PageLayout.jsx';
 import getDangerousHtml from '../../../util/get-dangerous-html.js';
 
 const Gallery = ({ gallery }) => {
+    if (gallery.galleries.length === 0) return <span></span>;
+
     return (
         <PageLayout title={gallery.title}>
             <div dangerouslySetInnerHTML={ getDangerousHtml(gallery.content) } />
