@@ -1,0 +1,11 @@
+RewriteEngine On
+
+RewriteCond	%{REQUEST_FILENAME}	-d 	[OR]
+RewriteCond	%{REQUEST_FILENAME} -f
+RewriteRule	^(.*)$			-	[L]
+
+RewriteRule	^resize(.*) _images.php?__path=$1 [QSA,L]
+
+RewriteRule ^api/1/(.*)$ api/index.php?endpoint=$1 [L,QSA]
+
+RewriteRule ^(.*)$ index.php [L,QSA]

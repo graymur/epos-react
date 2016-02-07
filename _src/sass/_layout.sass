@@ -1,0 +1,66 @@
+*
+    box-sizing: border-box
+
+HTML
+    font-size: 62.5%
+
+HTML, BODY
+    width: 100%
+    height: 100%
+    margin: 0
+    padding: 0
+
+BODY
+    font-family: $baseFont
+    color: black
+    -webkit-text-size-adjust: none
+
+    font-size: 1.6rem
+    line-height: 1.43
+
+A
+    color: black
+
+.container
+    position: relative
+    display: table
+    width: 100%
+    height: 100%
+
+.page-container
+    display: table-row
+    width: 100%
+    height: 100%
+
+.page
+    width: 100%
+    height: 100%
+    padding: $headerHeight 20px 50px 20px
+    display: table-cell
+    position: relative
+    +max-screen($screenXS)
+        padding: $headerHeight 10px 50px 10px
+
+    //&--main-page
+        vertical-align: middle
+
+    &__close
+        position: absolute
+        right: 25px
+        top: 25px
+        margin-top: -6px
+
+        A
+            +svgBG('close_message')
+            display: block
+            +wh(13px, 13px)
+
+.centering
+    max-width: 980px
+    position: relative
+    margin: 15px auto 0 auto
+    background: #000
+    color: #FFF
+    overflow: hidden
+    border-top: 5px solid #444
+    padding: 30px 50px 40px

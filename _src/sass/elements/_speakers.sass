@@ -1,0 +1,60 @@
+.speakers
+
+    &__list
+        margin: 0
+        padding: 0
+        list-style: none
+        margin-top: 30px
+
+        &__item
+            overflow: hidden
+            margin-bottom: 50px
+            +max-screen($screenXS)
+                margin-bottom: 25px
+                
+            &:last-child
+                margin-bottom: 0
+
+            &:hover &__image
+                transform: scale(1)
+
+                &:after
+                    opacity: 0
+
+            &__image
+                float: left
+                width: 190px
+                margin: 0 30px 10px 0
+                position: relative
+                transition: all $transitionSpeed
+                +max-screen($screenXS)
+                    float: none
+                    margin: 0 auto 40px auto
+
+                &:after
+                    content: ''
+                    position: absolute
+                    top: 0
+                    left: 0
+                    +wh(100%, 100%)
+                    background: #000000
+                    opacity: 0.2
+                    z-index: 2
+                    transition: all $transitionSpeed
+
+                IMG
+                    display: block
+                    +wh(100%, auto)
+                    border-radius: 100%
+                    position: relative
+                    z-index: 1
+
+            &__content
+                overflow: hidden
+
+            &__title
+                margin-top: 0
+
+            &__position
+                font-style: italic
+                //border: 1px solid red

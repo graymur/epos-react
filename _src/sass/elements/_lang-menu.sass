@@ -1,0 +1,15 @@
+.lang-menu
+    position: absolute
+    +lt(15px, 35px)
+    text-align: left
+    @extend .main-menu
+
+    &__item
+        text-transform: uppercase
+        display: inline-block
+        margin: 0 2px
+        font-size: 1.1rem
+        letter-spacing: 2px
+
+        &--active
+            @extend .main-menu__item--active
