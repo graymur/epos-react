@@ -1,4 +1,3 @@
-import { createStore, applyMiddleware } from 'redux';
 import { routeReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
 
@@ -11,14 +10,13 @@ import index from '../modules/index/reducer.js';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 
-const reducer = combineReducers(Object.assign({}, {
+const reducer = combineReducers({
     meta,
     page,
     speakers,
     gallery,
-    index
-}, {
+    index,
     routing: routeReducer
-}));
+});
 
 export default reducer;
