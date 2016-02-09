@@ -1,13 +1,10 @@
 <?php
 
-//include 'config/config.php';
-include '../lib/lib_common.php';
-
-include './ImageEditor.class.php';
-
 define('BASE_PATH', dirname(__FILE__));
 define('FILES_PATH', BASE_PATH . DIRECTORY_SEPARATOR . 'files');
 define('IMG_CACHE_PATH', BASE_PATH . DIRECTORY_SEPARATOR . 'resize');
+
+include BASE_PATH . '/ImageEditor.class.php';
 
 $path_string = trim(str_replace(array('..', '\\'), '', urldecode($_REQUEST['__path'])), '/');
 $path = explode('/', $path_string);
@@ -34,22 +31,12 @@ if (count($path) == 2)
     }
 }
 
-//dv($params);
-//
-//die;
-
 if (isset($params['w']) && empty($params['w'])) die;
 if (isset($params['h']) && empty($params['h'])) die;
 
 array_shift($path);
 
-//dv($params);
-//die;
-
 $source = FILES_PATH . DIRECTORY_SEPARATOR . join(DIRECTORY_SEPARATOR, $path);
-
-//dv($source);
-//die;
 
 if (file_exists($source) && (empty($params) || (@$params['w'] == 'o' || @$params['h'] == 'o')))
 {
@@ -78,8 +65,6 @@ else if (file_exists($source) && !empty($params))
 
     if (!file_exists($cache_name))
     {
-//        require BASE_PATH . '/lib/ImageEditor.class.php';
-
         $IE = new ImageEditorGD();
 
         $IE->setSource($source)->setTarget($cache_name);
@@ -160,5 +145,3 @@ else
 {
     header('HTTP/1.0 404 Not Found');
 }
-
-die;
