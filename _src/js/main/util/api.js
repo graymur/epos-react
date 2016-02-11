@@ -1,6 +1,4 @@
 import $ from 'jquery';
-//import deepFreeze from 'deep-freeze';
-
 let cache = {};
 
 function fetchUrl(endpoint, data = {}) {
@@ -43,6 +41,5 @@ const api = {
     }
 };
 
-//export default deepFreeze(api);
-export default api;
+export default Object.freeze(api);
 
