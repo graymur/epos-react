@@ -21,7 +21,7 @@ function fetchUrl(endpoint, data = {}) {
 }
 
 const api = {
-    fetchIndex: (lang, pageName) => {
+    fetchIndex: (lang) => {
         return fetchUrl('index', { lang });
     },
     fetchPage: (lang, pageName) => {
