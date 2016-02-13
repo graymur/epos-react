@@ -20,7 +20,7 @@ export default function page(state = initialState, action = {}) {
         //    break;
 
         case 'PAGE_FETCHED':
-            retval =  action.page;
+            retval =  action.page || initialState;
             break;
 
         default:

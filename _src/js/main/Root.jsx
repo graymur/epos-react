@@ -17,7 +17,6 @@ export default class Root extends React.Component {
                     <Route path=":lang/">
                         <Route path="speakers" component={Speakers}/>
                         <Route path="gallery" component={Gallery}/>
-                        {/*<Route path=":page" component={Page}/>*/}
                         <Route path="*" component={Page}/>
                     </Route>
                     <Route path="/:lang" component={Index}/>

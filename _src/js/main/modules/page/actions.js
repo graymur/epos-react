@@ -1,4 +1,5 @@
 import api from '../../util/api.js';
+import { errorAction } from '../error/actions.js';
 
 export function fetchPageAction(lang, page) {
     return (dispatch, getState) => {
@@ -6,6 +7,8 @@ export function fetchPageAction(lang, page) {
 
         api.fetchPage(lang, page).then(data => {
             dispatch(fetchedPageAction(data));
+        }).catch((e) => {
+            dispatch(errorAction(e.status, e.statusText));
         });
     };
 }

@@ -1,6 +1,8 @@
 import $ from 'jquery';
 let cache = {};
 
+import errorAction from '../modules/error/actions.js';
+
 function fetchUrl(endpoint, data = {}) {
     let cacheKey = JSON.stringify(Object.assign({}, data, { __e__: endpoint}));
 
