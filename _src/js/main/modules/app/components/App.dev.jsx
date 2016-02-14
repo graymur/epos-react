@@ -3,7 +3,10 @@ import Menu from './Menu.jsx';
 import Languages from './Languages.jsx';
 import DevTools from '../../../containers/DevTools.jsx';
 
+import Error from '../../error/container.jsx';
+
 const App = (props) => {
+    let content = props.error.status > 0 ? <Error/> : props.children;
     return (
         <div className="page-container">
             <header className="header">

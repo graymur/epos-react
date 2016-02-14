@@ -16,12 +16,10 @@ class PageContainer extends React.Component {
     }
 
     fetch(props) {
-        //console.log(this.props);
         this.props.dispatch(fetchPageAction(props.params.lang, props.params.splat));
     }
 
     render() {
-        console.log(this.props);
         return <Page page={this.props.page}/>
     }
 }
