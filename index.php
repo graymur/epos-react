@@ -25,3 +25,4 @@ $language = empty($language) ? 'en' : $language[0];
 <script src="/js/main.js"></script>
 </body>
 </html>
+
