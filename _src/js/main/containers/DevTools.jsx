@@ -9,3 +9,7 @@ export default createDevTools(
     <LogMonitor />
   </DockMonitor>
 );
+
+//export default createDevTools(
+//  <div></div>
+//);

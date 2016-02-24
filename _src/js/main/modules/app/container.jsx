@@ -18,8 +18,7 @@ class AppContainer extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        meta: state.meta,
-        error: state.error
+        meta: state.meta
     }
 };
 

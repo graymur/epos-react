@@ -1,13 +1,11 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import Languages from './Languages.jsx';
-
-import Error from '../../error/container.jsx';
+import Error from './Error.jsx';
 
 const App = (props) => {
-    let content = props.error.status > 0 ? <Error/> : props.children;
+    let content = props.meta.error ? <Error {...props.meta.error}/> : props.children;
     return (
-
         <div className="page-container">
             <header className="header">
                 <h1 className="header__title">Epos</h1>

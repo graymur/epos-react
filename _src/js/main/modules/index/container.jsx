@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchIndexAction } from './actions.js';
-
 import Index from './components/Index.jsx';
 
 class IndexContainer extends React.Component {

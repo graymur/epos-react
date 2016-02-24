@@ -1,12 +1,12 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import Languages from './Languages.jsx';
+import Error from './Error.jsx';
+
 import DevTools from '../../../containers/DevTools.jsx';
 
-import Error from '../../error/container.jsx';
-
 const App = (props) => {
-    let content = props.error.status > 0 ? <Error/> : props.children;
+    let content = props.meta.error ? <Error {...props.meta.error}/> : props.children;
     return (
         <div className="page-container">
             <header className="header">
@@ -14,7 +14,7 @@ const App = (props) => {
                 <Languages items={props.meta.languages} currentLanguage={props.meta.currentLanguage}/>
                 <Menu items={props.meta.menu} currentLanguage={props.meta.currentLanguage} activeLink={props.activeLink}/>
             </header>
-            {props.children}
+            {content}
             <DevTools />
         </div>
     );

@@ -17,7 +17,7 @@ const reducer = combineReducers({
     speakers,
     gallery,
     index,
-    error,
+    //error,
     routing: routeReducer
 });
 

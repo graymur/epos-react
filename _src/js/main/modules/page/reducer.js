@@ -1,3 +1,5 @@
+import { PAGE_REQUEST, PAGE_SUCCESS, PAGE_FAILURE } from './actions.js';
+
 const initialState = {
     title: '',
     content: '',
@@ -9,18 +11,8 @@ export default function page(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-
-        case 'META_FETCHED':
-
-            retval = Object.assign({}, initialState);
-
-            break;
-        //case 'PAGE_FETCHING':
-        //    retval = Object.assign({}, initialState, { isLoading: true });
-        //    break;
-
-        case 'PAGE_FETCHED':
-            retval =  action.page || initialState;
+        case PAGE_SUCCESS:
+            retval =  action.data || initialState;
             break;
 
         default:

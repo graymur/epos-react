@@ -2,7 +2,7 @@
 $info = include './api/modules/meta.php';
 $language = preg_split('#/#', $_SERVER['REQUEST_URI'], 0, PREG_SPLIT_NO_EMPTY);
 
-$language = !in_array($language, array('en', 'si')) ? 'en' : $language[0];
+$language = !@in_array($language[0], array('en', 'si')) ? 'en' : $language[0];
 
 ?>
 <!DOCTYPE html>

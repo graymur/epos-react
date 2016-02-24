@@ -1,6 +1,6 @@
 import React from 'react';
 
-import history from './util/get-browser-history.js';
+import { browserHistory } from 'react-router';
 import { Router, Route, Redirect } from 'react-router';
 
 import App from './modules/app/container.jsx';
@@ -12,7 +12,7 @@ import Index from './modules/index/container.jsx';
 export default class Root extends React.Component {
     render() {
         return (
-            <Router history={history}>
+            <Router history={browserHistory}>
                 <Route component={App}>
                     <Route path=":lang/">
                         <Route path="speakers" component={Speakers}/>

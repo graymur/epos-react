@@ -1,27 +1,23 @@
-import api from '../../util/api.js';
-import { errorAction } from '../error/actions.js';
+import { CALL_API } from '../../redux/middleware/api.js';
 
-export function fetchPageAction(lang, page) {
+export const PAGE_REQUEST = 'PAGE_REQUEST';
+export const PAGE_SUCCESS = 'PAGE_SUCCESS';
+export const PAGE_FAILURE = 'PAGE_FAILURE';
+
+export function fetchPageAction(lang, pageName) {
     return (dispatch, getState) => {
-        dispatch(fetchingPageAction());
-
-        api.fetchPage(lang, page).then(data => {
-            dispatch(fetchedPageAction(data));
-        }).catch((e) => {
-            dispatch(errorAction(e.status, e.statusText));
+        return dispatch({
+            type: CALL_API,
+            types: {
+                fetchingType: PAGE_REQUEST,
+                fetchedType: PAGE_SUCCESS,
+                errorType: PAGE_FAILURE
+            },
+            lang,
+            payload: {
+                pageName
+            },
+            endpoint: 'page'
         });
-    };
-}
-
-export function fetchedPageAction(page) {
-    return {
-        type: 'PAGE_FETCHED',
-        page
-    };
-}
-
-export function fetchingPageAction() {
-    return {
-        type: 'PAGE_FETCHING'
     };
 }

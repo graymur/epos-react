@@ -1,11 +1,19 @@
+import { META_REQUEST, META_SUCCESS, META_FAILURE, ASYNC_ERROR } from './actions.js';
 const initialState = window.__INITIAL_STATE__ || {};
 
 export default function meta(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        case 'META_FETCHED':
-            retval = action.meta;
+        case META_SUCCESS:
+            retval = Object.assign({}, state, action.data, { error: false });
+
+            break;
+
+        case ASYNC_ERROR:
+            state.error = action.error;
+            retval = Object.assign({}, state);
+
             break;
 
         default:

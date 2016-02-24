@@ -1,24 +1,20 @@
-import api from '../../util/api.js';
+import { CALL_API } from '../../redux/middleware/api.js';
+
+export const INDEX_REQUEST = 'INDEX_REQUEST';
+export const INDEX_SUCCESS = 'INDEX_SUCCESS';
+export const INDEX_FAILURE = 'INDEX_FAILURE';
 
 export function fetchIndexAction(lang) {
     return (dispatch, getState) => {
-        dispatch(fetchingIndexAction());
-
-        api.fetchIndex(lang).then(data => {
-            dispatch(fetchedIndexAction(data));
+        return dispatch({
+            type: CALL_API,
+            types: {
+                fetchingType: INDEX_REQUEST,
+                fetchedType: INDEX_SUCCESS,
+                errorType: INDEX_FAILURE
+            },
+            lang,
+            endpoint: 'index'
         });
-    };
-}
-
-export function fetchedIndexAction(index) {
-    return {
-        type: 'INDEX_FETCHED',
-        index
-    };
-}
-
-export function fetchingIndexAction() {
-    return {
-        type: 'INDEX_FETCHING'
     };
 }

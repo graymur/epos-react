@@ -1,3 +1,5 @@
+import { SPEAKERS_REQUEST, SPEAKERS_SUCCESS, SPEAKERS_FAILURE } from './actions.js';
+
 const initialState = {
     title: '',
     content: '',
@@ -5,16 +7,12 @@ const initialState = {
     speakers: []
 };
 
-export default function page(state = initialState, action = {}) {
+export default function speakers(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        case 'SPEAKERS_FETCHING':
-            retval = initialState;
-            break;
-
-        case 'SPEAKERS_FETCHED':
-            retval = action.speakers;
+        case SPEAKERS_SUCCESS:
+            retval = action.data;
             break;
 
         default:

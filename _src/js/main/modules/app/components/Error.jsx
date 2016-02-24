@@ -1,5 +1,5 @@
 import React from 'react';
-import PageLayout from '../../components/PageLayout.jsx';
+import PageLayout from '../../../components/PageLayout.jsx';
 
 export default Error = () => {
     return (
