@@ -42,7 +42,7 @@ gulp.task('min', ['webpack-min'], function() {
 });
 
 gulp.task('lint', function () {
-    return gulp.src(['_src/js/**/*.js', '!_src/js/tests/**', '!_src/js/main/vendor/**'])
+    return gulp.src(['_src/js/**/*.js', './server.js', '!_src/js/tests/**', '!_src/js/main/vendor/**'])
         .pipe(eslint({
             extends: 'eslint:recommended',
             ecmaFeatures: {

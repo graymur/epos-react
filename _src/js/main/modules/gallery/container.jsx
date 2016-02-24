@@ -5,18 +5,22 @@ import { fetchGalleryAction } from './actions.js';
 import Gallery from './components/Gallery.jsx';
 
 class GalleryContainer extends React.Component {
-    componentDidMount() {
-        this.fetch(this.props, true);
+    componentWillMount() {
+        this.fetchIfNeeded(this.props, true);
     }
 
     componentWillReceiveProps(props) {
-        this.fetch(props);
+        this.fetchIfNeeded(props);
     }
 
-    fetch(props, force = false) {
+    fetchIfNeeded(props, force = false) {
         if (props.location.pathname !== this.props.location.pathname || force) {
-            this.props.dispatch(fetchGalleryAction(props.params.lang));
+            this.constructor.fetch(props.dispatch, props.params.lang);
         }
+    }
+
+    static fetch(dispatch, lang = 'en') {
+        return dispatch(fetchGalleryAction(lang));
     }
 
     render() {

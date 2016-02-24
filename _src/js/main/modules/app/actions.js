@@ -6,17 +6,15 @@ export const META_SUCCESS = 'META_SUCCESS';
 export const META_FAILURE = 'META_FAILURE';
 
 export function fetchMetaAction(lang) {
-    return (dispatch, getState) => {
-        return dispatch({
-            type: CALL_API,
-            types: {
-                fetchingType: META_REQUEST,
-                fetchedType: META_SUCCESS,
-                errorType: META_FAILURE
-            },
-            lang,
-            endpoint: 'meta'
-        });
+    return {
+        type: CALL_API,
+        types: {
+            fetchingType: META_REQUEST,
+            fetchedType: META_SUCCESS,
+            errorType: META_FAILURE
+        },
+        lang,
+        endpoint: 'meta'
     };
 }
 

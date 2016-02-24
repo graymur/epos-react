@@ -5,18 +5,22 @@ import { fetchPageAction } from './actions.js';
 import Page from './components/Page.jsx';
 
 class PageContainer extends React.Component {
-    componentDidMount() {
-        this.fetch(this.props);
+    componentWillMount() {
+        this.fetchIfNeeded(this.props);
     }
 
     componentWillReceiveProps(props) {
         if (this.props.params.splat !== props.params.splat) {
-            this.fetch(props);
+            this.fetchIfNeeded(props);
         }
     }
 
-    fetch(props) {
-        this.props.dispatch(fetchPageAction(props.params.lang, props.params.splat));
+    fetchIfNeeded(props) {
+        this.constructor.fetch(props.dispatch, props.params.lang, props.params.splat);
+    }
+
+    static fetch(dispatch, lang, splat) {
+        return dispatch(fetchPageAction(lang, splat));
     }
 
     render() {

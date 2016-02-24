@@ -4,18 +4,22 @@ import { fetchIndexAction } from './actions.js';
 import Index from './components/Index.jsx';
 
 class IndexContainer extends React.Component {
-    componentDidMount() {
-        this.fetch(this.props);
+    componentWillMount() {
+        this.fetchIfNeeded(this.props);
     }
 
     componentWillReceiveProps(props) {
         if (props.location.pathname !== this.props.location.pathname) {
-            this.fetch(props);
+            this.fetchIfNeeded(props);
         }
     }
 
-    fetch(props) {
-        this.props.dispatch(fetchIndexAction(props.params.lang));
+    fetchIfNeeded(props) {
+        this.constructor.fetch(props.dispatch, props.params.lang)
+    }
+
+    static fetch(dispatch, lang) {
+        return dispatch(fetchIndexAction(lang));
     }
 
     render() {

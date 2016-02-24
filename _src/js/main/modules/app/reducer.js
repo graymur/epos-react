@@ -1,5 +1,6 @@
 import { META_REQUEST, META_SUCCESS, META_FAILURE, ASYNC_ERROR } from './actions.js';
-const initialState = window.__INITIAL_STATE__ || {};
+//const initialState = window && window.__INITIAL_STATE__ || {};
+const initialState = {};
 
 export default function meta(state = initialState, action = {}) {
     let retval;

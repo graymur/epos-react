@@ -1,9 +1,10 @@
 var webpack = require('webpack');
 
 module.exports = {
-    entry: [
-        './_src/js/main/main.jsx'
-    ],
+    entry: {
+        'main': './_src/js/main/main.jsx',
+        'server': './server.js'
+    },
     module: {
         loaders: [{
             test: /\.jsx?$/,
@@ -20,7 +21,7 @@ module.exports = {
     output: {
         path: __dirname + '/js',
         publicPath: '/',
-        filename: 'main.js'
+        filename: '[name].js'
     },
     plugins: [
         new webpack.DefinePlugin({

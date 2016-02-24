@@ -8,8 +8,17 @@ import { browserHistory } from 'react-router';
 import { enableBatching } from 'redux-batched-actions';
 import reducer from './rootReducer.js';
 
-const reduxRouterMiddleware = syncHistory(browserHistory);
-const createStoreWithMiddleware = applyMiddleware(reduxRouterMiddleware, thunk, api/*, createLogger()*/)(createStore);
+const middleware = [
+    thunk,
+    api,
+    //createLogger()
+];
+
+if (typeof window !== 'undefined') {
+    middleware.push(syncHistory(browserHistory));
+}
+
+const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
 
 export default function configureStore(initialState) {
     return createStoreWithMiddleware(enableBatching(reducer), initialState);
