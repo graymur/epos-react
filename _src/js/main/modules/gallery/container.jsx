@@ -15,11 +15,11 @@ class GalleryContainer extends React.Component {
 
     fetchIfNeeded(props, force = false) {
         if (props.location.pathname !== this.props.location.pathname || force) {
-            this.constructor.fetch(props.dispatch, props.params.lang);
+            this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang });
         }
     }
 
-    static fetch(dispatch, lang = 'en') {
+    static fetch({ dispatch, lang }) {
         return dispatch(fetchGalleryAction(lang));
     }
 

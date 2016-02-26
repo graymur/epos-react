@@ -15,11 +15,11 @@ class SpeakersContainer extends React.Component {
 
     fetchIfNeeded(props, force) {
         if (force || props.location.pathname !== this.props.location.pathname) {
-            this.constructor.fetch(props.dispatch, props.params.lang);
+            this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang });
         }
     }
 
-    static fetch(dispatch, lang) {
+    static fetch({ dispatch, lang }) {
         return dispatch(fetchSpeakersAction(lang));
     }
 

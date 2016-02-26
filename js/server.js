@@ -68,65 +68,34 @@
 
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 
+	var _api = __webpack_require__(360);
+
+	var _api2 = _interopRequireDefault(_api);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var dv = console.log.bind(console);
 
-	var location = (0, _createLocation2.default)('/en/gallery');
-
-	var __INITIAL_STATE__ = {
-	    meta: {
-	        "menu": [{ "link": "about", "title": "About us" }, { "link": "services", "title": "Services" }, { "link": "contacts", "title": "Contact us" }, { "link": "speakers", "title": "Guest Speakers" }, { "link": "gallery", "title": "Gallery" }],
-	        "languages": [{ "code": "en", "title": "English" }, { "code": "si", "title": 'Slovenčina' }],
-	        "currentLanguage": "en"
-	    }
-	};
-
-	//"speakers": {"title":"Guest Speakers","url":"speakers","menu_id":1,"content":"<p>From fall 2015 to summer 2016 we plan to bring many international guest speakers to Slovenia with workshops, guest lectures, seminars, and research projects.  <\/p>","speakers":[{"name":"Mr. Maynard \"Rink\" Wheeler","position":"Independent Consumer Goods Professional (Michigan, USA).  ","image":"\/files\/Wheeler.jpg","content":"\r\n            <p>Stanford MBA 1957; Former Vice President of Operations for the Food\u2019s Division of the Coca-Cola Company; Business consultant in CIS countries (Poland, Ukraine, Azerbaijan and Kyrgyzstan) with US State Department: 1998-2012.<\/p>\r\n            <p>Specialties: International operations, organizational structure, business and marketing strategies, budget and cost control, mentoring new start-up businesses.<\/p>\r\n            <p><a href=\"\/en\/gallery#rink\">21 October 2015: Lecture at ABC Accelerator \u201cBuilding Company vision and plan for growth: best practices from the USA\u201d<\/a><\/p>\r\n            "},{"name":"Dr. R. Boyd Johnson","position":"Chair of the Doctoral Program in Organizational Leadership at Indiana Wesleyan University (Indiana, USA).","image":"\/files\/boyd-johnson.jpg","content":"<p>PhD in International Studies (Oxford), MA degrees in Anthropology (California State) and Theology (Fuller Seminary) and a BA in Anthropology (UCLA). Focus on international business and social sciences.<\/p>\r\n            <p>Research project: \u201cCultural intelligence: case study of Slovenia.\u201d<\/p>\r\n            <p>20 January 2016: Dr Boyd Johnson presents at the conference \"<a href=\"http:\/\/psihologijadela.com\/program\/\" target=\"_blank\">Tujina, moja slu\u017ebena domovina<\/a>\" with a lecture \"<a href=\"\/en\/gallery\">Leadership and culture: perceptions of Western-based assessment models in other cultures<\/a>\". <\/p>\r\n            "},{"name":"Dr. Gaye Bammet","position":"Lead mediator at Dispute Resolution Center of Seattle \/ King County (Seattle, USA).","image":"\/files\/DrBammet.jpg","content":"<p>Assistant professor, University of Washington. Ph.D., Speech Communication, Southern Illinois University, (Carbondale, IL); M.A., Speech Communication California State University-Northridge.<\/p>\r\n            <p>Guest lecture: \u201cEffective communication and dispute resolution: case studies of US businesses.\u201d<\/p>"},{"name":"Mr. Prokofiev Sergey","position":"Business Development Director, CreativePeople (Moscow, Russian Federation)","image":"\/files\/Prokofiev.jpg","content":"<p>Guest lecture: \u201cTips for start up and management of successful Creative Agency: Case study of Russia.\u201d<\/p>"}]}
-	var store = (0, _configureStore2.default)(__INITIAL_STATE__);
-
-	(0, _reactRouter.match)({ routes: _routes2.default, location: location }, function (err, redirectLocation, renderProps) {
-	    if (err) {}
-	    //console.error(err);
-	    //return res.status(500).end('Internal server error');
-
-	    //
-	    //    const HTML = `
-	    //<!DOCTYPE html>
-	    //<html lang="en">
-	    //<head>
-	    //    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-	    //    <meta charset="UTF-8">
-	    //    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-	    //    <title>Epos Slovenia</title>
-	    //    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-	    //    <link rel="stylesheet" type="text/css" media="screen" href="/css/main.css?5221">
-	    //</head>
-	    //<body>
-	    //<div class="container" id="root">!!!--------------!!!${content}!!!------------------!!!</div>
-	    //<script>var __INITIAL_STATE__ = ${JSON.stringify(__INITIAL_STATE__)}</script>
-	    //<script src="/js/main.js"></script>
-	    //</body>
-	    //</html>
-	    //`;
-
-	    //dv(renderProps.components, renderProps.params);
-
-	    function getReduxPromise() {
-	        var query = renderProps.query;
-	        var params = renderProps.params;
-
-	        var comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
-
-	        return comp.fetch ? comp.fetch(store.dispatch) : Promise.resolve();
+	(0, _reactRouter.match)({ routes: _routes2.default, location: '/en/gallery' }, function (err, redirectLocation, renderProps) {
+	    if (err) {
+	        //console.error(err);
+	        //return res.status(500).end('Internal server error');
 	    }
 
-	    var p = getReduxPromise();
+	    var __INITIAL_STATE__ = { meta: (0, _api2.default)('meta', { lang: 'en' }) };
+	    var store = (0, _configureStore2.default)(__INITIAL_STATE__);
 
-	    p.then(function () {
+	    var query = renderProps.query;
+	    var params = renderProps.params;
+
+	    var comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
+
+	    params.dispatch = store.dispatch;
+
+	    var promise = comp.fetch ? comp.fetch(params) : Promise.resolve();
+
+	    promise.then(function (data) {
 	        var reduxState = JSON.stringify(store.getState());
-
-	        dv(store.getState());
 
 	        var InitialComponent = _react2.default.createElement(
 	            _reactRedux.Provider,
@@ -136,29 +105,10 @@
 
 	        var content = (0, _server.renderToString)(InitialComponent);
 	        console.log(content);
+	    }).catch(function (err) {
+	        //console.log(err);
 	    });
 	});
-
-	//import { renderToString } from 'react-dom/server';
-	//import { Provider } from 'react-redux';
-	//import configureStore from './_src/js/main/redux/configureStore.js';
-	//import Root from './_src/js/main/Root.jsx';
-	//
-	//let __INITIAL_STATE__ = {
-	//    meta: {"menu":[{"link":"about","title":"About us"},{"link":"services","title":"Services"},{"link":"contacts","title":"Contact us"},{"link":"speakers","title":"Guest Speakers"},{"link":"gallery","title":"Gallery"}],"languages":[{"code":"en","title":"English"},{"code":"si","title":"Sloven\u010dina"}],"currentLanguage":"en"}
-	//};
-	//
-	//const store = configureStore(__INITIAL_STATE__);
-	//
-	//console.log(store);
-
-	//let content = renderToString((
-	//    <Provider store={store}>
-	//        <Root/>
-	//    </Provider>
-	//));
-
-	//console.log(content);
 
 /***/ },
 /* 1 */,
@@ -21057,8 +21007,18 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var dv = console.log.bind(dv);
+
+	var serverApi = { default: function _default() {} };
+
+	if (typeof window === 'undefined') {
+	    serverApi = __webpack_require__(360);
+	}
+
 	var CALL_API = exports.CALL_API = 'CALL_API';
 	var ASYNC_ERROR = exports.ASYNC_ERROR = 'ASYNC_ERROR';
+
+	var cache = {};
 
 	exports.default = function (store) {
 	    return function (next) {
@@ -21070,15 +21030,10 @@
 	            next({ type: action.types.fetchingType });
 
 	            var request = Object.assign({}, action.payload || {}, { lang: action.lang || store.getState().meta.currentLanguage });
-	            //
-	            //console.log(action);
 
-	            //return next(batchActions([{
-	            //    type: action.types.fetchedType,
-	            //    data: {"title":"Guest Speakers","url":"speakers","menu_id":1,"content":"<p>From fall 2015 to summer 2016 we plan to bring many international guest speakers to Slovenia with workshops, guest lectures, seminars, and research projects.  <\/p>","speakers":[{"name":"Mr. Maynard \"Rink\" Wheeler","position":"Independent Consumer Goods Professional (Michigan, USA).  ","image":"\/files\/Wheeler.jpg","content":"\r\n            <p>Stanford MBA 1957; Former Vice President of Operations for the Food\u2019s Division of the Coca-Cola Company; Business consultant in CIS countries (Poland, Ukraine, Azerbaijan and Kyrgyzstan) with US State Department: 1998-2012.<\/p>\r\n            <p>Specialties: International operations, organizational structure, business and marketing strategies, budget and cost control, mentoring new start-up businesses.<\/p>\r\n            <p><a href=\"\/en\/gallery#rink\">21 October 2015: Lecture at ABC Accelerator \u201cBuilding Company vision and plan for growth: best practices from the USA\u201d<\/a><\/p>\r\n            "},{"name":"Dr. R. Boyd Johnson","position":"Chair of the Doctoral Program in Organizational Leadership at Indiana Wesleyan University (Indiana, USA).","image":"\/files\/boyd-johnson.jpg","content":"<p>PhD in International Studies (Oxford), MA degrees in Anthropology (California State) and Theology (Fuller Seminary) and a BA in Anthropology (UCLA). Focus on international business and social sciences.<\/p>\r\n            <p>Research project: \u201cCultural intelligence: case study of Slovenia.\u201d<\/p>\r\n            <p>20 January 2016: Dr Boyd Johnson presents at the conference \"<a href=\"http:\/\/psihologijadela.com\/program\/\" target=\"_blank\">Tujina, moja slu\u017ebena domovina<\/a>\" with a lecture \"<a href=\"\/en\/gallery\">Leadership and culture: perceptions of Western-based assessment models in other cultures<\/a>\". <\/p>\r\n            "},{"name":"Dr. Gaye Bammet","position":"Lead mediator at Dispute Resolution Center of Seattle \/ King County (Seattle, USA).","image":"\/files\/DrBammet.jpg","content":"<p>Assistant professor, University of Washington. Ph.D., Speech Communication, Southern Illinois University, (Carbondale, IL); M.A., Speech Communication California State University-Northridge.<\/p>\r\n            <p>Guest lecture: \u201cEffective communication and dispute resolution: case studies of US businesses.\u201d<\/p>"},{"name":"Mr. Prokofiev Sergey","position":"Business Development Director, CreativePeople (Moscow, Russian Federation)","image":"\/files\/Prokofiev.jpg","content":"<p>Guest lecture: \u201cTips for start up and management of successful Creative Agency: Case study of Russia.\u201d<\/p>"}]}
-	            //}, errorAction(false)]));
+	            var func = typeof window === 'undefined' ? fetchData : fetchUrl;
 
-	            return fetchUrl(action.endpoint, request || {}).then(function (data) {
+	            return func(action.endpoint, request || {}).then(function (data) {
 	                return next((0, _reduxBatchedActions.batchActions)([{
 	                    type: action.types.fetchedType,
 	                    data: data
@@ -21089,8 +21044,6 @@
 	        };
 	    };
 	};
-
-	var cache = {};
 
 	function fetchUrl(endpoint) {
 	    var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
@@ -21104,7 +21057,7 @@
 	    } else {
 	        // нужно переделать на iso-fetch
 	        retval = new Promise(function (resolve, reject) {
-	            _jquery2.default.ajax({ url: 'http://epos-react/api/1/' + endpoint, data: data }).then(resolve, reject);
+	            _jquery2.default.ajax({ url: '/api/1/' + endpoint, data: data }).then(resolve, reject);
 	        }).then(function (data) {
 	            cache[cacheKey] = data;
 	            return data;
@@ -21112,6 +21065,14 @@
 	    }
 
 	    return retval;
+	}
+
+	function fetchData(endpoint) {
+	    var data = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	    return new Promise(function (resolve, reject) {
+	        resolve(serverApi.default(endpoint, data));
+	    });
 	}
 
 /***/ },
@@ -36509,6 +36470,7 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
+	            //console.log(this.props);
 	            return _react2.default.createElement(_App2.default, _extends({}, this.props, { activeLink: this.props.location.pathname.split('/')[2] }));
 	        }
 	    }]);
@@ -36569,17 +36531,6 @@
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'page-container' },
-	        _react2.default.createElement(
-	            'header',
-	            { className: 'header' },
-	            _react2.default.createElement(
-	                'h1',
-	                { className: 'header__title' },
-	                'Epos'
-	            ),
-	            _react2.default.createElement(_Languages2.default, { items: props.meta.languages, currentLanguage: props.meta.currentLanguage }),
-	            _react2.default.createElement(_Menu2.default, { items: props.meta.menu, currentLanguage: props.meta.currentLanguage, activeLink: props.activeLink })
-	        ),
 	        content
 	    );
 	};
@@ -36843,7 +36794,11 @@
 	    }, {
 	        key: 'fetchIfNeeded',
 	        value: function fetchIfNeeded(props) {
-	            this.constructor.fetch(props.dispatch, props.params.lang, props.params.splat);
+	            this.constructor.fetch({
+	                dispatch: props.dispatch,
+	                lang: props.params.lang,
+	                splat: props.params.splat
+	            });
 	        }
 	    }, {
 	        key: 'render',
@@ -36852,7 +36807,11 @@
 	        }
 	    }], [{
 	        key: 'fetch',
-	        value: function fetch(dispatch, lang, splat) {
+	        value: function fetch(_ref) {
+	            var dispatch = _ref.dispatch;
+	            var lang = _ref.lang;
+	            var splat = _ref.splat;
+
 	            return dispatch((0, _actions.fetchPageAction)(lang, splat));
 	        }
 	    }]);
@@ -36975,7 +36934,7 @@
 	        key: 'fetchIfNeeded',
 	        value: function fetchIfNeeded(props, force) {
 	            if (force || props.location.pathname !== this.props.location.pathname) {
-	                this.constructor.fetch(props.dispatch, props.params.lang);
+	                this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang });
 	            }
 	        }
 	    }, {
@@ -36985,7 +36944,10 @@
 	        }
 	    }], [{
 	        key: 'fetch',
-	        value: function fetch(dispatch, lang) {
+	        value: function fetch(_ref) {
+	            var dispatch = _ref.dispatch;
+	            var lang = _ref.lang;
+
 	            return dispatch((0, _actions.fetchSpeakersAction)(lang));
 	        }
 	    }]);
@@ -37157,7 +37119,7 @@
 	            var force = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
 	            if (props.location.pathname !== this.props.location.pathname || force) {
-	                this.constructor.fetch(props.dispatch, props.params.lang);
+	                this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang });
 	            }
 	        }
 	    }, {
@@ -37167,8 +37129,9 @@
 	        }
 	    }], [{
 	        key: 'fetch',
-	        value: function fetch(dispatch) {
-	            var lang = arguments.length <= 1 || arguments[1] === undefined ? 'en' : arguments[1];
+	        value: function fetch(_ref) {
+	            var dispatch = _ref.dispatch;
+	            var lang = _ref.lang;
 
 	            return dispatch((0, _actions.fetchGalleryAction)(lang));
 	        }
@@ -39456,7 +39419,7 @@
 	    }, {
 	        key: 'fetchIfNeeded',
 	        value: function fetchIfNeeded(props) {
-	            this.constructor.fetch(props.dispatch, props.params.lang);
+	            this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang });
 	        }
 	    }, {
 	        key: 'render',
@@ -39465,7 +39428,10 @@
 	        }
 	    }], [{
 	        key: 'fetch',
-	        value: function fetch(dispatch, lang) {
+	        value: function fetch(_ref) {
+	            var dispatch = _ref.dispatch;
+	            var lang = _ref.lang;
+
 	            return dispatch((0, _actions.fetchIndexAction)(lang));
 	        }
 	    }]);
@@ -39754,6 +39720,405 @@
 
 	module.exports = __webpack_require__(204);
 
+
+/***/ },
+/* 360 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports.default = function (endpoint, params) {
+	    if (arguments.length != 2) {
+	        throw new Error('Api expects exactly two arguments');
+	    }
+
+	    // check if endpoint exists
+	    if (typeof endpoints[endpoint] !== 'function') {
+	        throw new Error('No action is mapped to this endpoint');
+	    }
+
+	    // check language
+	    if (! ~(0, _meta.getLanguages)().indexOf(params.lang)) {
+	        throw new Error('Wrong language');
+	    }
+
+	    return endpoints[endpoint](params);
+	};
+
+	var _pages = __webpack_require__(361);
+
+	var _pages2 = _interopRequireDefault(_pages);
+
+	var _gallery = __webpack_require__(362);
+
+	var _gallery2 = _interopRequireDefault(_gallery);
+
+	var _index = __webpack_require__(363);
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _meta = __webpack_require__(364);
+
+	var _meta2 = _interopRequireDefault(_meta);
+
+	var _speakers = __webpack_require__(365);
+
+	var _speakers2 = _interopRequireDefault(_speakers);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// TODO: move all this to some actual storage
+
+
+	var endpoints = {
+	    'index': _index2.default,
+	    'page': _pages2.default,
+	    'gallery': _gallery2.default,
+	    'meta': _meta2.default,
+	    'speakers': _speakers2.default
+	};
+
+	var dv = console.log.bind(console);
+
+/***/ },
+/* 361 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getPage;
+
+	var _fs = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fs\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _fs2 = _interopRequireDefault(_fs);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var data = {
+	    'en': {
+	        'about': {
+	            'title': 'About us',
+	            'url': 'about',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/about.html\')'
+	        },
+	        'services': {
+	            'title': 'Services',
+	            'url': 'services',
+	            'menu_id': 1,
+	            'content': '<h3>Research</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-research.html\') .\n                    \'<h3>Academic partnerships</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-partnerships.html\') .\n                    \'<h3>Business seminars</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-seminars.html\')'
+	        },
+	        'partnerships': {
+	            'title': 'Partnerships',
+	            'url': 'partnerships',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/partnerships.html\')'
+	        },
+	        'contacts': {
+	            'title': 'Contacts',
+	            'url': 'contacts',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/contacts.html\')'
+	        },
+	        'services/research': {
+	            'title': 'Research',
+	            'url': 'services/research',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-research.html\')'
+	        },
+	        'services/partnerships': {
+	            'title': 'Academic partnerships',
+	            'url': 'services/partnerships',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-partnerships.html\')'
+	        },
+	        'services/seminars': {
+	            'title': 'Business seminars',
+	            'url': 'services/seminars',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-seminars.html\')'
+	        },
+	        'speakers': {
+	            'title': 'Guest Speakers',
+	            'url': 'speakers',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/speakers.html\')'
+	        },
+	        'gallery': {
+	            'title': 'Gallery',
+	            'url': 'gallery',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/gallery.html\')'
+	        }
+	    },
+	    'si': {
+	        'about': {
+	            'title': 'Kdo smo',
+	            'url': 'about',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/about.html\')'
+	        },
+	        'services': {
+	            'title': 'Storitve',
+	            'url': 'services',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services.html\')'
+	        },
+	        'partnerships': {
+	            'title': 'Partnerstvo',
+	            'url': 'partnerships',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/partnerships.html\')'
+	        },
+	        'contacts': {
+	            'title': 'Kontakt',
+	            'url': 'contacts',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/contacts.html\')'
+	        },
+	        'services/research': {
+	            'title': 'Raziskovanje',
+	            'url': 'services/research',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-research.html\')'
+	        },
+	        'services/consulting': {
+	            'title': 'Poslovno Svetovanje',
+	            'url': 'services/consulting',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-consulting.html\')'
+	        },
+	        'services/trainings': {
+	            'title': 'Akademska partnerstva',
+	            'url': 'about',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-trainings.html\')'
+	        },
+	        'speakers': {
+	            'title': 'Tuji gostujoči predavatelji',
+	            'url': 'speakers',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/speakers.html\')'
+	        },
+	        'gallery': {
+	            'title': 'Galerija',
+	            'url': 'gallery',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/gallery.html\')'
+	        }
+	    }
+	};
+
+	function getPage(_ref) {
+	    var lang = _ref.lang;
+	    var pageName = _ref.pageName;
+
+	    return data[lang][pageName];
+	}
+
+/***/ },
+/* 362 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getGalleries;
+
+	var _pages = __webpack_require__(361);
+
+	var _pages2 = _interopRequireDefault(_pages);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var data = {
+	    'en': [{
+	        'title': 'Business lectures and consulting',
+	        'images': ['_B9A1055.JPG', '_B9A1064.JPG', '_B9A1101.JPG', '_B9A1034.jpg'],
+	        'content': '\n            <p><i>21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</i></p>\n            <p>Presentation of US business consultant about approaches to building company vision and implementing growth.</p>\n            <p>US consultant shared barriers and drivers of success based on the case studies and field stories in the USA. He looked into basic principals of building and growing successful business.\n            The focus is on the value of the vision and the importance of the strategic approach to company growth. The workshop is based on the American examples and international consulting case studies:\n            58 years of experience in the real world; from corporate America to small businesses; 9 different countries (USA, Germany, Australia, Philippines, Mexico, Poland, Azerbaijan, Kyrgyzstan, Ukraine).</p>\n            '
+	    }, {
+	        'title': 'Conferences / Networking / Interviews',
+	        'images': ['C05150B9-09DA-45F1-8E0F-82BD2555E458.jpg', 'IMG_2930.JPG', 'zavod.jpg', 'fam.jpg'],
+	        'content': '\n            <p>Field work with expert interviews, attending conferences and events of the professional associations with the goal to bring new opportunities, partnerships, ideas, projects and research to Slovenia.</p>\n            <p>10 June 2015, International Conference “<a href="http://feel-leadership.si/" target="_blank">FEELS: Future - Ethical - Effective – Leadership.</a>” (Brdo, Slovenia)</p>\n            <p>June-November 2015, FAM: <a href="http://www.drustvo-fam.si/" target="_blank">Association of Female Managers Events in Slovenia</a>. (Ljubljana, Slovenia) </p>\n            <p>14-17 October 2015, International Leadership Association Conference “<a href="http://www.ila-net.org/Conferences/Past/index.htm" target="_blank">Leading across borders and generations.</a>” (Barcelona, Spain)</p>\n            '
+	    }, {
+	        'title': 'Сonference support',
+	        'images': ['Boyd_Johnson_bio.jpg', 'conference_.jpg', 'DSC_0286.jpg', 'partners.jpg'],
+	        'content': '\n            <p>20 January 2016: Dr Boyd Johnson\'s presentation at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "Leadership and culture: perceptions of Western-based assessment models in other cultures".</p>\n            <p>This presentation examined the cross-cultural transferability of two widely used leadership assessment tools: the Leadership Practice Inventory (LPI) and the Cultural Intelligence Scale (CQS) based on the case studies from Eastern and Southern Europe.</p>\n            '
+	    }, {
+	        'title': 'Academic research partnerships',
+	        'images': ['01_small.jpg', 'Conferece_Students_CQS_Slovenia.jpg'],
+	        'content': '\n            <p>October 2015- January 2016: US-Slovenian research partnership with pilot research of Cultural Intelligence CQS (student testing) in Slovenia (527 students: University of Ljubljana, University of Maribor, University of Primorska, University of Nova Gorica) coordinated by a group of Slovenian <a href="https://www.linkedin.com/pulse/i-sent-overseas-basically-said-heres-your-ticket-good-ne%C5%BEa-prelog">junior researchers</a>.</p>\n            '
+	    }],
+	    'si': [{
+	        'title': 'SI Business lectures and consulting',
+	        'images': ['_B9A1055.JPG', '_B9A1064.JPG', '_B9A1101.JPG', '_B9A1034.jpg'],
+	        'content': '\n            <p><i>21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</i></p>\n            <p>Presentation of US business consultant about approaches to building company vision and implementing growth.</p>\n            <p>US consultant shared barriers and drivers of success based on the case studies and field stories in the USA. He looked into basic principals of building and growing successful business.\n            The focus is on the value of the vision and the importance of the strategic approach to company growth. The workshop is based on the American examples and international consulting case studies:\n            58 years of experience in the real world; from corporate America to small businesses; 9 different countries (USA, Germany, Australia, Philippines, Mexico, Poland, Azerbaijan, Kyrgyzstan, Ukraine).</p>\n            '
+	    }, {
+	        'title': 'SI Conferences / Networking / Interviews',
+	        'images': ['C05150B9-09DA-45F1-8E0F-82BD2555E458.jpg', 'IMG_2930.JPG', 'zavod.jpg', 'fam.jpg'],
+	        'content': '\n            <p>Field work with expert interviews, attending conferences and events of the professional associations with the goal to bring new opportunities, partnerships, ideas, projects and research to Slovenia.</p>\n            <p>10 June 2015, International Conference “<a href="http://feel-leadership.si/" target="_blank">FEELS: Future - Ethical - Effective – Leadership.</a>” (Brdo, Slovenia)</p>\n            <p>June-November 2015, FAM: <a href="http://www.drustvo-fam.si/" target="_blank">Association of Female Managers Events in Slovenia</a>. (Ljubljana, Slovenia) </p>\n            <p>14-17 October 2015, International Leadership Association Conference “<a href="http://www.ila-net.org/Conferences/Past/index.htm" target="_blank">Leading across borders and generations.</a>” (Barcelona, Spain)</p>\n            '
+	    }, {
+	        'title': 'Academic research partnerships',
+	        'images': ['01_small.jpg', 'Conferece_Students_CQS_Slovenia.jpg'],
+	        'content': '\n            <p>October 2015- January 2016: US-Slovenian research partnership with pilot research of Cultural Intelligence CQS (student testing) in Slovenia (527 students: University of Ljubljana, University of Maribor, University of Primorska, University of Nova Gorica) coordinated by a group of Slovenian <a href="https://www.linkedin.com/pulse/i-sent-overseas-basically-said-heres-your-ticket-good-ne%C5%BEa-prelog">junior researchers</a>.</p>\n            '
+	    }]
+	};
+
+	function getGalleries(_ref) {
+	    var lang = _ref.lang;
+
+	    var retval = (0, _pages2.default)({ lang: lang, pageName: 'gallery' });
+	    retval['galleries'] = data[lang];
+
+	    return retval;
+	}
+
+/***/ },
+/* 363 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getIndex;
+	var data = {
+	    'en': [{
+	        'title': 'Research',
+	        'link': 'services/research'
+	    }, {
+	        'title': 'Academic partnerships',
+	        'link': 'services/partnerships'
+	    }, {
+	        'title': 'Business seminars',
+	        'link': 'services/seminars'
+	    }],
+	    'si': [{
+	        'title': 'Raziskovanje',
+	        'link': 'services/research'
+	    }, {
+	        'title': 'Poslovno Svetovanje',
+	        'link': 'services/consulting'
+	    }, {
+	        'title': 'Akademska partnerstva',
+	        'link': 'services/trainings'
+	    }]
+	};
+
+	function getIndex(_ref) {
+	    var lang = _ref.lang;
+
+	    return data[lang];
+	}
+
+/***/ },
+/* 364 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getMeta;
+	exports.getLanguages = getLanguages;
+	var data = {
+	    'en': {
+	        'menu': [{ 'link': 'about', 'title': 'About us' }, { 'link': 'services', 'title': 'Services' }, { 'link': 'contacts', 'title': 'Contact us' }, { 'link': 'speakers', 'title': 'Guest Speakers' }, { 'link': 'gallery', 'title': 'Gallery' }],
+	        'languages': [{ 'code': 'en', 'title': 'English' }, { 'code': 'si', 'title': 'Slovenčina' }],
+	        'currentLanguage': 'en'
+	    },
+	    'si': {
+	        'menu': [{ 'link': 'about', 'title': 'Kdo smo' }, { 'link': 'services', 'title': 'Storitve' }, { 'link': 'contacts', 'title': 'Kontakt' }, { 'link': 'speakers', 'title': 'Tuji gostujoči predavatelji' }, { 'link': 'gallery', 'title': 'Galerija' }],
+	        'languages': [{ 'code': 'en', 'title': 'English' }, { 'code': 'si', 'title': 'Slovenčina' }],
+	        'currentLanguage': 'si'
+	    }
+	};
+
+	function getMeta(_ref) {
+	    var lang = _ref.lang;
+
+	    return data[lang];
+	}
+
+	function getLanguages() {
+	    return Object.keys(data);
+	}
+
+/***/ },
+/* 365 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getSpeakers;
+
+	var _pages = __webpack_require__(361);
+
+	var _pages2 = _interopRequireDefault(_pages);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var data = {
+	    'en': [{
+	        'name': 'Mr. Maynard "Rink" Wheeler',
+	        'position': 'Independent Consumer Goods Professional (Michigan, USA).  ',
+	        'image': '/files/Wheeler.jpg',
+	        'content': '\n            <p>Stanford MBA 1957; Former Vice President of Operations for the Food’s Division of the Coca-Cola Company; Business consultant in CIS countries (Poland, Ukraine, Azerbaijan and Kyrgyzstan) with US State Department: 1998-2012.</p>\n            <p>Specialties: International operations, organizational structure, business and marketing strategies, budget and cost control, mentoring new start-up businesses.</p>\n            <p><a href="/en/gallery#rink">21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</a></p>\n            '
+	    }, {
+	        'name': 'Dr. R. Boyd Johnson',
+	        'position': 'Chair of the Doctoral Program in Organizational Leadership at Indiana Wesleyan University (Indiana, USA).',
+	        'image': '/files/boyd-johnson.jpg',
+	        'content': '<p>PhD in International Studies (Oxford), MA degrees in Anthropology (California State) and Theology (Fuller Seminary) and a BA in Anthropology (UCLA). Focus on international business and social sciences.</p>\n            <p>Research project: “Cultural intelligence: case study of Slovenia.”</p>\n            <p>20 January 2016: Dr Boyd Johnson presents at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "<a href="/en/gallery">Leadership and culture: perceptions of Western-based assessment models in other cultures</a>". </p>\n            <p>9 June 2016: Dr. Boyd Johnson’s presentation "Drivers and barriers of effective Leadership in the multigenerational workplaces" at the FEELs conference “<a href="http://feel-leadership.si/">Poslovna etika in konflikti vlog</a>“.</p>\n            '
+	    }, {
+	        'name': 'Dr. Gaye Bammet',
+	        'position': 'Lead mediator at Dispute Resolution Center of Seattle / King County (Seattle, USA).',
+	        'image': '/files/DrBammet.jpg',
+	        'content': '<p>Assistant professor, University of Washington. Ph.D., Speech Communication, Southern Illinois University, (Carbondale, IL); M.A., Speech Communication California State University-Northridge.</p>\n            <p>Guest lecture: “Effective communication and dispute resolution: case studies of US businesses.”</p>'
+	    }, {
+	        'name': 'Mr. Prokofiev Sergey',
+	        'position': 'Business Development Director, CreativePeople (Moscow, Russian Federation)',
+	        'image': '/files/Prokofiev.jpg',
+	        'content': '<p>Guest lecture: “Tips for start up and management of successful Creative Agency: Case study of Russia.”</p>'
+	    }],
+	    'si': [{
+	        'name': 'Mr. Maynard "Rink" Wheeler',
+	        'position': 'strokovnjak s področja potrošniškega blaga (Michigan, ZDA).  ',
+	        'image': '/files/Wheeler.jpg',
+	        'content': '\n            <p>Stanford MBA 1957; Bivši Podpredsednik Oddelka za živilske zaloge pri Podjetju Coca-Cola; Poslovni svetovalec po državam SND (Polska, Ukrajina, Azerbajdžan and Kirgizija) pri Zunanjem ministrstvu ZDA: 1998-2012 leta.</p>\n            <p>Mednarodno poslovanje, organizacijske structure.</p>\n            <p><a href="/si/gallery#rink">21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</a></p>\n            '
+	    }, {
+	        'name': 'Dr. R. Boyd Johnson',
+	        'position': 'Predsednik doktorskega programa v organizacijskem vodenju pri Univerzi Indiana Wesleyan (Indiana, ZDA).',
+	        'image': '/files/boyd-johnson.jpg',
+	        'content': '<p>PhD in Mednarodne Študije (Oxford), magister antropologije (ZDA, Kalifornija) in Teologije (Fuller Seminary) ter diplomant antropologije (UCLA). Osredotoča se na mednarodnih poslovnih in družbenih vedah.</p>\n            <p>Raziskovalni projekt: "Kulturna inteligenca v Sloveniji.”</p>\n            <p>20 January 2016: Dr Boyd Johnson presents at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "<a href="/si/gallery">Leadership and culture: perceptions of Western-based assessment models in other cultures</a>". </p>\n            '
+	    }, {
+	        'name': 'Dr. Gaye Bammet',
+	        'position': 'Vodilni posrednik pri Centru za reševanje sporov pri Seattle / King County (Seattle, ZDA).',
+	        'image': '/files/DrBammet.jpg',
+	        'content': '<p>Asistent profesorja, University of Washington. Ph.D., Metode in možnosti komuniciranja, Southern Illinois University, (Carbondale, IL); M.A., Metode in možnosti komuniciranja California State University-Northridge.</p>\n            <p>"Učinkovita komunikacija in reševanje sporov. obravnava študijskih primerov podjetij v ZDA". </p>'
+	    }, {
+	        'name': 'Mr. Prokofiev Sergey',
+	        'position': 'Direktor za razvoj poslovanja, CreativePeople (Moskva, Ruska Federacija)',
+	        'image': '/files/Prokofiev.jpg',
+	        'content': '<p>"Nasveti za startup in vodenje uspešne kreativne agencije: Študijski primeri v Rusiji."</p>'
+	    }]
+	};
+
+	function getSpeakers(_ref) {
+	    var lang = _ref.lang;
+
+	    var retval = (0, _pages2.default)({ lang: lang, pageName: 'speakers' });
+	    retval['speakers'] = data[lang];
+
+	    return retval;
+	}
 
 /***/ }
 /******/ ]);

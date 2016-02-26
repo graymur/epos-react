@@ -12,6 +12,7 @@ class AppContainer extends React.Component {
     }
 
     render() {
+        //console.log(this.props);
         return <App {...this.props} activeLink={this.props.location.pathname.split('/')[2]}/>;
     }
 }

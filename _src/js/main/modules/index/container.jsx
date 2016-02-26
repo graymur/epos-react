@@ -15,10 +15,10 @@ class IndexContainer extends React.Component {
     }
 
     fetchIfNeeded(props) {
-        this.constructor.fetch(props.dispatch, props.params.lang)
+        this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang })
     }
 
-    static fetch(dispatch, lang) {
+    static fetch({ dispatch, lang }) {
         return dispatch(fetchIndexAction(lang));
     }
 
