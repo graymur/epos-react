@@ -35,23 +35,6 @@ try {
     });
 
     app.get('*', (req, res) => {
-        var __INITIAL_STATE__ = {
-            meta: {
-                "menu":[
-                    {"link":"about","title":"About us"},
-                    {"link":"services","title":"Services"},
-                    {"link":"contacts","title":"Contact us"},
-                    {"link":"speakers","title":"Guest Speakers"},
-                    {"link":"gallery","title":"Gallery"}
-                ],
-                "languages":[
-                    {"code":"en","title":"English"},
-                    {"code":"si","title":"Sloven\u010dina"}
-                ],
-                "currentLanguage":"en"
-            }
-        };
-
         match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
             if (err) {
                 throw err;
