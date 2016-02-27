@@ -20,7 +20,5 @@ export default function speakers(state = initialState, action = {}) {
             break;
     }
 
-    //console.log(retval);
-
     return retval;
 }

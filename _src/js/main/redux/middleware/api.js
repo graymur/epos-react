@@ -1,5 +1,3 @@
-const dv = console.log.bind(dv);
-
 import $ from 'jquery';
 import { batchActions } from 'redux-batched-actions';
 import { errorAction } from '../../modules/app/actions.js';

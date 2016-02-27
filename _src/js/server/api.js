@@ -14,11 +14,9 @@ const endpoints = {
     'speakers': getSpeakers
 };
 
-const dv = console.log.bind(console);
-
 export default function(endpoint, params) {
     if (arguments.length != 2) {
-        throw new Error('Api expects exactly two arguments');
+        throw new Error('API expects exactly two arguments');
     }
 
     // check if endpoint exists

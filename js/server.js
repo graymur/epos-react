@@ -50,17 +50,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _createLocation = __webpack_require__(355);
+	var _createLocation = __webpack_require__(361);
 
 	var _createLocation2 = _interopRequireDefault(_createLocation);
 
-	var _routes = __webpack_require__(313);
+	var _routes = __webpack_require__(319);
 
 	var _routes2 = _interopRequireDefault(_routes);
 
-	var _server = __webpack_require__(359);
+	var _server = __webpack_require__(365);
 
-	var _reactRouter = __webpack_require__(245);
+	var _reactRouter = __webpack_require__(251);
 
 	var _reactRedux = __webpack_require__(215);
 
@@ -68,22 +68,23 @@
 
 	var _configureStore2 = _interopRequireDefault(_configureStore);
 
-	var _api = __webpack_require__(360);
+	var _api = __webpack_require__(245);
 
 	var _api2 = _interopRequireDefault(_api);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var dv = console.log.bind(console);
-
-	(0, _reactRouter.match)({ routes: _routes2.default, location: '/en/gallery' }, function (err, redirectLocation, renderProps) {
+	(0, _reactRouter.match)({ routes: _routes2.default, location: '/si' }, function (err, redirectLocation, renderProps) {
 	    if (err) {
 	        //console.error(err);
 	        //return res.status(500).end('Internal server error');
 	    }
 
-	    var __INITIAL_STATE__ = { meta: (0, _api2.default)('meta', { lang: 'en' }) };
-	    var store = (0, _configureStore2.default)(__INITIAL_STATE__);
+	    if (redirectLocation && redirectLocation.pathname) {
+	        // redirect
+	    }
+
+	    var store = (0, _configureStore2.default)({ meta: (0, _api2.default)('meta', { lang: renderProps.params.lang }) });
 
 	    var query = renderProps.query;
 	    var params = renderProps.params;
@@ -95,7 +96,7 @@
 	    var promise = comp.fetch ? comp.fetch(params) : Promise.resolve();
 
 	    promise.then(function (data) {
-	        var reduxState = JSON.stringify(store.getState());
+	        var state = JSON.stringify(store.getState());
 
 	        var InitialComponent = _react2.default.createElement(
 	            _reactRedux.Provider,
@@ -20590,11 +20591,11 @@
 
 	var _api2 = _interopRequireDefault(_api);
 
-	var _reactRouter = __webpack_require__(245);
+	var _reactRouter = __webpack_require__(251);
 
 	var _reduxBatchedActions = __webpack_require__(243);
 
-	var _rootReducer = __webpack_require__(302);
+	var _rootReducer = __webpack_require__(308);
 
 	var _rootReducer2 = _interopRequireDefault(_rootReducer);
 
@@ -21012,7 +21013,7 @@
 	var serverApi = { default: function _default() {} };
 
 	if (typeof window === 'undefined') {
-	    serverApi = __webpack_require__(360);
+	    serverApi = __webpack_require__(245);
 	}
 
 	var CALL_API = exports.CALL_API = 'CALL_API';
@@ -30986,6 +30987,403 @@
 /* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports.default = function (endpoint, params) {
+	    if (arguments.length != 2) {
+	        throw new Error('API expects exactly two arguments');
+	    }
+
+	    // check if endpoint exists
+	    if (typeof endpoints[endpoint] !== 'function') {
+	        throw new Error('No action is mapped to this endpoint');
+	    }
+
+	    // check language
+	    if (! ~(0, _meta.getLanguages)().indexOf(params.lang)) {
+	        throw new Error('Wrong language');
+	    }
+
+	    return endpoints[endpoint](params);
+	};
+
+	var _pages = __webpack_require__(246);
+
+	var _pages2 = _interopRequireDefault(_pages);
+
+	var _gallery = __webpack_require__(247);
+
+	var _gallery2 = _interopRequireDefault(_gallery);
+
+	var _index = __webpack_require__(248);
+
+	var _index2 = _interopRequireDefault(_index);
+
+	var _meta = __webpack_require__(249);
+
+	var _meta2 = _interopRequireDefault(_meta);
+
+	var _speakers = __webpack_require__(250);
+
+	var _speakers2 = _interopRequireDefault(_speakers);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// TODO: move all this to some actual storage
+
+
+	var endpoints = {
+	    'index': _index2.default,
+	    'page': _pages2.default,
+	    'gallery': _gallery2.default,
+	    'meta': _meta2.default,
+	    'speakers': _speakers2.default
+	};
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getPage;
+
+	var _fs = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fs\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _fs2 = _interopRequireDefault(_fs);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var data = {
+	    'en': {
+	        'about': {
+	            'title': 'About us',
+	            'url': 'about',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/about.html\')'
+	        },
+	        'services': {
+	            'title': 'Services',
+	            'url': 'services',
+	            'menu_id': 1,
+	            'content': '<h3>Research</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-research.html\') .\n                    \'<h3>Academic partnerships</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-partnerships.html\') .\n                    \'<h3>Business seminars</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-seminars.html\')'
+	        },
+	        'partnerships': {
+	            'title': 'Partnerships',
+	            'url': 'partnerships',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/partnerships.html\')'
+	        },
+	        'contacts': {
+	            'title': 'Contacts',
+	            'url': 'contacts',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/contacts.html\')'
+	        },
+	        'services/research': {
+	            'title': 'Research',
+	            'url': 'services/research',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-research.html\')'
+	        },
+	        'services/partnerships': {
+	            'title': 'Academic partnerships',
+	            'url': 'services/partnerships',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-partnerships.html\')'
+	        },
+	        'services/seminars': {
+	            'title': 'Business seminars',
+	            'url': 'services/seminars',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-seminars.html\')'
+	        },
+	        'speakers': {
+	            'title': 'Guest Speakers',
+	            'url': 'speakers',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/speakers.html\')'
+	        },
+	        'gallery': {
+	            'title': 'Gallery',
+	            'url': 'gallery',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/en/gallery.html\')'
+	        }
+	    },
+	    'si': {
+	        'about': {
+	            'title': 'Kdo smo',
+	            'url': 'about',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/about.html\')'
+	        },
+	        'services': {
+	            'title': 'Storitve',
+	            'url': 'services',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services.html\')'
+	        },
+	        'partnerships': {
+	            'title': 'Partnerstvo',
+	            'url': 'partnerships',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/partnerships.html\')'
+	        },
+	        'contacts': {
+	            'title': 'Kontakt',
+	            'url': 'contacts',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/contacts.html\')'
+	        },
+	        'services/research': {
+	            'title': 'Raziskovanje',
+	            'url': 'services/research',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-research.html\')'
+	        },
+	        'services/consulting': {
+	            'title': 'Poslovno Svetovanje',
+	            'url': 'services/consulting',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-consulting.html\')'
+	        },
+	        'services/trainings': {
+	            'title': 'Akademska partnerstva',
+	            'url': 'about',
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-trainings.html\')'
+	        },
+	        'speakers': {
+	            'title': 'Tuji gostujoči predavatelji',
+	            'url': 'speakers',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/speakers.html\')'
+	        },
+	        'gallery': {
+	            'title': 'Galerija',
+	            'url': 'gallery',
+	            'menu_id': 1,
+	            'content': 'file_get_contents(__DIR__ . \'/../html/si/gallery.html\')'
+	        }
+	    }
+	};
+
+	function getPage(_ref) {
+	    var lang = _ref.lang;
+	    var pageName = _ref.pageName;
+
+	    return data[lang][pageName];
+	}
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getGalleries;
+
+	var _pages = __webpack_require__(246);
+
+	var _pages2 = _interopRequireDefault(_pages);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var data = {
+	    'en': [{
+	        'title': 'Business lectures and consulting',
+	        'images': ['_B9A1055.JPG', '_B9A1064.JPG', '_B9A1101.JPG', '_B9A1034.jpg'],
+	        'content': '\n            <p><i>21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</i></p>\n            <p>Presentation of US business consultant about approaches to building company vision and implementing growth.</p>\n            <p>US consultant shared barriers and drivers of success based on the case studies and field stories in the USA. He looked into basic principals of building and growing successful business.\n            The focus is on the value of the vision and the importance of the strategic approach to company growth. The workshop is based on the American examples and international consulting case studies:\n            58 years of experience in the real world; from corporate America to small businesses; 9 different countries (USA, Germany, Australia, Philippines, Mexico, Poland, Azerbaijan, Kyrgyzstan, Ukraine).</p>\n            '
+	    }, {
+	        'title': 'Conferences / Networking / Interviews',
+	        'images': ['C05150B9-09DA-45F1-8E0F-82BD2555E458.jpg', 'IMG_2930.JPG', 'zavod.jpg', 'fam.jpg'],
+	        'content': '\n            <p>Field work with expert interviews, attending conferences and events of the professional associations with the goal to bring new opportunities, partnerships, ideas, projects and research to Slovenia.</p>\n            <p>10 June 2015, International Conference “<a href="http://feel-leadership.si/" target="_blank">FEELS: Future - Ethical - Effective – Leadership.</a>” (Brdo, Slovenia)</p>\n            <p>June-November 2015, FAM: <a href="http://www.drustvo-fam.si/" target="_blank">Association of Female Managers Events in Slovenia</a>. (Ljubljana, Slovenia) </p>\n            <p>14-17 October 2015, International Leadership Association Conference “<a href="http://www.ila-net.org/Conferences/Past/index.htm" target="_blank">Leading across borders and generations.</a>” (Barcelona, Spain)</p>\n            '
+	    }, {
+	        'title': 'Сonference support',
+	        'images': ['Boyd_Johnson_bio.jpg', 'conference_.jpg', 'DSC_0286.jpg', 'partners.jpg'],
+	        'content': '\n            <p>20 January 2016: Dr Boyd Johnson\'s presentation at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "Leadership and culture: perceptions of Western-based assessment models in other cultures".</p>\n            <p>This presentation examined the cross-cultural transferability of two widely used leadership assessment tools: the Leadership Practice Inventory (LPI) and the Cultural Intelligence Scale (CQS) based on the case studies from Eastern and Southern Europe.</p>\n            '
+	    }, {
+	        'title': 'Academic research partnerships',
+	        'images': ['01_small.jpg', 'Conferece_Students_CQS_Slovenia.jpg'],
+	        'content': '\n            <p>October 2015- January 2016: US-Slovenian research partnership with pilot research of Cultural Intelligence CQS (student testing) in Slovenia (527 students: University of Ljubljana, University of Maribor, University of Primorska, University of Nova Gorica) coordinated by a group of Slovenian <a href="https://www.linkedin.com/pulse/i-sent-overseas-basically-said-heres-your-ticket-good-ne%C5%BEa-prelog">junior researchers</a>.</p>\n            '
+	    }],
+	    'si': [{
+	        'title': 'SI Business lectures and consulting',
+	        'images': ['_B9A1055.JPG', '_B9A1064.JPG', '_B9A1101.JPG', '_B9A1034.jpg'],
+	        'content': '\n            <p><i>21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</i></p>\n            <p>Presentation of US business consultant about approaches to building company vision and implementing growth.</p>\n            <p>US consultant shared barriers and drivers of success based on the case studies and field stories in the USA. He looked into basic principals of building and growing successful business.\n            The focus is on the value of the vision and the importance of the strategic approach to company growth. The workshop is based on the American examples and international consulting case studies:\n            58 years of experience in the real world; from corporate America to small businesses; 9 different countries (USA, Germany, Australia, Philippines, Mexico, Poland, Azerbaijan, Kyrgyzstan, Ukraine).</p>\n            '
+	    }, {
+	        'title': 'SI Conferences / Networking / Interviews',
+	        'images': ['C05150B9-09DA-45F1-8E0F-82BD2555E458.jpg', 'IMG_2930.JPG', 'zavod.jpg', 'fam.jpg'],
+	        'content': '\n            <p>Field work with expert interviews, attending conferences and events of the professional associations with the goal to bring new opportunities, partnerships, ideas, projects and research to Slovenia.</p>\n            <p>10 June 2015, International Conference “<a href="http://feel-leadership.si/" target="_blank">FEELS: Future - Ethical - Effective – Leadership.</a>” (Brdo, Slovenia)</p>\n            <p>June-November 2015, FAM: <a href="http://www.drustvo-fam.si/" target="_blank">Association of Female Managers Events in Slovenia</a>. (Ljubljana, Slovenia) </p>\n            <p>14-17 October 2015, International Leadership Association Conference “<a href="http://www.ila-net.org/Conferences/Past/index.htm" target="_blank">Leading across borders and generations.</a>” (Barcelona, Spain)</p>\n            '
+	    }, {
+	        'title': 'Academic research partnerships',
+	        'images': ['01_small.jpg', 'Conferece_Students_CQS_Slovenia.jpg'],
+	        'content': '\n            <p>October 2015- January 2016: US-Slovenian research partnership with pilot research of Cultural Intelligence CQS (student testing) in Slovenia (527 students: University of Ljubljana, University of Maribor, University of Primorska, University of Nova Gorica) coordinated by a group of Slovenian <a href="https://www.linkedin.com/pulse/i-sent-overseas-basically-said-heres-your-ticket-good-ne%C5%BEa-prelog">junior researchers</a>.</p>\n            '
+	    }]
+	};
+
+	function getGalleries(_ref) {
+	    var lang = _ref.lang;
+
+	    var retval = (0, _pages2.default)({ lang: lang, pageName: 'gallery' });
+	    retval['galleries'] = data[lang];
+
+	    return retval;
+	}
+
+/***/ },
+/* 248 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getIndex;
+	var data = {
+	    'en': [{
+	        'title': 'Research',
+	        'link': 'services/research'
+	    }, {
+	        'title': 'Academic partnerships',
+	        'link': 'services/partnerships'
+	    }, {
+	        'title': 'Business seminars',
+	        'link': 'services/seminars'
+	    }],
+	    'si': [{
+	        'title': 'Raziskovanje',
+	        'link': 'services/research'
+	    }, {
+	        'title': 'Poslovno Svetovanje',
+	        'link': 'services/consulting'
+	    }, {
+	        'title': 'Akademska partnerstva',
+	        'link': 'services/trainings'
+	    }]
+	};
+
+	function getIndex(_ref) {
+	    var lang = _ref.lang;
+
+	    return data[lang];
+	}
+
+/***/ },
+/* 249 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getMeta;
+	exports.getLanguages = getLanguages;
+	var data = {
+	    'en': {
+	        'menu': [{ 'link': 'about', 'title': 'About us' }, { 'link': 'services', 'title': 'Services' }, { 'link': 'contacts', 'title': 'Contact us' }, { 'link': 'speakers', 'title': 'Guest Speakers' }, { 'link': 'gallery', 'title': 'Gallery' }],
+	        'languages': [{ 'code': 'en', 'title': 'English' }, { 'code': 'si', 'title': 'Slovenčina' }],
+	        'currentLanguage': 'en'
+	    },
+	    'si': {
+	        'menu': [{ 'link': 'about', 'title': 'Kdo smo' }, { 'link': 'services', 'title': 'Storitve' }, { 'link': 'contacts', 'title': 'Kontakt' }, { 'link': 'speakers', 'title': 'Tuji gostujoči predavatelji' }, { 'link': 'gallery', 'title': 'Galerija' }],
+	        'languages': [{ 'code': 'en', 'title': 'English' }, { 'code': 'si', 'title': 'Slovenčina' }],
+	        'currentLanguage': 'si'
+	    }
+	};
+
+	function getMeta(_ref) {
+	    var lang = _ref.lang;
+
+	    return data[lang];
+	}
+
+	function getLanguages() {
+	    return Object.keys(data);
+	}
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = getSpeakers;
+
+	var _pages = __webpack_require__(246);
+
+	var _pages2 = _interopRequireDefault(_pages);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var data = {
+	    'en': [{
+	        'name': 'Mr. Maynard "Rink" Wheeler',
+	        'position': 'Independent Consumer Goods Professional (Michigan, USA).  ',
+	        'image': '/files/Wheeler.jpg',
+	        'content': '\n            <p>Stanford MBA 1957; Former Vice President of Operations for the Food’s Division of the Coca-Cola Company; Business consultant in CIS countries (Poland, Ukraine, Azerbaijan and Kyrgyzstan) with US State Department: 1998-2012.</p>\n            <p>Specialties: International operations, organizational structure, business and marketing strategies, budget and cost control, mentoring new start-up businesses.</p>\n            <p><a href="/en/gallery#rink">21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</a></p>\n            '
+	    }, {
+	        'name': 'Dr. R. Boyd Johnson',
+	        'position': 'Chair of the Doctoral Program in Organizational Leadership at Indiana Wesleyan University (Indiana, USA).',
+	        'image': '/files/boyd-johnson.jpg',
+	        'content': '<p>PhD in International Studies (Oxford), MA degrees in Anthropology (California State) and Theology (Fuller Seminary) and a BA in Anthropology (UCLA). Focus on international business and social sciences.</p>\n            <p>Research project: “Cultural intelligence: case study of Slovenia.”</p>\n            <p>20 January 2016: Dr Boyd Johnson presents at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "<a href="/en/gallery">Leadership and culture: perceptions of Western-based assessment models in other cultures</a>". </p>\n            <p>9 June 2016: Dr. Boyd Johnson’s presentation "Drivers and barriers of effective Leadership in the multigenerational workplaces" at the FEELs conference “<a href="http://feel-leadership.si/">Poslovna etika in konflikti vlog</a>“.</p>\n            '
+	    }, {
+	        'name': 'Dr. Gaye Bammet',
+	        'position': 'Lead mediator at Dispute Resolution Center of Seattle / King County (Seattle, USA).',
+	        'image': '/files/DrBammet.jpg',
+	        'content': '<p>Assistant professor, University of Washington. Ph.D., Speech Communication, Southern Illinois University, (Carbondale, IL); M.A., Speech Communication California State University-Northridge.</p>\n            <p>Guest lecture: “Effective communication and dispute resolution: case studies of US businesses.”</p>'
+	    }, {
+	        'name': 'Mr. Prokofiev Sergey',
+	        'position': 'Business Development Director, CreativePeople (Moscow, Russian Federation)',
+	        'image': '/files/Prokofiev.jpg',
+	        'content': '<p>Guest lecture: “Tips for start up and management of successful Creative Agency: Case study of Russia.”</p>'
+	    }],
+	    'si': [{
+	        'name': 'Mr. Maynard "Rink" Wheeler',
+	        'position': 'strokovnjak s področja potrošniškega blaga (Michigan, ZDA).  ',
+	        'image': '/files/Wheeler.jpg',
+	        'content': '\n            <p>Stanford MBA 1957; Bivši Podpredsednik Oddelka za živilske zaloge pri Podjetju Coca-Cola; Poslovni svetovalec po državam SND (Polska, Ukrajina, Azerbajdžan and Kirgizija) pri Zunanjem ministrstvu ZDA: 1998-2012 leta.</p>\n            <p>Mednarodno poslovanje, organizacijske structure.</p>\n            <p><a href="/si/gallery#rink">21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</a></p>\n            '
+	    }, {
+	        'name': 'Dr. R. Boyd Johnson',
+	        'position': 'Predsednik doktorskega programa v organizacijskem vodenju pri Univerzi Indiana Wesleyan (Indiana, ZDA).',
+	        'image': '/files/boyd-johnson.jpg',
+	        'content': '<p>PhD in Mednarodne Študije (Oxford), magister antropologije (ZDA, Kalifornija) in Teologije (Fuller Seminary) ter diplomant antropologije (UCLA). Osredotoča se na mednarodnih poslovnih in družbenih vedah.</p>\n            <p>Raziskovalni projekt: "Kulturna inteligenca v Sloveniji.”</p>\n            <p>20 January 2016: Dr Boyd Johnson presents at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "<a href="/si/gallery">Leadership and culture: perceptions of Western-based assessment models in other cultures</a>". </p>\n            '
+	    }, {
+	        'name': 'Dr. Gaye Bammet',
+	        'position': 'Vodilni posrednik pri Centru za reševanje sporov pri Seattle / King County (Seattle, ZDA).',
+	        'image': '/files/DrBammet.jpg',
+	        'content': '<p>Asistent profesorja, University of Washington. Ph.D., Metode in možnosti komuniciranja, Southern Illinois University, (Carbondale, IL); M.A., Metode in možnosti komuniciranja California State University-Northridge.</p>\n            <p>"Učinkovita komunikacija in reševanje sporov. obravnava študijskih primerov podjetij v ZDA". </p>'
+	    }, {
+	        'name': 'Mr. Prokofiev Sergey',
+	        'position': 'Direktor za razvoj poslovanja, CreativePeople (Moskva, Ruska Federacija)',
+	        'image': '/files/Prokofiev.jpg',
+	        'content': '<p>"Nasveti za startup in vodenje uspešne kreativne agencije: Študijski primeri v Rusiji."</p>'
+	    }]
+	};
+
+	function getSpeakers(_ref) {
+	    var lang = _ref.lang;
+
+	    var retval = (0, _pages2.default)({ lang: lang, pageName: 'speakers' });
+	    retval['speakers'] = data[lang];
+
+	    return retval;
+	}
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* components */
 	'use strict';
 
@@ -30993,19 +31391,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _Router2 = __webpack_require__(246);
+	var _Router2 = __webpack_require__(252);
 
 	var _Router3 = _interopRequireDefault(_Router2);
 
 	exports.Router = _Router3['default'];
 
-	var _Link2 = __webpack_require__(282);
+	var _Link2 = __webpack_require__(288);
 
 	var _Link3 = _interopRequireDefault(_Link2);
 
 	exports.Link = _Link3['default'];
 
-	var _IndexLink2 = __webpack_require__(283);
+	var _IndexLink2 = __webpack_require__(289);
 
 	var _IndexLink3 = _interopRequireDefault(_IndexLink2);
 
@@ -31013,25 +31411,25 @@
 
 	/* components (configuration) */
 
-	var _IndexRedirect2 = __webpack_require__(284);
+	var _IndexRedirect2 = __webpack_require__(290);
 
 	var _IndexRedirect3 = _interopRequireDefault(_IndexRedirect2);
 
 	exports.IndexRedirect = _IndexRedirect3['default'];
 
-	var _IndexRoute2 = __webpack_require__(286);
+	var _IndexRoute2 = __webpack_require__(292);
 
 	var _IndexRoute3 = _interopRequireDefault(_IndexRoute2);
 
 	exports.IndexRoute = _IndexRoute3['default'];
 
-	var _Redirect2 = __webpack_require__(285);
+	var _Redirect2 = __webpack_require__(291);
 
 	var _Redirect3 = _interopRequireDefault(_Redirect2);
 
 	exports.Redirect = _Redirect3['default'];
 
-	var _Route2 = __webpack_require__(287);
+	var _Route2 = __webpack_require__(293);
 
 	var _Route3 = _interopRequireDefault(_Route2);
 
@@ -31039,19 +31437,19 @@
 
 	/* mixins */
 
-	var _History2 = __webpack_require__(288);
+	var _History2 = __webpack_require__(294);
 
 	var _History3 = _interopRequireDefault(_History2);
 
 	exports.History = _History3['default'];
 
-	var _Lifecycle2 = __webpack_require__(289);
+	var _Lifecycle2 = __webpack_require__(295);
 
 	var _Lifecycle3 = _interopRequireDefault(_Lifecycle2);
 
 	exports.Lifecycle = _Lifecycle3['default'];
 
-	var _RouteContext2 = __webpack_require__(290);
+	var _RouteContext2 = __webpack_require__(296);
 
 	var _RouteContext3 = _interopRequireDefault(_RouteContext2);
 
@@ -31059,72 +31457,72 @@
 
 	/* utils */
 
-	var _useRoutes2 = __webpack_require__(291);
+	var _useRoutes2 = __webpack_require__(297);
 
 	var _useRoutes3 = _interopRequireDefault(_useRoutes2);
 
 	exports.useRoutes = _useRoutes3['default'];
 
-	var _RouteUtils = __webpack_require__(276);
+	var _RouteUtils = __webpack_require__(282);
 
 	exports.createRoutes = _RouteUtils.createRoutes;
 
-	var _RouterContext2 = __webpack_require__(278);
+	var _RouterContext2 = __webpack_require__(284);
 
 	var _RouterContext3 = _interopRequireDefault(_RouterContext2);
 
 	exports.RouterContext = _RouterContext3['default'];
 
-	var _RoutingContext2 = __webpack_require__(292);
+	var _RoutingContext2 = __webpack_require__(298);
 
 	var _RoutingContext3 = _interopRequireDefault(_RoutingContext2);
 
 	exports.RoutingContext = _RoutingContext3['default'];
 
-	var _PropTypes2 = __webpack_require__(277);
+	var _PropTypes2 = __webpack_require__(283);
 
 	var _PropTypes3 = _interopRequireDefault(_PropTypes2);
 
 	exports.PropTypes = _PropTypes3['default'];
 
-	var _match2 = __webpack_require__(293);
+	var _match2 = __webpack_require__(299);
 
 	var _match3 = _interopRequireDefault(_match2);
 
 	exports.match = _match3['default'];
 
-	var _useRouterHistory2 = __webpack_require__(297);
+	var _useRouterHistory2 = __webpack_require__(303);
 
 	var _useRouterHistory3 = _interopRequireDefault(_useRouterHistory2);
 
 	exports.useRouterHistory = _useRouterHistory3['default'];
 
-	var _PatternUtils = __webpack_require__(270);
+	var _PatternUtils = __webpack_require__(276);
 
 	exports.formatPattern = _PatternUtils.formatPattern;
 
 	/* histories */
 
-	var _browserHistory2 = __webpack_require__(298);
+	var _browserHistory2 = __webpack_require__(304);
 
 	var _browserHistory3 = _interopRequireDefault(_browserHistory2);
 
 	exports.browserHistory = _browserHistory3['default'];
 
-	var _hashHistory2 = __webpack_require__(301);
+	var _hashHistory2 = __webpack_require__(307);
 
 	var _hashHistory3 = _interopRequireDefault(_hashHistory2);
 
 	exports.hashHistory = _hashHistory3['default'];
 
-	var _createMemoryHistory2 = __webpack_require__(294);
+	var _createMemoryHistory2 = __webpack_require__(300);
 
 	var _createMemoryHistory3 = _interopRequireDefault(_createMemoryHistory2);
 
 	exports.createMemoryHistory = _createMemoryHistory3['default'];
 
 /***/ },
-/* 246 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31137,11 +31535,11 @@
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var _historyLibCreateHashHistory = __webpack_require__(247);
+	var _historyLibCreateHashHistory = __webpack_require__(253);
 
 	var _historyLibCreateHashHistory2 = _interopRequireDefault(_historyLibCreateHashHistory);
 
-	var _historyLibUseQueries = __webpack_require__(264);
+	var _historyLibUseQueries = __webpack_require__(270);
 
 	var _historyLibUseQueries2 = _interopRequireDefault(_historyLibUseQueries);
 
@@ -31149,21 +31547,21 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _createTransitionManager = __webpack_require__(267);
+	var _createTransitionManager = __webpack_require__(273);
 
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
-	var _PropTypes = __webpack_require__(277);
+	var _PropTypes = __webpack_require__(283);
 
-	var _RouterContext = __webpack_require__(278);
+	var _RouterContext = __webpack_require__(284);
 
 	var _RouterContext2 = _interopRequireDefault(_RouterContext);
 
-	var _RouteUtils = __webpack_require__(276);
+	var _RouteUtils = __webpack_require__(282);
 
-	var _RouterUtils = __webpack_require__(281);
+	var _RouterUtils = __webpack_require__(287);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -31339,7 +31737,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 247 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31350,25 +31748,25 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _Actions = __webpack_require__(250);
+	var _Actions = __webpack_require__(256);
 
-	var _PathUtils = __webpack_require__(251);
+	var _PathUtils = __webpack_require__(257);
 
-	var _ExecutionEnvironment = __webpack_require__(252);
+	var _ExecutionEnvironment = __webpack_require__(258);
 
-	var _DOMUtils = __webpack_require__(253);
+	var _DOMUtils = __webpack_require__(259);
 
-	var _DOMStateStorage = __webpack_require__(254);
+	var _DOMStateStorage = __webpack_require__(260);
 
-	var _createDOMHistory = __webpack_require__(255);
+	var _createDOMHistory = __webpack_require__(261);
 
 	var _createDOMHistory2 = _interopRequireDefault(_createDOMHistory);
 
@@ -31590,7 +31988,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 248 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31656,7 +32054,7 @@
 
 
 /***/ },
-/* 249 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31713,7 +32111,7 @@
 
 
 /***/ },
-/* 250 */
+/* 256 */
 /***/ function(module, exports) {
 
 	/**
@@ -31749,7 +32147,7 @@
 	};
 
 /***/ },
-/* 251 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31760,7 +32158,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -31801,7 +32199,7 @@
 	}
 
 /***/ },
-/* 252 */
+/* 258 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31811,7 +32209,7 @@
 	exports.canUseDOM = canUseDOM;
 
 /***/ },
-/* 253 */
+/* 259 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -31891,7 +32289,7 @@
 	}
 
 /***/ },
-/* 254 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*eslint-disable no-empty */
@@ -31903,7 +32301,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -31969,7 +32367,7 @@
 	}
 
 /***/ },
-/* 255 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -31980,15 +32378,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _ExecutionEnvironment = __webpack_require__(252);
+	var _ExecutionEnvironment = __webpack_require__(258);
 
-	var _DOMUtils = __webpack_require__(253);
+	var _DOMUtils = __webpack_require__(259);
 
-	var _createHistory = __webpack_require__(256);
+	var _createHistory = __webpack_require__(262);
 
 	var _createHistory2 = _interopRequireDefault(_createHistory);
 
@@ -32014,7 +32412,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 256 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32025,29 +32423,29 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _deepEqual = __webpack_require__(257);
+	var _deepEqual = __webpack_require__(263);
 
 	var _deepEqual2 = _interopRequireDefault(_deepEqual);
 
-	var _PathUtils = __webpack_require__(251);
+	var _PathUtils = __webpack_require__(257);
 
-	var _AsyncUtils = __webpack_require__(260);
+	var _AsyncUtils = __webpack_require__(266);
 
-	var _Actions = __webpack_require__(250);
+	var _Actions = __webpack_require__(256);
 
-	var _createLocation2 = __webpack_require__(261);
+	var _createLocation2 = __webpack_require__(267);
 
 	var _createLocation3 = _interopRequireDefault(_createLocation2);
 
-	var _runTransitionHook = __webpack_require__(262);
+	var _runTransitionHook = __webpack_require__(268);
 
 	var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
-	var _deprecate = __webpack_require__(263);
+	var _deprecate = __webpack_require__(269);
 
 	var _deprecate2 = _interopRequireDefault(_deprecate);
 
@@ -32307,12 +32705,12 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 257 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var pSlice = Array.prototype.slice;
-	var objectKeys = __webpack_require__(258);
-	var isArguments = __webpack_require__(259);
+	var objectKeys = __webpack_require__(264);
+	var isArguments = __webpack_require__(265);
 
 	var deepEqual = module.exports = function (actual, expected, opts) {
 	  if (!opts) opts = {};
@@ -32407,7 +32805,7 @@
 
 
 /***/ },
-/* 258 */
+/* 264 */
 /***/ function(module, exports) {
 
 	exports = module.exports = typeof Object.keys === 'function'
@@ -32422,7 +32820,7 @@
 
 
 /***/ },
-/* 259 */
+/* 265 */
 /***/ function(module, exports) {
 
 	var supportsArgumentsClass = (function(){
@@ -32448,7 +32846,7 @@
 
 
 /***/ },
-/* 260 */
+/* 266 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -32479,7 +32877,7 @@
 	}
 
 /***/ },
-/* 261 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32490,13 +32888,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _Actions = __webpack_require__(250);
+	var _Actions = __webpack_require__(256);
 
-	var _PathUtils = __webpack_require__(251);
+	var _PathUtils = __webpack_require__(257);
 
 	function createLocation() {
 	  var location = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
@@ -32535,7 +32933,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 262 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32544,7 +32942,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -32564,7 +32962,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 263 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32573,7 +32971,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -32588,7 +32986,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 264 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32601,19 +32999,19 @@
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _queryString = __webpack_require__(265);
+	var _queryString = __webpack_require__(271);
 
-	var _runTransitionHook = __webpack_require__(262);
+	var _runTransitionHook = __webpack_require__(268);
 
 	var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
-	var _PathUtils = __webpack_require__(251);
+	var _PathUtils = __webpack_require__(257);
 
-	var _deprecate = __webpack_require__(263);
+	var _deprecate = __webpack_require__(269);
 
 	var _deprecate2 = _interopRequireDefault(_deprecate);
 
@@ -32772,11 +33170,11 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 265 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var strictUriEncode = __webpack_require__(266);
+	var strictUriEncode = __webpack_require__(272);
 
 	exports.extract = function (str) {
 		return str.split('?')[1] || '';
@@ -32844,7 +33242,7 @@
 
 
 /***/ },
-/* 266 */
+/* 272 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -32856,7 +33254,7 @@
 
 
 /***/ },
-/* 267 */
+/* 273 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32869,27 +33267,27 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
-	var _historyLibActions = __webpack_require__(250);
+	var _historyLibActions = __webpack_require__(256);
 
-	var _computeChangedRoutes2 = __webpack_require__(269);
+	var _computeChangedRoutes2 = __webpack_require__(275);
 
 	var _computeChangedRoutes3 = _interopRequireDefault(_computeChangedRoutes2);
 
-	var _TransitionUtils = __webpack_require__(271);
+	var _TransitionUtils = __webpack_require__(277);
 
-	var _isActive2 = __webpack_require__(273);
+	var _isActive2 = __webpack_require__(279);
 
 	var _isActive3 = _interopRequireDefault(_isActive2);
 
-	var _getComponents = __webpack_require__(274);
+	var _getComponents = __webpack_require__(280);
 
 	var _getComponents2 = _interopRequireDefault(_getComponents);
 
-	var _matchRoutes = __webpack_require__(275);
+	var _matchRoutes = __webpack_require__(281);
 
 	var _matchRoutes2 = _interopRequireDefault(_matchRoutes);
 
@@ -33157,7 +33555,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 268 */
+/* 274 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33167,7 +33565,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -33184,14 +33582,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 269 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _PatternUtils = __webpack_require__(270);
+	var _PatternUtils = __webpack_require__(276);
 
 	function routeParamsChanged(route, prevState, nextState) {
 	  if (!route.path) return false;
@@ -33245,7 +33643,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 270 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33259,7 +33657,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
@@ -33477,7 +33875,7 @@
 	}
 
 /***/ },
-/* 271 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33488,9 +33886,9 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _AsyncUtils = __webpack_require__(272);
+	var _AsyncUtils = __webpack_require__(278);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -33571,7 +33969,7 @@
 	}
 
 /***/ },
-/* 272 */
+/* 278 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -33666,7 +34064,7 @@
 	}
 
 /***/ },
-/* 273 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33674,7 +34072,7 @@
 	exports.__esModule = true;
 	exports['default'] = isActive;
 
-	var _PatternUtils = __webpack_require__(270);
+	var _PatternUtils = __webpack_require__(276);
 
 	function deepEqual(a, b) {
 	  if (a == b) return true;
@@ -33798,14 +34196,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 274 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _AsyncUtils = __webpack_require__(272);
+	var _AsyncUtils = __webpack_require__(278);
 
 	function getComponentsForRoute(location, route, callback) {
 	  if (route.component || route.components) {
@@ -33836,7 +34234,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 275 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33845,15 +34243,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
-	var _AsyncUtils = __webpack_require__(272);
+	var _AsyncUtils = __webpack_require__(278);
 
-	var _PatternUtils = __webpack_require__(270);
+	var _PatternUtils = __webpack_require__(276);
 
-	var _RouteUtils = __webpack_require__(276);
+	var _RouteUtils = __webpack_require__(282);
 
 	function getChildRoutes(route, location, callback) {
 	  if (route.childRoutes) {
@@ -34047,7 +34445,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 276 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34067,7 +34465,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -34166,7 +34564,7 @@
 	}
 
 /***/ },
-/* 277 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34224,7 +34622,7 @@
 	};
 
 /***/ },
-/* 278 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34235,7 +34633,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
@@ -34243,17 +34641,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _deprecateObjectProperties = __webpack_require__(279);
+	var _deprecateObjectProperties = __webpack_require__(285);
 
 	var _deprecateObjectProperties2 = _interopRequireDefault(_deprecateObjectProperties);
 
-	var _getRouteParams = __webpack_require__(280);
+	var _getRouteParams = __webpack_require__(286);
 
 	var _getRouteParams2 = _interopRequireDefault(_getRouteParams);
 
-	var _RouteUtils = __webpack_require__(276);
+	var _RouteUtils = __webpack_require__(282);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -34383,7 +34781,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 279 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*eslint no-empty: 0*/
@@ -34394,7 +34792,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -34445,14 +34843,14 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 280 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _PatternUtils = __webpack_require__(270);
+	var _PatternUtils = __webpack_require__(276);
 
 	/**
 	 * Extracts an object of params the given route cares about from
@@ -34474,7 +34872,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 281 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34488,7 +34886,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _deprecateObjectProperties = __webpack_require__(279);
+	var _deprecateObjectProperties = __webpack_require__(285);
 
 	var _deprecateObjectProperties2 = _interopRequireDefault(_deprecateObjectProperties);
 
@@ -34512,7 +34910,7 @@
 	}
 
 /***/ },
-/* 282 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34529,7 +34927,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -34681,7 +35079,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 283 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34696,7 +35094,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Link = __webpack_require__(282);
+	var _Link = __webpack_require__(288);
 
 	var _Link2 = _interopRequireDefault(_Link);
 
@@ -34716,7 +35114,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 284 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34729,19 +35127,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _Redirect = __webpack_require__(285);
+	var _Redirect = __webpack_require__(291);
 
 	var _Redirect2 = _interopRequireDefault(_Redirect);
 
-	var _PropTypes = __webpack_require__(277);
+	var _PropTypes = __webpack_require__(283);
 
 	var _React$PropTypes = _react2['default'].PropTypes;
 	var string = _React$PropTypes.string;
@@ -34785,7 +35183,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 285 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34798,15 +35196,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _RouteUtils = __webpack_require__(276);
+	var _RouteUtils = __webpack_require__(282);
 
-	var _PatternUtils = __webpack_require__(270);
+	var _PatternUtils = __webpack_require__(276);
 
-	var _PropTypes = __webpack_require__(277);
+	var _PropTypes = __webpack_require__(283);
 
 	var _React$PropTypes = _react2['default'].PropTypes;
 	var string = _React$PropTypes.string;
@@ -34893,7 +35291,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 286 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34906,17 +35304,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _RouteUtils = __webpack_require__(276);
+	var _RouteUtils = __webpack_require__(282);
 
-	var _PropTypes = __webpack_require__(277);
+	var _PropTypes = __webpack_require__(283);
 
 	var func = _react2['default'].PropTypes.func;
 
@@ -34959,7 +35357,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 287 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -34972,13 +35370,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _RouteUtils = __webpack_require__(276);
+	var _RouteUtils = __webpack_require__(282);
 
-	var _PropTypes = __webpack_require__(277);
+	var _PropTypes = __webpack_require__(283);
 
 	var _React$PropTypes = _react2['default'].PropTypes;
 	var string = _React$PropTypes.string;
@@ -35020,7 +35418,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 288 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35029,11 +35427,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
-	var _PropTypes = __webpack_require__(277);
+	var _PropTypes = __webpack_require__(283);
 
 	/**
 	 * A mixin that adds the "history" instance variable to components.
@@ -35055,7 +35453,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 289 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35064,7 +35462,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -35072,7 +35470,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
@@ -35129,7 +35527,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 290 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35138,7 +35536,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -35180,7 +35578,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 291 */
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35193,15 +35591,15 @@
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var _historyLibUseQueries = __webpack_require__(264);
+	var _historyLibUseQueries = __webpack_require__(270);
 
 	var _historyLibUseQueries2 = _interopRequireDefault(_historyLibUseQueries);
 
-	var _createTransitionManager = __webpack_require__(267);
+	var _createTransitionManager = __webpack_require__(273);
 
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -35236,7 +35634,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 292 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35249,11 +35647,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _RouterContext = __webpack_require__(278);
+	var _RouterContext = __webpack_require__(284);
 
 	var _RouterContext2 = _interopRequireDefault(_RouterContext);
 
-	var _routerWarning = __webpack_require__(268);
+	var _routerWarning = __webpack_require__(274);
 
 	var _routerWarning2 = _interopRequireDefault(_routerWarning);
 
@@ -35273,7 +35671,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 293 */
+/* 299 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35286,21 +35684,21 @@
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _createMemoryHistory = __webpack_require__(294);
+	var _createMemoryHistory = __webpack_require__(300);
 
 	var _createMemoryHistory2 = _interopRequireDefault(_createMemoryHistory);
 
-	var _createTransitionManager = __webpack_require__(267);
+	var _createTransitionManager = __webpack_require__(273);
 
 	var _createTransitionManager2 = _interopRequireDefault(_createTransitionManager);
 
-	var _RouteUtils = __webpack_require__(276);
+	var _RouteUtils = __webpack_require__(282);
 
-	var _RouterUtils = __webpack_require__(281);
+	var _RouterUtils = __webpack_require__(287);
 
 	/**
 	 * A high-level API to be used for server-side rendering.
@@ -35359,7 +35757,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 294 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35369,15 +35767,15 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _historyLibUseQueries = __webpack_require__(264);
+	var _historyLibUseQueries = __webpack_require__(270);
 
 	var _historyLibUseQueries2 = _interopRequireDefault(_historyLibUseQueries);
 
-	var _historyLibUseBasename = __webpack_require__(295);
+	var _historyLibUseBasename = __webpack_require__(301);
 
 	var _historyLibUseBasename2 = _interopRequireDefault(_historyLibUseBasename);
 
-	var _historyLibCreateMemoryHistory = __webpack_require__(296);
+	var _historyLibCreateMemoryHistory = __webpack_require__(302);
 
 	var _historyLibCreateMemoryHistory2 = _interopRequireDefault(_historyLibCreateMemoryHistory);
 
@@ -35397,7 +35795,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 295 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35410,15 +35808,15 @@
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	var _ExecutionEnvironment = __webpack_require__(252);
+	var _ExecutionEnvironment = __webpack_require__(258);
 
-	var _PathUtils = __webpack_require__(251);
+	var _PathUtils = __webpack_require__(257);
 
-	var _runTransitionHook = __webpack_require__(262);
+	var _runTransitionHook = __webpack_require__(268);
 
 	var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
-	var _deprecate = __webpack_require__(263);
+	var _deprecate = __webpack_require__(269);
 
 	var _deprecate2 = _interopRequireDefault(_deprecate);
 
@@ -35540,7 +35938,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 296 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35551,19 +35949,19 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(248);
+	var _warning = __webpack_require__(254);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _PathUtils = __webpack_require__(251);
+	var _PathUtils = __webpack_require__(257);
 
-	var _Actions = __webpack_require__(250);
+	var _Actions = __webpack_require__(256);
 
-	var _createHistory = __webpack_require__(256);
+	var _createHistory = __webpack_require__(262);
 
 	var _createHistory2 = _interopRequireDefault(_createHistory);
 
@@ -35698,7 +36096,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 297 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35708,11 +36106,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _historyLibUseQueries = __webpack_require__(264);
+	var _historyLibUseQueries = __webpack_require__(270);
 
 	var _historyLibUseQueries2 = _interopRequireDefault(_historyLibUseQueries);
 
-	var _historyLibUseBasename = __webpack_require__(295);
+	var _historyLibUseBasename = __webpack_require__(301);
 
 	var _historyLibUseBasename2 = _interopRequireDefault(_historyLibUseBasename);
 
@@ -35727,7 +36125,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 298 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35736,11 +36134,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _historyLibCreateBrowserHistory = __webpack_require__(299);
+	var _historyLibCreateBrowserHistory = __webpack_require__(305);
 
 	var _historyLibCreateBrowserHistory2 = _interopRequireDefault(_historyLibCreateBrowserHistory);
 
-	var _createRouterHistory = __webpack_require__(300);
+	var _createRouterHistory = __webpack_require__(306);
 
 	var _createRouterHistory2 = _interopRequireDefault(_createRouterHistory);
 
@@ -35748,7 +36146,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 299 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35759,21 +36157,21 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _invariant = __webpack_require__(249);
+	var _invariant = __webpack_require__(255);
 
 	var _invariant2 = _interopRequireDefault(_invariant);
 
-	var _Actions = __webpack_require__(250);
+	var _Actions = __webpack_require__(256);
 
-	var _PathUtils = __webpack_require__(251);
+	var _PathUtils = __webpack_require__(257);
 
-	var _ExecutionEnvironment = __webpack_require__(252);
+	var _ExecutionEnvironment = __webpack_require__(258);
 
-	var _DOMUtils = __webpack_require__(253);
+	var _DOMUtils = __webpack_require__(259);
 
-	var _DOMStateStorage = __webpack_require__(254);
+	var _DOMStateStorage = __webpack_require__(260);
 
-	var _createDOMHistory = __webpack_require__(255);
+	var _createDOMHistory = __webpack_require__(261);
 
 	var _createDOMHistory2 = _interopRequireDefault(_createDOMHistory);
 
@@ -35929,7 +36327,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 300 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35938,7 +36336,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _useRouterHistory = __webpack_require__(297);
+	var _useRouterHistory = __webpack_require__(303);
 
 	var _useRouterHistory2 = _interopRequireDefault(_useRouterHistory);
 
@@ -35953,7 +36351,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 301 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35962,11 +36360,11 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _historyLibCreateHashHistory = __webpack_require__(247);
+	var _historyLibCreateHashHistory = __webpack_require__(253);
 
 	var _historyLibCreateHashHistory2 = _interopRequireDefault(_historyLibCreateHashHistory);
 
-	var _createRouterHistory = __webpack_require__(300);
+	var _createRouterHistory = __webpack_require__(306);
 
 	var _createRouterHistory2 = _interopRequireDefault(_createRouterHistory);
 
@@ -35974,7 +36372,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 302 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -35987,23 +36385,23 @@
 
 	var _redux = __webpack_require__(221);
 
-	var _reducer = __webpack_require__(303);
+	var _reducer = __webpack_require__(309);
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var _reducer3 = __webpack_require__(304);
+	var _reducer3 = __webpack_require__(310);
 
 	var _reducer4 = _interopRequireDefault(_reducer3);
 
-	var _reducer5 = __webpack_require__(306);
+	var _reducer5 = __webpack_require__(312);
 
 	var _reducer6 = _interopRequireDefault(_reducer5);
 
-	var _reducer7 = __webpack_require__(308);
+	var _reducer7 = __webpack_require__(314);
 
 	var _reducer8 = _interopRequireDefault(_reducer7);
 
-	var _reducer9 = __webpack_require__(310);
+	var _reducer9 = __webpack_require__(316);
 
 	var _reducer10 = _interopRequireDefault(_reducer9);
 
@@ -36029,7 +36427,7 @@
 	exports.default = reducer;
 
 /***/ },
-/* 303 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36071,7 +36469,7 @@
 	}
 
 /***/ },
-/* 304 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36081,7 +36479,7 @@
 	});
 	exports.default = page;
 
-	var _actions = __webpack_require__(305);
+	var _actions = __webpack_require__(311);
 
 	var initialState = {
 	    title: '',
@@ -36110,7 +36508,7 @@
 	}
 
 /***/ },
-/* 305 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36146,7 +36544,7 @@
 	}
 
 /***/ },
-/* 306 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36156,7 +36554,7 @@
 	});
 	exports.default = speakers;
 
-	var _actions = __webpack_require__(307);
+	var _actions = __webpack_require__(313);
 
 	var initialState = {
 	    title: '',
@@ -36187,7 +36585,7 @@
 	}
 
 /***/ },
-/* 307 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36230,7 +36628,7 @@
 	}
 
 /***/ },
-/* 308 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36240,7 +36638,7 @@
 	});
 	exports.default = page;
 
-	var _actions = __webpack_require__(309);
+	var _actions = __webpack_require__(315);
 
 	var initialState = {
 	    title: '',
@@ -36269,7 +36667,7 @@
 	}
 
 /***/ },
-/* 309 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36300,7 +36698,7 @@
 	}
 
 /***/ },
-/* 310 */
+/* 316 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36310,7 +36708,7 @@
 	});
 	exports.default = page;
 
-	var _actions = __webpack_require__(311);
+	var _actions = __webpack_require__(317);
 
 	var initialState = [];
 
@@ -36334,7 +36732,7 @@
 	}
 
 /***/ },
-/* 311 */
+/* 317 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36365,8 +36763,8 @@
 	}
 
 /***/ },
-/* 312 */,
-/* 313 */
+/* 318 */,
+/* 319 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36379,25 +36777,25 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRouter = __webpack_require__(245);
+	var _reactRouter = __webpack_require__(251);
 
-	var _container = __webpack_require__(314);
+	var _container = __webpack_require__(320);
 
 	var _container2 = _interopRequireDefault(_container);
 
-	var _container3 = __webpack_require__(321);
+	var _container3 = __webpack_require__(327);
 
 	var _container4 = _interopRequireDefault(_container3);
 
-	var _container5 = __webpack_require__(324);
+	var _container5 = __webpack_require__(330);
 
 	var _container6 = _interopRequireDefault(_container5);
 
-	var _container7 = __webpack_require__(327);
+	var _container7 = __webpack_require__(333);
 
 	var _container8 = _interopRequireDefault(_container7);
 
-	var _container9 = __webpack_require__(353);
+	var _container9 = __webpack_require__(359);
 
 	var _container10 = _interopRequireDefault(_container9);
 
@@ -36418,7 +36816,7 @@
 	);
 
 /***/ },
-/* 314 */
+/* 320 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36439,7 +36837,7 @@
 
 	var _actions = __webpack_require__(244);
 
-	var _App = __webpack_require__(315);
+	var _App = __webpack_require__(321);
 
 	var _App2 = _interopRequireDefault(_App);
 
@@ -36487,19 +36885,19 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, null)(AppContainer);
 
 /***/ },
-/* 315 */
+/* 321 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	//if (process.env.NODE_ENV === 'production') {
-	module.exports = __webpack_require__(316);
+	module.exports = __webpack_require__(322);
 	//} else {
 	//    module.exports = require('./App.dev');
 	//}
 
 /***/ },
-/* 316 */
+/* 322 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36512,15 +36910,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Menu = __webpack_require__(317);
+	var _Menu = __webpack_require__(323);
 
 	var _Menu2 = _interopRequireDefault(_Menu);
 
-	var _Languages = __webpack_require__(318);
+	var _Languages = __webpack_require__(324);
 
 	var _Languages2 = _interopRequireDefault(_Languages);
 
-	var _Error = __webpack_require__(319);
+	var _Error = __webpack_require__(325);
 
 	var _Error2 = _interopRequireDefault(_Error);
 
@@ -36531,6 +36929,17 @@
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'page-container' },
+	        _react2.default.createElement(
+	            'header',
+	            { className: 'header' },
+	            _react2.default.createElement(
+	                'h1',
+	                { className: 'header__title' },
+	                'Epos'
+	            ),
+	            _react2.default.createElement(_Languages2.default, { items: props.meta.languages, currentLanguage: props.meta.currentLanguage }),
+	            _react2.default.createElement(_Menu2.default, { items: props.meta.menu, currentLanguage: props.meta.currentLanguage, activeLink: props.activeLink })
+	        ),
 	        content
 	    );
 	};
@@ -36538,7 +36947,7 @@
 	exports.default = App;
 
 /***/ },
-/* 317 */
+/* 323 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36555,7 +36964,7 @@
 
 	var _reactRedux = __webpack_require__(215);
 
-	var _reactRouter = __webpack_require__(245);
+	var _reactRouter = __webpack_require__(251);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36600,7 +37009,7 @@
 	exports.default = Menu;
 
 /***/ },
-/* 318 */
+/* 324 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36617,7 +37026,7 @@
 
 	var _reactRedux = __webpack_require__(215);
 
-	var _reactRouter = __webpack_require__(245);
+	var _reactRouter = __webpack_require__(251);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -36660,7 +37069,7 @@
 	exports.default = Languages;
 
 /***/ },
-/* 319 */
+/* 325 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36673,7 +37082,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _PageLayout = __webpack_require__(320);
+	var _PageLayout = __webpack_require__(326);
 
 	var _PageLayout2 = _interopRequireDefault(_PageLayout);
 
@@ -36697,7 +37106,7 @@
 	};
 
 /***/ },
-/* 320 */
+/* 326 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36710,11 +37119,12 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRouter = __webpack_require__(245);
+	var _reactRouter = __webpack_require__(251);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var PageLayout = function PageLayout(props) {
+	    console.log(props);
 	    return _react2.default.createElement(
 	        'div',
 	        { className: 'page' },
@@ -36739,7 +37149,7 @@
 	exports.default = PageLayout;
 
 /***/ },
-/* 321 */
+/* 327 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36756,9 +37166,9 @@
 
 	var _reactRedux = __webpack_require__(215);
 
-	var _actions = __webpack_require__(305);
+	var _actions = __webpack_require__(311);
 
-	var _Page = __webpack_require__(322);
+	var _Page = __webpack_require__(328);
 
 	var _Page2 = _interopRequireDefault(_Page);
 
@@ -36828,7 +37238,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(PageContainer);
 
 /***/ },
-/* 322 */
+/* 328 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36841,11 +37251,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _PageLayout = __webpack_require__(320);
+	var _PageLayout = __webpack_require__(326);
 
 	var _PageLayout2 = _interopRequireDefault(_PageLayout);
 
-	var _getDangerousHtml = __webpack_require__(323);
+	var _getDangerousHtml = __webpack_require__(329);
 
 	var _getDangerousHtml2 = _interopRequireDefault(_getDangerousHtml);
 
@@ -36866,7 +37276,7 @@
 	exports.default = Page;
 
 /***/ },
-/* 323 */
+/* 329 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -36880,7 +37290,7 @@
 	};
 
 /***/ },
-/* 324 */
+/* 330 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36897,9 +37307,9 @@
 
 	var _reactRedux = __webpack_require__(215);
 
-	var _actions = __webpack_require__(307);
+	var _actions = __webpack_require__(313);
 
-	var _Speakers = __webpack_require__(325);
+	var _Speakers = __webpack_require__(331);
 
 	var _Speakers2 = _interopRequireDefault(_Speakers);
 
@@ -36964,7 +37374,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(SpeakersContainer);
 
 /***/ },
-/* 325 */
+/* 331 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -36977,11 +37387,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Item = __webpack_require__(326);
+	var _Item = __webpack_require__(332);
 
 	var _Item2 = _interopRequireDefault(_Item);
 
-	var _PageLayout = __webpack_require__(320);
+	var _PageLayout = __webpack_require__(326);
 
 	var _PageLayout2 = _interopRequireDefault(_PageLayout);
 
@@ -37008,7 +37418,7 @@
 	exports.default = Speakers;
 
 /***/ },
-/* 326 */
+/* 332 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37021,7 +37431,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _getDangerousHtml = __webpack_require__(323);
+	var _getDangerousHtml = __webpack_require__(329);
 
 	var _getDangerousHtml2 = _interopRequireDefault(_getDangerousHtml);
 
@@ -37063,7 +37473,7 @@
 	exports.default = Item;
 
 /***/ },
-/* 327 */
+/* 333 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37080,9 +37490,9 @@
 
 	var _reactRedux = __webpack_require__(215);
 
-	var _actions = __webpack_require__(309);
+	var _actions = __webpack_require__(315);
 
-	var _Gallery = __webpack_require__(328);
+	var _Gallery = __webpack_require__(334);
 
 	var _Gallery2 = _interopRequireDefault(_Gallery);
 
@@ -37149,7 +37559,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(GalleryContainer);
 
 /***/ },
-/* 328 */
+/* 334 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37162,15 +37572,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Item = __webpack_require__(329);
+	var _Item = __webpack_require__(335);
 
 	var _Item2 = _interopRequireDefault(_Item);
 
-	var _PageLayout = __webpack_require__(320);
+	var _PageLayout = __webpack_require__(326);
 
 	var _PageLayout2 = _interopRequireDefault(_PageLayout);
 
-	var _getDangerousHtml = __webpack_require__(323);
+	var _getDangerousHtml = __webpack_require__(329);
 
 	var _getDangerousHtml2 = _interopRequireDefault(_getDangerousHtml);
 
@@ -37198,7 +37608,7 @@
 	exports.default = Gallery;
 
 /***/ },
-/* 329 */
+/* 335 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37211,11 +37621,11 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Image = __webpack_require__(330);
+	var _Image = __webpack_require__(336);
 
 	var _Image2 = _interopRequireDefault(_Image);
 
-	var _getDangerousHtml = __webpack_require__(323);
+	var _getDangerousHtml = __webpack_require__(329);
 
 	var _getDangerousHtml2 = _interopRequireDefault(_getDangerousHtml);
 
@@ -37246,7 +37656,7 @@
 	exports.default = Item;
 
 /***/ },
-/* 330 */
+/* 336 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37261,15 +37671,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ImageFull = __webpack_require__(331);
+	var _ImageFull = __webpack_require__(337);
 
 	var _ImageFull2 = _interopRequireDefault(_ImageFull);
 
-	var _reactModal = __webpack_require__(332);
+	var _reactModal = __webpack_require__(338);
 
 	var _reactModal2 = _interopRequireDefault(_reactModal);
 
-	var _modalStyles = __webpack_require__(352);
+	var _modalStyles = __webpack_require__(358);
 
 	var _modalStyles2 = _interopRequireDefault(_modalStyles);
 
@@ -37337,7 +37747,7 @@
 	exports.default = Image;
 
 /***/ },
-/* 331 */
+/* 337 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -37405,23 +37815,23 @@
 	exports.default = ImageFull;
 
 /***/ },
-/* 332 */
+/* 338 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(333);
+	module.exports = __webpack_require__(339);
 
 
 
 /***/ },
-/* 333 */
+/* 339 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(62);
 	var ReactDOM = __webpack_require__(214);
-	var ExecutionEnvironment = __webpack_require__(334);
-	var ModalPortal = React.createFactory(__webpack_require__(335));
-	var ariaAppHider = __webpack_require__(350);
-	var elementClass = __webpack_require__(351);
+	var ExecutionEnvironment = __webpack_require__(340);
+	var ModalPortal = React.createFactory(__webpack_require__(341));
+	var ariaAppHider = __webpack_require__(356);
+	var elementClass = __webpack_require__(357);
 	var renderSubtreeIntoContainer = __webpack_require__(214).unstable_renderSubtreeIntoContainer;
 
 	var SafeHTMLElement = ExecutionEnvironment.canUseDOM ? window.HTMLElement : {};
@@ -37499,7 +37909,7 @@
 
 
 /***/ },
-/* 334 */
+/* 340 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -37544,14 +37954,14 @@
 
 
 /***/ },
-/* 335 */
+/* 341 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(62);
 	var div = React.DOM.div;
-	var focusManager = __webpack_require__(336);
-	var scopeTab = __webpack_require__(338);
-	var Assign = __webpack_require__(339);
+	var focusManager = __webpack_require__(342);
+	var scopeTab = __webpack_require__(344);
+	var Assign = __webpack_require__(345);
 
 
 	// so that our CSS is statically analyzable
@@ -37748,10 +38158,10 @@
 
 
 /***/ },
-/* 336 */
+/* 342 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(337);
+	var findTabbable = __webpack_require__(343);
 	var modalElement = null;
 	var focusLaterElement = null;
 	var needToFocus = false;
@@ -37822,7 +38232,7 @@
 
 
 /***/ },
-/* 337 */
+/* 343 */
 /***/ function(module, exports) {
 
 	/*!
@@ -37878,10 +38288,10 @@
 
 
 /***/ },
-/* 338 */
+/* 344 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var findTabbable = __webpack_require__(337);
+	var findTabbable = __webpack_require__(343);
 
 	module.exports = function(node, event) {
 	  var tabbable = findTabbable(node);
@@ -37899,7 +38309,7 @@
 
 
 /***/ },
-/* 339 */
+/* 345 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -37910,9 +38320,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseAssign = __webpack_require__(340),
-	    createAssigner = __webpack_require__(346),
-	    keys = __webpack_require__(342);
+	var baseAssign = __webpack_require__(346),
+	    createAssigner = __webpack_require__(352),
+	    keys = __webpack_require__(348);
 
 	/**
 	 * A specialized version of `_.assign` for customizing assigned values without
@@ -37985,7 +38395,7 @@
 
 
 /***/ },
-/* 340 */
+/* 346 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -37996,8 +38406,8 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var baseCopy = __webpack_require__(341),
-	    keys = __webpack_require__(342);
+	var baseCopy = __webpack_require__(347),
+	    keys = __webpack_require__(348);
 
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -38018,7 +38428,7 @@
 
 
 /***/ },
-/* 341 */
+/* 347 */
 /***/ function(module, exports) {
 
 	/**
@@ -38056,7 +38466,7 @@
 
 
 /***/ },
-/* 342 */
+/* 348 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -38067,9 +38477,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var getNative = __webpack_require__(343),
-	    isArguments = __webpack_require__(344),
-	    isArray = __webpack_require__(345);
+	var getNative = __webpack_require__(349),
+	    isArguments = __webpack_require__(350),
+	    isArray = __webpack_require__(351);
 
 	/** Used to detect unsigned integer values. */
 	var reIsUint = /^\d+$/;
@@ -38298,7 +38708,7 @@
 
 
 /***/ },
-/* 343 */
+/* 349 */
 /***/ function(module, exports) {
 
 	/**
@@ -38441,7 +38851,7 @@
 
 
 /***/ },
-/* 344 */
+/* 350 */
 /***/ function(module, exports) {
 
 	/**
@@ -38691,7 +39101,7 @@
 
 
 /***/ },
-/* 345 */
+/* 351 */
 /***/ function(module, exports) {
 
 	/**
@@ -38877,7 +39287,7 @@
 
 
 /***/ },
-/* 346 */
+/* 352 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -38888,9 +39298,9 @@
 	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
-	var bindCallback = __webpack_require__(347),
-	    isIterateeCall = __webpack_require__(348),
-	    restParam = __webpack_require__(349);
+	var bindCallback = __webpack_require__(353),
+	    isIterateeCall = __webpack_require__(354),
+	    restParam = __webpack_require__(355);
 
 	/**
 	 * Creates a function that assigns properties of source object(s) to a given
@@ -38935,7 +39345,7 @@
 
 
 /***/ },
-/* 347 */
+/* 353 */
 /***/ function(module, exports) {
 
 	/**
@@ -39006,7 +39416,7 @@
 
 
 /***/ },
-/* 348 */
+/* 354 */
 /***/ function(module, exports) {
 
 	/**
@@ -39144,7 +39554,7 @@
 
 
 /***/ },
-/* 349 */
+/* 355 */
 /***/ function(module, exports) {
 
 	/**
@@ -39217,7 +39627,7 @@
 
 
 /***/ },
-/* 350 */
+/* 356 */
 /***/ function(module, exports) {
 
 	var _element = typeof document !== 'undefined' ? document.body : null;
@@ -39264,7 +39674,7 @@
 
 
 /***/ },
-/* 351 */
+/* 357 */
 /***/ function(module, exports) {
 
 	module.exports = function(opts) {
@@ -39329,7 +39739,7 @@
 
 
 /***/ },
-/* 352 */
+/* 358 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -39364,7 +39774,7 @@
 	exports.default = modalStyles;
 
 /***/ },
-/* 353 */
+/* 359 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39381,9 +39791,9 @@
 
 	var _reactRedux = __webpack_require__(215);
 
-	var _actions = __webpack_require__(311);
+	var _actions = __webpack_require__(317);
 
-	var _Index = __webpack_require__(354);
+	var _Index = __webpack_require__(360);
 
 	var _Index2 = _interopRequireDefault(_Index);
 
@@ -39448,7 +39858,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(IndexContainer);
 
 /***/ },
-/* 354 */
+/* 360 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39463,7 +39873,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _reactRouter = __webpack_require__(245);
+	var _reactRouter = __webpack_require__(251);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39503,7 +39913,7 @@
 	exports.default = Index;
 
 /***/ },
-/* 355 */
+/* 361 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39514,13 +39924,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(356);
+	var _warning = __webpack_require__(362);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
-	var _Actions = __webpack_require__(357);
+	var _Actions = __webpack_require__(363);
 
-	var _PathUtils = __webpack_require__(358);
+	var _PathUtils = __webpack_require__(364);
 
 	function createLocation() {
 	  var location = arguments.length <= 0 || arguments[0] === undefined ? '/' : arguments[0];
@@ -39559,7 +39969,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 356 */
+/* 362 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -39625,7 +40035,7 @@
 
 
 /***/ },
-/* 357 */
+/* 363 */
 /***/ function(module, exports) {
 
 	/**
@@ -39661,7 +40071,7 @@
 	};
 
 /***/ },
-/* 358 */
+/* 364 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -39672,7 +40082,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _warning = __webpack_require__(356);
+	var _warning = __webpack_require__(362);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -39713,412 +40123,13 @@
 	}
 
 /***/ },
-/* 359 */
+/* 365 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	module.exports = __webpack_require__(204);
 
-
-/***/ },
-/* 360 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	exports.default = function (endpoint, params) {
-	    if (arguments.length != 2) {
-	        throw new Error('Api expects exactly two arguments');
-	    }
-
-	    // check if endpoint exists
-	    if (typeof endpoints[endpoint] !== 'function') {
-	        throw new Error('No action is mapped to this endpoint');
-	    }
-
-	    // check language
-	    if (! ~(0, _meta.getLanguages)().indexOf(params.lang)) {
-	        throw new Error('Wrong language');
-	    }
-
-	    return endpoints[endpoint](params);
-	};
-
-	var _pages = __webpack_require__(361);
-
-	var _pages2 = _interopRequireDefault(_pages);
-
-	var _gallery = __webpack_require__(362);
-
-	var _gallery2 = _interopRequireDefault(_gallery);
-
-	var _index = __webpack_require__(363);
-
-	var _index2 = _interopRequireDefault(_index);
-
-	var _meta = __webpack_require__(364);
-
-	var _meta2 = _interopRequireDefault(_meta);
-
-	var _speakers = __webpack_require__(365);
-
-	var _speakers2 = _interopRequireDefault(_speakers);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	// TODO: move all this to some actual storage
-
-
-	var endpoints = {
-	    'index': _index2.default,
-	    'page': _pages2.default,
-	    'gallery': _gallery2.default,
-	    'meta': _meta2.default,
-	    'speakers': _speakers2.default
-	};
-
-	var dv = console.log.bind(console);
-
-/***/ },
-/* 361 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = getPage;
-
-	var _fs = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"fs\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-
-	var _fs2 = _interopRequireDefault(_fs);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var data = {
-	    'en': {
-	        'about': {
-	            'title': 'About us',
-	            'url': 'about',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/en/about.html\')'
-	        },
-	        'services': {
-	            'title': 'Services',
-	            'url': 'services',
-	            'menu_id': 1,
-	            'content': '<h3>Research</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-research.html\') .\n                    \'<h3>Academic partnerships</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-partnerships.html\') .\n                    \'<h3>Business seminars</h3>\' .\n                    file_get_contents(__DIR__ . \'/../html/en/services-seminars.html\')'
-	        },
-	        'partnerships': {
-	            'title': 'Partnerships',
-	            'url': 'partnerships',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/en/partnerships.html\')'
-	        },
-	        'contacts': {
-	            'title': 'Contacts',
-	            'url': 'contacts',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/en/contacts.html\')'
-	        },
-	        'services/research': {
-	            'title': 'Research',
-	            'url': 'services/research',
-	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-research.html\')'
-	        },
-	        'services/partnerships': {
-	            'title': 'Academic partnerships',
-	            'url': 'services/partnerships',
-	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-partnerships.html\')'
-	        },
-	        'services/seminars': {
-	            'title': 'Business seminars',
-	            'url': 'services/seminars',
-	            'content': 'file_get_contents(__DIR__ . \'/../html/en/services-seminars.html\')'
-	        },
-	        'speakers': {
-	            'title': 'Guest Speakers',
-	            'url': 'speakers',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/en/speakers.html\')'
-	        },
-	        'gallery': {
-	            'title': 'Gallery',
-	            'url': 'gallery',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/en/gallery.html\')'
-	        }
-	    },
-	    'si': {
-	        'about': {
-	            'title': 'Kdo smo',
-	            'url': 'about',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/about.html\')'
-	        },
-	        'services': {
-	            'title': 'Storitve',
-	            'url': 'services',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services.html\')'
-	        },
-	        'partnerships': {
-	            'title': 'Partnerstvo',
-	            'url': 'partnerships',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/partnerships.html\')'
-	        },
-	        'contacts': {
-	            'title': 'Kontakt',
-	            'url': 'contacts',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/contacts.html\')'
-	        },
-	        'services/research': {
-	            'title': 'Raziskovanje',
-	            'url': 'services/research',
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-research.html\')'
-	        },
-	        'services/consulting': {
-	            'title': 'Poslovno Svetovanje',
-	            'url': 'services/consulting',
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-consulting.html\')'
-	        },
-	        'services/trainings': {
-	            'title': 'Akademska partnerstva',
-	            'url': 'about',
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/services-trainings.html\')'
-	        },
-	        'speakers': {
-	            'title': 'Tuji gostujoči predavatelji',
-	            'url': 'speakers',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/speakers.html\')'
-	        },
-	        'gallery': {
-	            'title': 'Galerija',
-	            'url': 'gallery',
-	            'menu_id': 1,
-	            'content': 'file_get_contents(__DIR__ . \'/../html/si/gallery.html\')'
-	        }
-	    }
-	};
-
-	function getPage(_ref) {
-	    var lang = _ref.lang;
-	    var pageName = _ref.pageName;
-
-	    return data[lang][pageName];
-	}
-
-/***/ },
-/* 362 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = getGalleries;
-
-	var _pages = __webpack_require__(361);
-
-	var _pages2 = _interopRequireDefault(_pages);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var data = {
-	    'en': [{
-	        'title': 'Business lectures and consulting',
-	        'images': ['_B9A1055.JPG', '_B9A1064.JPG', '_B9A1101.JPG', '_B9A1034.jpg'],
-	        'content': '\n            <p><i>21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</i></p>\n            <p>Presentation of US business consultant about approaches to building company vision and implementing growth.</p>\n            <p>US consultant shared barriers and drivers of success based on the case studies and field stories in the USA. He looked into basic principals of building and growing successful business.\n            The focus is on the value of the vision and the importance of the strategic approach to company growth. The workshop is based on the American examples and international consulting case studies:\n            58 years of experience in the real world; from corporate America to small businesses; 9 different countries (USA, Germany, Australia, Philippines, Mexico, Poland, Azerbaijan, Kyrgyzstan, Ukraine).</p>\n            '
-	    }, {
-	        'title': 'Conferences / Networking / Interviews',
-	        'images': ['C05150B9-09DA-45F1-8E0F-82BD2555E458.jpg', 'IMG_2930.JPG', 'zavod.jpg', 'fam.jpg'],
-	        'content': '\n            <p>Field work with expert interviews, attending conferences and events of the professional associations with the goal to bring new opportunities, partnerships, ideas, projects and research to Slovenia.</p>\n            <p>10 June 2015, International Conference “<a href="http://feel-leadership.si/" target="_blank">FEELS: Future - Ethical - Effective – Leadership.</a>” (Brdo, Slovenia)</p>\n            <p>June-November 2015, FAM: <a href="http://www.drustvo-fam.si/" target="_blank">Association of Female Managers Events in Slovenia</a>. (Ljubljana, Slovenia) </p>\n            <p>14-17 October 2015, International Leadership Association Conference “<a href="http://www.ila-net.org/Conferences/Past/index.htm" target="_blank">Leading across borders and generations.</a>” (Barcelona, Spain)</p>\n            '
-	    }, {
-	        'title': 'Сonference support',
-	        'images': ['Boyd_Johnson_bio.jpg', 'conference_.jpg', 'DSC_0286.jpg', 'partners.jpg'],
-	        'content': '\n            <p>20 January 2016: Dr Boyd Johnson\'s presentation at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "Leadership and culture: perceptions of Western-based assessment models in other cultures".</p>\n            <p>This presentation examined the cross-cultural transferability of two widely used leadership assessment tools: the Leadership Practice Inventory (LPI) and the Cultural Intelligence Scale (CQS) based on the case studies from Eastern and Southern Europe.</p>\n            '
-	    }, {
-	        'title': 'Academic research partnerships',
-	        'images': ['01_small.jpg', 'Conferece_Students_CQS_Slovenia.jpg'],
-	        'content': '\n            <p>October 2015- January 2016: US-Slovenian research partnership with pilot research of Cultural Intelligence CQS (student testing) in Slovenia (527 students: University of Ljubljana, University of Maribor, University of Primorska, University of Nova Gorica) coordinated by a group of Slovenian <a href="https://www.linkedin.com/pulse/i-sent-overseas-basically-said-heres-your-ticket-good-ne%C5%BEa-prelog">junior researchers</a>.</p>\n            '
-	    }],
-	    'si': [{
-	        'title': 'SI Business lectures and consulting',
-	        'images': ['_B9A1055.JPG', '_B9A1064.JPG', '_B9A1101.JPG', '_B9A1034.jpg'],
-	        'content': '\n            <p><i>21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</i></p>\n            <p>Presentation of US business consultant about approaches to building company vision and implementing growth.</p>\n            <p>US consultant shared barriers and drivers of success based on the case studies and field stories in the USA. He looked into basic principals of building and growing successful business.\n            The focus is on the value of the vision and the importance of the strategic approach to company growth. The workshop is based on the American examples and international consulting case studies:\n            58 years of experience in the real world; from corporate America to small businesses; 9 different countries (USA, Germany, Australia, Philippines, Mexico, Poland, Azerbaijan, Kyrgyzstan, Ukraine).</p>\n            '
-	    }, {
-	        'title': 'SI Conferences / Networking / Interviews',
-	        'images': ['C05150B9-09DA-45F1-8E0F-82BD2555E458.jpg', 'IMG_2930.JPG', 'zavod.jpg', 'fam.jpg'],
-	        'content': '\n            <p>Field work with expert interviews, attending conferences and events of the professional associations with the goal to bring new opportunities, partnerships, ideas, projects and research to Slovenia.</p>\n            <p>10 June 2015, International Conference “<a href="http://feel-leadership.si/" target="_blank">FEELS: Future - Ethical - Effective – Leadership.</a>” (Brdo, Slovenia)</p>\n            <p>June-November 2015, FAM: <a href="http://www.drustvo-fam.si/" target="_blank">Association of Female Managers Events in Slovenia</a>. (Ljubljana, Slovenia) </p>\n            <p>14-17 October 2015, International Leadership Association Conference “<a href="http://www.ila-net.org/Conferences/Past/index.htm" target="_blank">Leading across borders and generations.</a>” (Barcelona, Spain)</p>\n            '
-	    }, {
-	        'title': 'Academic research partnerships',
-	        'images': ['01_small.jpg', 'Conferece_Students_CQS_Slovenia.jpg'],
-	        'content': '\n            <p>October 2015- January 2016: US-Slovenian research partnership with pilot research of Cultural Intelligence CQS (student testing) in Slovenia (527 students: University of Ljubljana, University of Maribor, University of Primorska, University of Nova Gorica) coordinated by a group of Slovenian <a href="https://www.linkedin.com/pulse/i-sent-overseas-basically-said-heres-your-ticket-good-ne%C5%BEa-prelog">junior researchers</a>.</p>\n            '
-	    }]
-	};
-
-	function getGalleries(_ref) {
-	    var lang = _ref.lang;
-
-	    var retval = (0, _pages2.default)({ lang: lang, pageName: 'gallery' });
-	    retval['galleries'] = data[lang];
-
-	    return retval;
-	}
-
-/***/ },
-/* 363 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = getIndex;
-	var data = {
-	    'en': [{
-	        'title': 'Research',
-	        'link': 'services/research'
-	    }, {
-	        'title': 'Academic partnerships',
-	        'link': 'services/partnerships'
-	    }, {
-	        'title': 'Business seminars',
-	        'link': 'services/seminars'
-	    }],
-	    'si': [{
-	        'title': 'Raziskovanje',
-	        'link': 'services/research'
-	    }, {
-	        'title': 'Poslovno Svetovanje',
-	        'link': 'services/consulting'
-	    }, {
-	        'title': 'Akademska partnerstva',
-	        'link': 'services/trainings'
-	    }]
-	};
-
-	function getIndex(_ref) {
-	    var lang = _ref.lang;
-
-	    return data[lang];
-	}
-
-/***/ },
-/* 364 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = getMeta;
-	exports.getLanguages = getLanguages;
-	var data = {
-	    'en': {
-	        'menu': [{ 'link': 'about', 'title': 'About us' }, { 'link': 'services', 'title': 'Services' }, { 'link': 'contacts', 'title': 'Contact us' }, { 'link': 'speakers', 'title': 'Guest Speakers' }, { 'link': 'gallery', 'title': 'Gallery' }],
-	        'languages': [{ 'code': 'en', 'title': 'English' }, { 'code': 'si', 'title': 'Slovenčina' }],
-	        'currentLanguage': 'en'
-	    },
-	    'si': {
-	        'menu': [{ 'link': 'about', 'title': 'Kdo smo' }, { 'link': 'services', 'title': 'Storitve' }, { 'link': 'contacts', 'title': 'Kontakt' }, { 'link': 'speakers', 'title': 'Tuji gostujoči predavatelji' }, { 'link': 'gallery', 'title': 'Galerija' }],
-	        'languages': [{ 'code': 'en', 'title': 'English' }, { 'code': 'si', 'title': 'Slovenčina' }],
-	        'currentLanguage': 'si'
-	    }
-	};
-
-	function getMeta(_ref) {
-	    var lang = _ref.lang;
-
-	    return data[lang];
-	}
-
-	function getLanguages() {
-	    return Object.keys(data);
-	}
-
-/***/ },
-/* 365 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = getSpeakers;
-
-	var _pages = __webpack_require__(361);
-
-	var _pages2 = _interopRequireDefault(_pages);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var data = {
-	    'en': [{
-	        'name': 'Mr. Maynard "Rink" Wheeler',
-	        'position': 'Independent Consumer Goods Professional (Michigan, USA).  ',
-	        'image': '/files/Wheeler.jpg',
-	        'content': '\n            <p>Stanford MBA 1957; Former Vice President of Operations for the Food’s Division of the Coca-Cola Company; Business consultant in CIS countries (Poland, Ukraine, Azerbaijan and Kyrgyzstan) with US State Department: 1998-2012.</p>\n            <p>Specialties: International operations, organizational structure, business and marketing strategies, budget and cost control, mentoring new start-up businesses.</p>\n            <p><a href="/en/gallery#rink">21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</a></p>\n            '
-	    }, {
-	        'name': 'Dr. R. Boyd Johnson',
-	        'position': 'Chair of the Doctoral Program in Organizational Leadership at Indiana Wesleyan University (Indiana, USA).',
-	        'image': '/files/boyd-johnson.jpg',
-	        'content': '<p>PhD in International Studies (Oxford), MA degrees in Anthropology (California State) and Theology (Fuller Seminary) and a BA in Anthropology (UCLA). Focus on international business and social sciences.</p>\n            <p>Research project: “Cultural intelligence: case study of Slovenia.”</p>\n            <p>20 January 2016: Dr Boyd Johnson presents at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "<a href="/en/gallery">Leadership and culture: perceptions of Western-based assessment models in other cultures</a>". </p>\n            <p>9 June 2016: Dr. Boyd Johnson’s presentation "Drivers and barriers of effective Leadership in the multigenerational workplaces" at the FEELs conference “<a href="http://feel-leadership.si/">Poslovna etika in konflikti vlog</a>“.</p>\n            '
-	    }, {
-	        'name': 'Dr. Gaye Bammet',
-	        'position': 'Lead mediator at Dispute Resolution Center of Seattle / King County (Seattle, USA).',
-	        'image': '/files/DrBammet.jpg',
-	        'content': '<p>Assistant professor, University of Washington. Ph.D., Speech Communication, Southern Illinois University, (Carbondale, IL); M.A., Speech Communication California State University-Northridge.</p>\n            <p>Guest lecture: “Effective communication and dispute resolution: case studies of US businesses.”</p>'
-	    }, {
-	        'name': 'Mr. Prokofiev Sergey',
-	        'position': 'Business Development Director, CreativePeople (Moscow, Russian Federation)',
-	        'image': '/files/Prokofiev.jpg',
-	        'content': '<p>Guest lecture: “Tips for start up and management of successful Creative Agency: Case study of Russia.”</p>'
-	    }],
-	    'si': [{
-	        'name': 'Mr. Maynard "Rink" Wheeler',
-	        'position': 'strokovnjak s področja potrošniškega blaga (Michigan, ZDA).  ',
-	        'image': '/files/Wheeler.jpg',
-	        'content': '\n            <p>Stanford MBA 1957; Bivši Podpredsednik Oddelka za živilske zaloge pri Podjetju Coca-Cola; Poslovni svetovalec po državam SND (Polska, Ukrajina, Azerbajdžan and Kirgizija) pri Zunanjem ministrstvu ZDA: 1998-2012 leta.</p>\n            <p>Mednarodno poslovanje, organizacijske structure.</p>\n            <p><a href="/si/gallery#rink">21 October 2015: Lecture at ABC Accelerator “Building Company vision and plan for growth: best practices from the USA”</a></p>\n            '
-	    }, {
-	        'name': 'Dr. R. Boyd Johnson',
-	        'position': 'Predsednik doktorskega programa v organizacijskem vodenju pri Univerzi Indiana Wesleyan (Indiana, ZDA).',
-	        'image': '/files/boyd-johnson.jpg',
-	        'content': '<p>PhD in Mednarodne Študije (Oxford), magister antropologije (ZDA, Kalifornija) in Teologije (Fuller Seminary) ter diplomant antropologije (UCLA). Osredotoča se na mednarodnih poslovnih in družbenih vedah.</p>\n            <p>Raziskovalni projekt: "Kulturna inteligenca v Sloveniji.”</p>\n            <p>20 January 2016: Dr Boyd Johnson presents at the conference "<a href="http://psihologijadela.com/program/" target="_blank">Tujina, moja službena domovina</a>" with a lecture "<a href="/si/gallery">Leadership and culture: perceptions of Western-based assessment models in other cultures</a>". </p>\n            '
-	    }, {
-	        'name': 'Dr. Gaye Bammet',
-	        'position': 'Vodilni posrednik pri Centru za reševanje sporov pri Seattle / King County (Seattle, ZDA).',
-	        'image': '/files/DrBammet.jpg',
-	        'content': '<p>Asistent profesorja, University of Washington. Ph.D., Metode in možnosti komuniciranja, Southern Illinois University, (Carbondale, IL); M.A., Metode in možnosti komuniciranja California State University-Northridge.</p>\n            <p>"Učinkovita komunikacija in reševanje sporov. obravnava študijskih primerov podjetij v ZDA". </p>'
-	    }, {
-	        'name': 'Mr. Prokofiev Sergey',
-	        'position': 'Direktor za razvoj poslovanja, CreativePeople (Moskva, Ruska Federacija)',
-	        'image': '/files/Prokofiev.jpg',
-	        'content': '<p>"Nasveti za startup in vodenje uspešne kreativne agencije: Študijski primeri v Rusiji."</p>'
-	    }]
-	};
-
-	function getSpeakers(_ref) {
-	    var lang = _ref.lang;
-
-	    var retval = (0, _pages2.default)({ lang: lang, pageName: 'speakers' });
-	    retval['speakers'] = data[lang];
-
-	    return retval;
-	}
 
 /***/ }
 /******/ ]);

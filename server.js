@@ -1,6 +1,8 @@
-import React from 'react';
-const dv = console.log.bind(console);
+import express from 'express';
+import api from './_src/js/server/api.js';
+import fs from 'fs';
 
+import React from 'react';
 import createLocation from 'history/lib/createLocation';
 import routes from './_src/js/main/routes.jsx';
 import { renderToString } from 'react-dom/server'
@@ -9,34 +11,90 @@ import { Provider } from 'react-redux';
 import configureStore from './_src/js/main/redux/configureStore.js';
 import serverApi from './_src/js/server/api.js';
 
-match({ routes, location: '/en/gallery' }, (err, redirectLocation, renderProps) => {
-    if (err) {
-        //console.error(err);
-        //return res.status(500).end('Internal server error');
-    }
+const port = 3000;
 
-    const __INITIAL_STATE__ = { meta: serverApi('meta', { lang: 'en' }) };
-    const store = configureStore(__INITIAL_STATE__);
+let app = express();
+let layout;
 
-    let { query, params } = renderProps;
-    let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
+const dv = console.log.bind(console);
 
-    params.dispatch = store.dispatch;
+fs.readFile('./_src/js/server/layout.html', 'utf8', (err, data) => {
+    layout = data;
+});
 
-    let promise = comp.fetch ? comp.fetch(params) : Promise.resolve();
+try {
+    app.use('/css', express.static('./css'));
+    app.use('/files', express.static('./files'));
+    app.use('/img', express.static('./img'));
+    app.use('/js', express.static('./js'));
 
-    promise.then(data => {
-        let reduxState = JSON.stringify(store.getState());
-
-        const InitialComponent = (
-            <Provider store={store}>
-                <RouterContext {...renderProps} />
-            </Provider>
-        );
-
-        const content = renderToString(InitialComponent);
-        console.log(content);
-    }).catch(err => {
-        //console.log(err);
+    app.get('/api/1/:endpoint', (req, res) => {
+        let response = api(req.params.endpoint, req.query);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(response), null, 4);
     });
+
+    app.get('*', (req, res) => {
+        var __INITIAL_STATE__ = {
+            meta: {
+                "menu":[
+                    {"link":"about","title":"About us"},
+                    {"link":"services","title":"Services"},
+                    {"link":"contacts","title":"Contact us"},
+                    {"link":"speakers","title":"Guest Speakers"},
+                    {"link":"gallery","title":"Gallery"}
+                ],
+                "languages":[
+                    {"code":"en","title":"English"},
+                    {"code":"si","title":"Sloven\u010dina"}
+                ],
+                "currentLanguage":"en"
+            }
+        };
+
+        match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
+            if (err) {
+                throw err;
+            }
+
+            if (redirectLocation && redirectLocation.pathname) {
+                res.redirect(redirectLocation.pathname)
+            }
+
+            const store = configureStore({ meta: serverApi('meta', { lang: renderProps.params.lang }) });
+
+            let { query, params } = renderProps;
+            let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
+
+            params.dispatch = store.dispatch;
+
+            let promise = comp.fetch ? comp.fetch(params) : Promise.resolve();
+
+            promise.then(data => {
+                let state = JSON.stringify(store.getState());
+
+                const InitialComponent = (
+                    <Provider store={store}>
+                        <RouterContext {...renderProps} />
+                    </Provider>
+                );
+
+                let content = renderToString(InitialComponent);
+                let response = layout.replace('{{content}}', content);
+                response = response.replace('{{state}}', JSON.stringify(store.getState()));
+
+                res.setHeader('Content-Type', 'text/html');
+                res.send(response);
+            }).catch(error => {
+                console.log(error);
+                throw new Error(error);
+            });
+        });
+    });
+} catch (error) {
+    console.log(error);
+}
+
+app.listen(port, () => {
+    console.log(`Epos app listening on port ${port}!`);
 });
