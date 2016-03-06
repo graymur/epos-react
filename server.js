@@ -68,9 +68,6 @@ try {
 
                 res.setHeader('Content-Type', 'text/html');
                 res.send(response);
-            }).catch(error => {
-                console.log(error);
-                throw new Error(error);
             });
         });
     });
