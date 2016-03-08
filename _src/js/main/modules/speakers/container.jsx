@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { fetchSpeakersAction } from './actions.js';
-
 import Speakers from './components/Speakers.jsx';
 
 class SpeakersContainer extends React.Component {
     componentWillMount() {
         this.fetchIfNeeded(this.props, true);
+        //this.fetchIfNeeded(this.props, !Boolean(this.props.speakers.speakers.length));
     }
 
     componentWillReceiveProps(props) {

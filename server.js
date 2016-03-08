@@ -54,8 +54,6 @@ try {
             let promise = comp.fetch ? comp.fetch(params) : Promise.resolve();
 
             promise.then(data => {
-                let state = JSON.stringify(store.getState());
-
                 const InitialComponent = (
                     <Provider store={store}>
                         <RouterContext {...renderProps} />
@@ -65,6 +63,8 @@ try {
                 let content = renderToString(InitialComponent);
                 let response = layout.replace('{{content}}', content);
                 response = response.replace('{{state}}', JSON.stringify(store.getState()));
+
+                //console.log(store.getState());
 
                 res.setHeader('Content-Type', 'text/html');
                 res.send(response);

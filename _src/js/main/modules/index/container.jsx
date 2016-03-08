@@ -9,13 +9,16 @@ class IndexContainer extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        if (props.location.pathname !== this.props.location.pathname) {
-            this.fetchIfNeeded(props);
-        }
+        this.fetchIfNeeded(props);
     }
 
     fetchIfNeeded(props) {
-        this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang })
+        if (this.props.routeParams.lang !== props.routeParams.lang || !props.index.length) {
+            this.constructor.fetch({
+                dispatch: props.dispatch,
+                lang: props.params.lang
+            })
+        }
     }
 
     static fetch({ dispatch, lang }) {
