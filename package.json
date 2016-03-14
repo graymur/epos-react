@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register ./_src/js/tests/**/*.js*",
+    "test": "mocha --compilers js:babel-core/register --require ./_src/js/tests/util/dom.js ./_src/js/tests/**/*.js*",
+    "testcalculateAutoProducts": "mocha --compilers js:babel-core/register --require ./_src/js/tests/util/dom.js ./_src/js/tests/unit/components/PageLayout_spec.js",
     "tw": "npm run test -- --watch"
   },
   "keywords": [],
@@ -45,7 +46,11 @@
     "gulp-shell": "^0.5.1",
     "gulp-svgmin": "^1.2.1",
     "gulp-util": "^3.0.7",
+    "jquery": "^2.2.1",
+    "jsdom": "^8.1.0",
     "mocha": "^2.3.4",
+    "mocha-jsdom": "^1.1.0",
+    "react-addons-test-utils": "^0.14.7",
     "redux-devtools": "^3.0.1",
     "redux-devtools-dock-monitor": "^1.0.1",
     "redux-devtools-log-monitor": "^1.0.2",
