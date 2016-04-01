@@ -1,4 +1,4 @@
-import { CALL_API } from '../../redux/middleware/api.js';
+import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
 
 export const INDEX_REQUEST = 'INDEX_REQUEST';
 export const INDEX_SUCCESS = 'INDEX_SUCCESS';

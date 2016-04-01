@@ -2,7 +2,7 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        'main': './_src/js/main/main.jsx'
+        'main': './_src/js/client/main.jsx'
     },
     module: {
         loaders: [{
@@ -10,7 +10,7 @@ module.exports = {
             exclude: /node_modules/,
             loader: 'babel',
             query: {
-                presets: ['es2015', 'react', 'stage-0']
+                presets: ['es2015', 'react']
             }
         }]
     },

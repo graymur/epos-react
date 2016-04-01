@@ -1,4 +1,4 @@
-import { CALL_API } from '../../redux/middleware/api.js';
+import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
 
 export const PAGE_REQUEST = 'PAGE_REQUEST';
 export const PAGE_SUCCESS = 'PAGE_SUCCESS';

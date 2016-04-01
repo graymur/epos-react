@@ -1,4 +1,4 @@
-import { CALL_API } from '../../redux/middleware/api.js';
+import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
 
 export const GALLERY_REQUEST = 'GALLERY_REQUEST';
 export const GALLERY_SUCCESS = 'GALLERY_SUCCESS';

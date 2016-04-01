@@ -1,4 +1,4 @@
-import { CALL_API } from '../../redux/middleware/api.js';
+import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
 
 export const SPEAKERS_REQUEST = 'SPEAKERS_REQUEST';
 export const SPEAKERS_SUCCESS = 'SPEAKERS_SUCCESS';

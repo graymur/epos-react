@@ -22,7 +22,7 @@ $language = !@in_array($language[0], array('en', 'si')) ? 'en' : $language[0];
         meta: <?=json_encode(getMeta($language))?>
     }
 </script>
-<script src="/js/main.js"></script>
+<script src="/js/main.js?<?=microtime(true)?>"></script>
 </body>
 </html>
 

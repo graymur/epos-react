@@ -1,5 +1,4 @@
 import express from 'express';
-import api from './_src/js/server/api.js';
 import fs from 'fs';
 
 import React from 'react';
@@ -9,7 +8,7 @@ import { renderToString } from 'react-dom/server'
 import { RouterContext, match } from 'react-router';
 import { Provider } from 'react-redux';
 import configureStore from './_src/js/main/redux/configureStore.js';
-import serverApi from './_src/js/server/api.js';
+import api from './_src/js/server/api.js';
 
 const port = 3000;
 
@@ -29,9 +28,10 @@ try {
     app.use('/js', express.static('./js'));
 
     app.get('/api/1/:endpoint', (req, res) => {
-        let response = api(req.params.endpoint, req.query);
-        res.setHeader('Content-Type', 'application/json');
-        res.send(JSON.stringify(response), null, 4);
+        api(req.params.endpoint, req.query).then(data => {
+            res.setHeader('Content-Type', 'application/json');
+            res.send(JSON.stringify(data), null, 4);
+        });
     });
 
     app.get('*', (req, res) => {
@@ -44,30 +44,37 @@ try {
                 res.redirect(redirectLocation.pathname)
             }
 
-            const store = configureStore({ meta: serverApi('meta', { lang: renderProps.params.lang }) });
-
-            let { query, params } = renderProps;
-            let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
-
-            params.dispatch = store.dispatch;
-
-            let promise = comp.fetch ? comp.fetch(params) : Promise.resolve();
-
-            promise.then(data => {
-                const InitialComponent = (
-                    <Provider store={store}>
-                        <RouterContext {...renderProps} />
-                    </Provider>
+            api('meta', { lang: renderProps.params.lang }).then(meta => {
+                const store = configureStore(
+                    { meta: meta },
+                    api
                 );
 
-                let content = renderToString(InitialComponent);
-                let response = layout.replace('{{content}}', content);
-                response = response.replace('{{state}}', JSON.stringify(store.getState()));
+                let { query, params } = renderProps;
+                let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
 
-                //console.log(store.getState());
+                params.dispatch = store.dispatch;
 
-                res.setHeader('Content-Type', 'text/html');
-                res.send(response);
+                let promise = comp.fetch ? comp.fetch(params) : Promise.resolve();
+
+                promise.then(data => {
+                    const InitialComponent = (
+                        <Provider store={store}>
+                            <RouterContext {...renderProps} />
+                        </Provider>
+                    );
+
+                    let content = renderToString(InitialComponent);
+
+                    let response = layout.replace('{{content}}', content);
+                    response = response.replace('{{state}}', JSON.stringify(store.getState()));
+
+                    res.setHeader('Content-Type', 'text/html');
+                    res.send(response);
+                });
+            }).catch(e => {
+                console.log(e.message);
+                console.log(e.stack);
             });
         });
     });

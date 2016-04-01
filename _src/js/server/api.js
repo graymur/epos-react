@@ -29,5 +29,5 @@ export default function(endpoint, params) {
         throw new Error('Wrong language');
     }
 
-    return endpoints[endpoint](params);
+    return Promise.resolve(endpoints[endpoint](params));
 }

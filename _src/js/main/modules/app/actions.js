@@ -1,4 +1,4 @@
-import { CALL_API } from '../../redux/middleware/api.js';
+import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
 
 export const ASYNC_ERROR = 'ASYNC_ERROR';
 export const META_REQUEST = 'META_REQUEST';
