@@ -1,4 +1,5 @@
 import { PAGE_REQUEST, PAGE_SUCCESS, PAGE_FAILURE } from './actions.js';
+//import { ASYNC_PENDING } from '../../redux/middleware/create-api-middleware.js';
 
 const initialState = {
     title: '',
@@ -11,6 +12,10 @@ export default function page(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
+        //case ASYNC_PENDING:
+        //    retval = Object.assign({}, state, { title: '' });
+        //    break;
+
         case PAGE_SUCCESS:
             retval =  action.data || initialState;
             break;

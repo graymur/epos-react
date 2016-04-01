@@ -6,8 +6,7 @@ import Gallery from './components/Gallery.jsx';
 
 class GalleryContainer extends React.Component {
     componentWillMount() {
-        //this.fetchIfNeeded(this.props, !Boolean(this.props.gallery.galleries.length));
-        this.fetchIfNeeded(this.props, true);
+        this.fetchIfNeeded(this.props);
     }
 
     componentWillReceiveProps(props) {
@@ -15,7 +14,7 @@ class GalleryContainer extends React.Component {
     }
 
     fetchIfNeeded(props, force = false) {
-        if (props.location.pathname !== this.props.location.pathname || force) {
+        if (!props.gallery.title || props.location.pathname !== this.props.location.pathname || this.props.gallery.lang !== props.params.lang || force) {
             this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang });
         }
     }

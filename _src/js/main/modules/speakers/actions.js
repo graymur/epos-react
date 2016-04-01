@@ -15,16 +15,4 @@ export function fetchSpeakersAction(lang) {
         lang,
         endpoint: 'speakers'
     };
-    //return (dispatch, getState) => {
-        //return dispatch({
-        //    type: CALL_API,
-        //    types: {
-        //        fetchingType: SPEAKERS_REQUEST,
-        //        fetchedType: SPEAKERS_SUCCESS,
-        //        errorType: SPEAKERS_FAILURE
-        //    },
-        //    lang,
-        //    endpoint: 'speakers'
-        //});
-    //};
 }

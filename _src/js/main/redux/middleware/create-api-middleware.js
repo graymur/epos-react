@@ -3,13 +3,15 @@ import { errorAction } from '../../modules/app/actions.js';
 
 export const CALL_API = 'CALL_API';
 export const ASYNC_ERROR = 'ASYNC_ERROR';
+export const ASYNC_PENDING = 'ASYNC_PENDING';
 
 export default api => store => next => action => {
     if (action.type !== CALL_API) {
         return next(batchActions([action, errorAction(false)]));
     }
 
-    next({ type: action.types.fetchingType });
+    //next({ type: action.types.fetchingType });
+    next({ type: ASYNC_PENDING });
 
     let request = Object.assign(
         {},

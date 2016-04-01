@@ -5,8 +5,7 @@ import Speakers from './components/Speakers.jsx';
 
 class SpeakersContainer extends React.Component {
     componentWillMount() {
-        this.fetchIfNeeded(this.props, true);
-        //this.fetchIfNeeded(this.props, !Boolean(this.props.speakers.speakers.length));
+        this.fetchIfNeeded(this.props);
     }
 
     componentWillReceiveProps(props) {
@@ -14,7 +13,7 @@ class SpeakersContainer extends React.Component {
     }
 
     fetchIfNeeded(props, force) {
-        if (force || props.location.pathname !== this.props.location.pathname) {
+        if (!props.speakers.title || props.location.pathname !== this.props.location.pathname || this.props.speakers.lang !== props.params.lang || force) {
             this.constructor.fetch({ dispatch: props.dispatch, lang: props.params.lang });
         }
     }

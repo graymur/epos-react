@@ -15,19 +15,27 @@ const endpoints = {
 };
 
 export default function(endpoint, params) {
-    if (arguments.length != 2) {
-        throw new Error('API expects exactly two arguments');
-    }
+    return new Promise((resolve, reject) => {
+        try {
+            if (arguments.length != 2) {
+                throw new Error('API expects exactly two arguments');
+            }
 
-    // check if endpoint exists
-    if (typeof endpoints[endpoint] !== 'function') {
-        throw new Error('No action is mapped to this endpoint');
-    }
+            // check if endpoint exists
+            if (typeof endpoints[endpoint] !== 'function') {
+                throw new Error('No action is mapped to this endpoint');
+            }
 
-    // check language
-    if (!~getLanguages().indexOf(params.lang)) {
-        throw new Error('Wrong language');
-    }
+            // check language
+            if (!~getLanguages().indexOf(params.lang)) {
+                throw new Error('Wrong language');
+            }
 
-    return Promise.resolve(endpoints[endpoint](params));
+            let result = endpoints[endpoint](params);
+            result.lang = params.lang;
+            resolve(result);
+        } catch (e) {
+            reject(e);
+        }
+    });
 }

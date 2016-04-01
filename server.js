@@ -44,43 +44,41 @@ try {
                 res.redirect(redirectLocation.pathname)
             }
 
+            let store;
+
             api('meta', { lang: renderProps.params.lang }).then(meta => {
-                const store = configureStore(
-                    { meta: meta },
-                    api
-                );
+                store = configureStore({ meta: meta }, api);
 
                 let { query, params } = renderProps;
                 let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
 
                 params.dispatch = store.dispatch;
 
-                let promise = comp.fetch ? comp.fetch(params) : Promise.resolve();
+                return comp.fetch ? comp.fetch(params) : Promise.resolve();
+            }).then(data => {
+                const InitialComponent = (
+                    <Provider store={store}>
+                        <RouterContext {...renderProps} />
+                    </Provider>
+                );
 
-                promise.then(data => {
-                    const InitialComponent = (
-                        <Provider store={store}>
-                            <RouterContext {...renderProps} />
-                        </Provider>
-                    );
+                let content = renderToString(InitialComponent);
 
-                    let content = renderToString(InitialComponent);
+                let response = layout.replace('{{content}}', content);
+                response = response.replace('{{state}}', JSON.stringify(store.getState()));
 
-                    let response = layout.replace('{{content}}', content);
-                    response = response.replace('{{state}}', JSON.stringify(store.getState()));
-
-                    res.setHeader('Content-Type', 'text/html');
-                    res.send(response);
-                });
+                res.setHeader('Content-Type', 'text/html');
+                res.send(response);
             }).catch(e => {
-                console.log(e.message);
-                console.log(e.stack);
+                // TODO: handle wrong requests
+                res.setHeader('Content-Type', 'text/html');
+                res.send('error');
             });
+
+
         });
     });
-} catch (error) {
-    console.log(error);
-}
+} catch (error) { }
 
 app.listen(port, () => {
     console.log(`Epos app listening on port ${port}!`);
