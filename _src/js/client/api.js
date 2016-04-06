@@ -8,7 +8,7 @@ export default function (endpoint, data = {}) {
 
     let retval;
 
-    console.log(`${host}/api/1/${endpoint}?` + Object.keys(data).map(k => k + '=' + encodeURIComponent(data[k])).join('&'));
+    //console.log(`${host}/api/1/${endpoint}?` + Object.keys(data).map(k => k + '=' + encodeURIComponent(data[k])).join('&'));
 
     if (cache[cacheKey]) {
         retval = Promise.resolve(cache[cacheKey]);

@@ -1,7 +1,7 @@
 import React from 'react';
 import PageLayout from '../../../components/PageLayout.jsx';
 
-export default Error = () => {
+const ErrorComponent = () => {
     return (
         <PageLayout>
             <h1>Error 404</h1>
@@ -9,3 +9,5 @@ export default Error = () => {
         </PageLayout>
     );
 };
+
+export default ErrorComponent;

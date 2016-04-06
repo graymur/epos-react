@@ -1,10 +1,10 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import Languages from './Languages.jsx';
-import Error from './Error.jsx';
+import ErrorComponent from './ErrorComponent.jsx';
 
 const App = (props) => {
-    let content = props.meta.error ? <Error {...props.meta.error}/> : props.children;
+    let content = props.meta.error ? <ErrorComponent {...props.meta.error}/> : props.children;
     return (
         <div className="page-container">
             <header className="header">

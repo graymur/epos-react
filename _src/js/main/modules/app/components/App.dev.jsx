@@ -1,7 +1,7 @@
 import React from 'react';
 import Menu from './Menu.jsx';
 import Languages from './Languages.jsx';
-import Error from './Error.jsx';
+import Error from './ErrorComponent.jsx';
 
 import DevTools from '../../../containers/DevTools.jsx';
 

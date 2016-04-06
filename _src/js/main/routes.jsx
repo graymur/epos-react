@@ -6,6 +6,7 @@ import App from './modules/app/container.jsx';
 import Page from './modules/page/container.jsx';
 import Speakers from './modules/speakers/container.jsx';
 import Gallery from './modules/gallery/container.jsx';
+import Contacts from './modules/contacts/container.jsx';
 import Index from './modules/index/container.jsx';
 
 export default (
@@ -13,6 +14,7 @@ export default (
         <Route path=":lang/">
             <Route path="speakers" component={Speakers}/>
             <Route path="gallery" component={Gallery}/>
+            <Route path="contacts" component={Contacts}/>
             <Route path="*" component={Page}/>
         </Route>
         <Route path="/:lang" component={Index}/>
