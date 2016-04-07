@@ -6,10 +6,11 @@ const IndexItem = ({title, link, lang }) => {
 };
 
 const Index = ({ index, lang }) => {
+    if (!index.items || !index.items.length) return <span></span>;
     return (
         <div className="page page--main-page">
             <nav className="main-page__list">
-                { index.map((item, index) => <IndexItem key={index} {...item} lang={lang} />) }
+                { index.items.map((item, index) => <IndexItem key={index} {...item} lang={lang} />) }
             </nav>
         </div>
     );
