@@ -31,7 +31,7 @@ export function normalizeRule(rule) {
     let keys = Object.keys(rule);
 
     if (keys.length > 1) {
-        throw new Error('Single rule cannot cointain more than one key');
+        throw new Error('Single rule cannot contain more than one key');
     }
 
     let ruleData = rule[keys[0]];
