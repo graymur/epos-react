@@ -1,45 +1,39 @@
 import React from 'react';
 import { reduxForm } from 'redux-form';
-import { createAsyncValidator } from '../../../util/validate/validate.js';
+import { generateValidation } from 'redux-form-validation';
 
 function onSubmit() {
     console.log(arguments);
-}
-
-function validationClass(classes = [], state = {}) {
-    if (state.touched && !state.valid) {
-        classes.push('_invalid');
-    }
-
-    return classes.join(' ');
 }
 
 class Form extends React.Component {
     render() {
         const { fields: { name, email, phone, message }, handleSubmit } = this.props;
 
+        console.log(email);
+
         return (
             <form method="post" onSubmit={ handleSubmit(onSubmit) }>
                 <div className="contacts__form form">
-                    <label className={validationClass(['form__row'], name)}>
+                    <label className="form__row">
                         <span className="form__row__label">Your name:</span>
                         <span className="form__row__input">
                             <input name="name" {...name}/>
                         </span>
                     </label>
-                    <label className={validationClass(['form__row'], email)}>
+                    <label className="form__row">
                         <span className="form__row__label">Your email:</span>
                         <span className="form__row__input">
                             <input name="email" {...email}/>
                         </span>
                     </label>
-                    <label className={validationClass(['form__row'], phone)}>
+                    <label className="form__row">
                         <span className="form__row__label">Your phone:</span>
                         <span className="form__row__input">
                             <input name="phone" {...phone}/>
                         </span>
                     </label>
-                    <label className={validationClass(['form__row'], message)}>
+                    <label className="form__row">
                         <span className="form__row__label">Your message:</span>
                         <span className="form__row__input">
                             <textarea name="message" {...message}></textarea>
@@ -54,22 +48,47 @@ class Form extends React.Component {
     }
 }
 
-const rules = {
-    name: "required",
+var validations = {
+    name: {
+        required: false
+    },
     email: {
-        required: "This field is required",
-        email: "Wrong email"
+        required: true,
+        minLength: 5,
+        email: true
     },
     phone: {
+        //validateOnBlur: true,
         required: true,
-        minlength: 10
+        minLength: 5
     },
-    message: "required"
+    message: {
+        required: true,
+        minLength: 10
+    }
 };
+
+var validator = generateValidation(validations);
+
+//console.log(validator);
+
+//const asyncValidate = validator.asyncValidate;
+//
+//validator.asyncValidate = function () {
+//    let retval = asyncValidate.apply(null, [].slice.call(arguments));
+//    console.log(retval);
+//    retval.then(function (data) {
+//        console.log(data);
+//        return data;
+//    }).catch(e => {
+//        console.log(e);
+//    });
+//    return retval;
+//};
 
 export default reduxForm({
     form: 'contacts',
     fields: ['name', 'email', 'phone', 'message'],
-    asyncValidate: createAsyncValidator(rules),
-    asyncBlurFields: ['name', 'email', 'phone', 'message']
+    asyncValidate: validator.asyncValidate,
+    asyncBlurFields: validator.asyncBlurFields
 })(Form);

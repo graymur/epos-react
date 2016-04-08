@@ -1,12 +1,4 @@
-import required from './methods/requried.js';
-import regexp from './methods/regexp.js';
-import email from './methods/email.js';
-
-let methods = {
-    required: required,
-    email: email,
-    regexp: regexp
-};
+import * as methods from './methods/_index.js';
 
 export function normalizeRules(rules) {
     let key, normalized;
@@ -51,7 +43,7 @@ export function normalizeRule(rule) {
     return ruleData;
 }
 
-const createValidator = (fields, additionalMethods = {}, messages = {}) => {
+export function createValidator(fields, additionalMethods = {}, messages = {}) {
     let localMethods = Object.assign({}, methods, additionalMethods);
 
     return (values) => {
@@ -84,6 +76,11 @@ const createValidator = (fields, additionalMethods = {}, messages = {}) => {
 
         return errors;
     }
-};
+}
 
-export default createValidator;
+export function createAsyncValidator(fields, additionalMethods = {}, messages = {}) {
+    return (values, dispatch, props) => {
+        var result = createValidator(fields)(values);
+        return Object.keys(result).length === 0 ? Promise.resolve(result) : Promise.reject(result);
+    }
+}

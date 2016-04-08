@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import createValidator, { normalizeRules, normalizeRule } from '../../../main/util/validate/validate.js';
+import { createValidator, normalizeRules, normalizeRule } from '../../../../main/util/validate/validate.js';
 
 describe('Create validate function', () => {
     it('normalizes rules', () => {

@@ -1,0 +1,29 @@
+.form
+
+    &__row
+        display: block
+        margin-bottom: 15px
+
+        &__label
+            display: block
+
+        &__input
+            display: block
+
+            INPUT, SELECT, TEXTAREA
+                display: block
+                width: 100%
+                max-width: 500px
+                font-family: $baseFont
+                font-size: 1.6rem
+                padding: 5px
+                transition: all 0.4s
+                border-radius: 2px
+                background: white
+                border: 1px solid transparent
+
+                ._invalid &
+                    border: 1px solid red
+
+            TEXTAREA
+                height: 200px
