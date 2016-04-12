@@ -80,7 +80,7 @@ export function createValidator(fields, additionalMethods = {}, messages = {}) {
 
 export function createAsyncValidator(fields, additionalMethods = {}, messages = {}) {
     return (values, dispatch, props) => {
-        var result = createValidator(fields)(values);
+        var result = createValidator(fields, additionalMethods = {}, messages = {})(values);
         return Object.keys(result).length === 0 ? Promise.resolve(result) : Promise.reject(result);
     }
 }

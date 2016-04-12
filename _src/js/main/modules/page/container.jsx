@@ -3,8 +3,6 @@ import { connect } from 'react-redux';
 import { fetchPageAction } from './actions.js';
 import Page from './components/Page.jsx';
 
-const dv = console.log.bind(console);
-
 class PageContainer extends React.Component {
     componentWillMount() {
         this.fetchIfNeeded(this.props);

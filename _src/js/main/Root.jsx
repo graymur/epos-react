@@ -6,10 +6,8 @@ import routes from './routes.jsx';
 
 import { createLocation } from 'react-router';
 
-export default class Root extends React.Component {
-    render() {
-        return (
-            <Router children={routes} history={browserHistory}></Router>
-        );
-    }
+export default function Root() {
+    return (
+        <Router children={routes} history={browserHistory}></Router>
+    );
 }
