@@ -24,6 +24,10 @@ class PageContainer extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.page.title !== this.props.page.title;
+    }
+
     static fetch({ dispatch, lang, splat }) {
         return dispatch(fetchPageAction(lang, splat));
     }

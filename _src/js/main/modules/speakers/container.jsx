@@ -18,6 +18,10 @@ class SpeakersContainer extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.speakers.title !== this.props.speakers.title;
+    }
+
     static fetch({ dispatch, lang }) {
         return dispatch(fetchSpeakersAction(lang));
     }

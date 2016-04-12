@@ -19,6 +19,10 @@ class ContactsContainer extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.contacts.title !== this.props.contacts.title;
+    }
+
     static fetch({ dispatch, lang }) {
         return dispatch(fetchContactsAction(lang));
     }

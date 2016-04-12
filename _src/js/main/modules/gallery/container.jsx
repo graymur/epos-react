@@ -19,6 +19,10 @@ class GalleryContainer extends React.Component {
         }
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextProps.gallery.title !== this.props.gallery.title;
+    }
+
     static fetch({ dispatch, lang }) {
         return dispatch(fetchGalleryAction(lang));
     }
