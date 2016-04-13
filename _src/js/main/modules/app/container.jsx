@@ -11,9 +11,9 @@ class AppContainer extends React.Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return nextProps.location.pathname !== this.props.location.pathname;
-    }
+    //shouldComponentUpdate(nextProps, nextState) {
+    //    return nextProps.location.pathname !== this.props.location.pathname;
+    //}
 
     render() {
         return <App {...this.props} activeLink={this.props.location.pathname.split('/')[2]}/>;
