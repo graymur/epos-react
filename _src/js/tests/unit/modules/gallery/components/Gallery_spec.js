@@ -1,4 +1,4 @@
-import Gallery from '../../../../../main/modules/gallery/components/Gallery.jsx';
+import Gallery from '../../../../../shared/modules/gallery/components/Gallery.jsx';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

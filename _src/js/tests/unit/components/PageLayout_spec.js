@@ -1,4 +1,4 @@
-import PageLayout from '../../../main/components/PageLayout.jsx';
+import PageLayout from '../../../shared/components/PageLayout.jsx';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

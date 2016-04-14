@@ -3,11 +3,11 @@ import fs from 'fs';
 
 import React from 'react';
 import createLocation from 'history/lib/createLocation';
-import routes from './_src/js/main/routes.jsx';
+import routes from './_src/js/shared/routes.jsx';
 import { renderToString } from 'react-dom/server'
 import { RouterContext, match } from 'react-router';
 import { Provider } from 'react-redux';
-import configureStore from './_src/js/main/redux/configureStore.js';
+import configureStore from './_src/js/shared/redux/configureStore.js';
 import api from './_src/js/server/api.js';
 
 const port = 3000;

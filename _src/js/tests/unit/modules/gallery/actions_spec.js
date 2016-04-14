@@ -1,4 +1,4 @@
-import { fetchGalleryAction } from '../../../../main/modules/gallery/actions.js';
+import { fetchGalleryAction } from '../../../../shared/modules/gallery/actions.js';
 
 import React from 'react/addons';
 import {assert} from 'chai';

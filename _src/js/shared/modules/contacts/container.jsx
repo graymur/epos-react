@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchContactsAction } from './actions.js';
+import { fetchContactsAction, submitForm } from './actions.js';
 
 import Contacts from './components/Contacts.jsx';
 
 class ContactsContainer extends React.Component {
     componentWillMount() {
+        //console.log(this.props);
+        //this.props.onFormSubmit();
         this.fetchIfNeeded(this.props);
     }
 
@@ -27,6 +29,16 @@ class ContactsContainer extends React.Component {
         return dispatch(fetchContactsAction(lang));
     }
 
+    onFormSubmit(values) {
+        return this.props.dispatch(submitForm(values));
+    }
+
+    getChildContext() {
+        return {
+            onFormSubmit: this.onFormSubmit.bind(this)
+        };
+    }
+
     render() {
         return <Contacts contacts={this.props.contacts}/>;
     }
@@ -36,6 +48,10 @@ const mapStateToProps = (state) => {
     return {
         contacts: state.contacts
     }
+};
+
+ContactsContainer.childContextTypes = {
+    onFormSubmit: React.PropTypes.func
 };
 
 export default connect(mapStateToProps)(ContactsContainer);

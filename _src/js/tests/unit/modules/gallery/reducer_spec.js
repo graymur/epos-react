@@ -1,5 +1,5 @@
-import { GALLERY_REQUEST, GALLERY_SUCCESS, GALLERY_FAILURE } from '../../../../main/modules/gallery/actions.js';
-import reducer from '../../../../main/modules/gallery/reducer.js';
+import { GALLERY_REQUEST, GALLERY_SUCCESS, GALLERY_FAILURE } from '../../../../shared/modules/gallery/actions.js';
+import reducer from '../../../../shared/modules/gallery/reducer.js';
 
 import React from 'react/addons';
 import {assert} from 'chai';

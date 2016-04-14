@@ -2,10 +2,6 @@ import React from 'react';
 import { reduxForm } from 'redux-form';
 import { createAsyncValidator } from '../../../util/validate/validate.js';
 
-function onSubmit() {
-    console.log(arguments);
-}
-
 function validationClass(classes = [], state = {}) {
     if (state.touched && !state.valid) {
         classes.push('_invalid');
@@ -19,7 +15,7 @@ class Form extends React.Component {
         const { fields: { name, email, phone, message }, handleSubmit } = this.props;
 
         return (
-            <form method="post" onSubmit={ handleSubmit(onSubmit) }>
+            <form method="post" onSubmit={ handleSubmit(this.context.onFormSubmit) }>
                 <div className="contacts__form form">
                     <label className={validationClass(['form__row'], name)}>
                         <span className="form__row__label">Your name:</span>
@@ -54,6 +50,10 @@ class Form extends React.Component {
     }
 }
 
+Form.contextTypes = {
+    onFormSubmit: React.PropTypes.func.isRequried
+};
+
 const rules = {
     name: "required",
     email: {
@@ -72,4 +72,11 @@ export default reduxForm({
     fields: ['name', 'email', 'phone', 'message'],
     asyncValidate: createAsyncValidator(rules),
     asyncBlurFields: ['name', 'email', 'phone', 'message']
-})(Form);
+}, state => ({ // mapStateToProps
+    initialValues: {
+        name: 'Sergey',
+        email: 'graymur@mail.ru',
+        phone: '1234567890',
+        message: 'Hello, world!'
+    }
+}))(Form);

@@ -1,5 +1,5 @@
 import {assert} from 'chai';
-import required from '../../../../../main/util/validate/methods/required.js';
+import required from '../../../../../shared/util/validate/methods/required.js';
 
 describe('Should validate require', () => {
     it('validates', () => {

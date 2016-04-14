@@ -7,7 +7,7 @@ const Contacts = ({ contacts }) => {
     return (
         <PageLayout title={contacts.title}>
             <div dangerouslySetInnerHTML={ getDangerousHtml(contacts.content) } />
-            {/*contacts.title ? <Form/> : ''*/}
+            {contacts.title ? <Form/> : ''}
         </PageLayout>
     );
 };
