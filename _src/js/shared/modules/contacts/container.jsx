@@ -6,8 +6,6 @@ import Contacts from './components/Contacts.jsx';
 
 class ContactsContainer extends React.Component {
     componentWillMount() {
-        //console.log(this.props);
-        //this.props.onFormSubmit();
         this.fetchIfNeeded(this.props);
     }
 

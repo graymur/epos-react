@@ -16,17 +16,3 @@ export function fetchContactsAction(lang) {
         endpoint: 'contacts'
     };
 }
-
-export function submitForm(values) {
-    return {
-        type: CALL_API,
-        types: {
-            fetchingType: CONTACTS_REQUEST,
-            fetchedType: CONTACTS_SUCCESS,
-            errorType: CONTACTS_FAILURE
-        },
-        endpoint: 'contacts-form',
-        method: 'POST',
-        payload: values
-    };
-}

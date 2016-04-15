@@ -1,9 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { reduxForm } from 'redux-form';
-import { submitForm } from './actions.js';
+import { submitForm, resetForm } from './actions.js';
 import { createAsyncValidator } from '../../util/validate/validate.js';
-import { resetForm } from './actions.js';
 
 function validationClass(classes = [], state = {}) {
     if (state.touched && !state.valid) {
@@ -16,20 +15,29 @@ function validationClass(classes = [], state = {}) {
 class ContactsForm extends React.Component {
     componentDidMount() {
         this.form = this.refs.form;
+        this.resetTimeout = null;
     }
 
     componentDidUpdate() {
-        if (this.props.contactsForm.submitted) {
+        if (this.props.contactsForm.submitted && !this.resetTimeout) {
             this.form.reset();
+
+            this.resetTimeout = setTimeout(() => {
+                this.props.dispatch(resetForm());
+                this.resetTimeout = null;
+            }, 5000);
         }
     }
 
     render() {
         const { fields: { name, email, phone, message }, handleSubmit } = this.props;
 
+        let submitTitle = this.props.contactsForm.submitting ? 'Submitting...' : 'Submit';
+
         return (
             <div className="form-container">
-                { this.props.contactsForm.submitted ? <h3>Thank you, our message has been sent, we will contact you shortly.</h3> : null }
+                <h3>Contacts form</h3>
+                { this.props.contactsForm.submitted ? <h4>Thank you, our message has been sent, we will contact you shortly.</h4> : null }
 
                 <form ref="form" method="post" onSubmit={handleSubmit(this.props.onSubmit)}>
                     <div className="contacts__form form">
@@ -58,7 +66,7 @@ class ContactsForm extends React.Component {
                             </span>
                         </label>
                         <label className="form__row _submit">
-                            <input type="submit" value="Submit"/>
+                            <input type="submit" value={submitTitle} disabled={this.props.contactsForm.submitting} />
                         </label>
                     </div>
                 </form>
@@ -81,7 +89,7 @@ const rules = {
 };
 
 ContactsForm = connect(
-    state => ({ contactsForm: state.contactsForm }),
+    state => ( { contactsForm: state.contactsForm } ),
     dispatch => ( { onSubmit: values => dispatch(submitForm(values)) } )
 )(ContactsForm);
 
@@ -90,11 +98,11 @@ export default reduxForm({
     fields: ['name', 'email', 'phone', 'message'],
     asyncValidate: createAsyncValidator(rules),
     asyncBlurFields: ['name', 'email', 'phone', 'message']
-}/*, state => ({
+}, state => ({
     initialValues: {
         name: 'Sergey',
         email: 'graymur@mail.ru',
         phone: '1234567890',
         message: 'Hello, world!'
     }
-})*/)(ContactsForm);
+}))(ContactsForm);

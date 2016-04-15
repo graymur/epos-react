@@ -20,7 +20,6 @@ export function submitForm(values) {
 }
 
 export function resetForm() {
-    console.log('reset form');
     return {
         type: CONTACTS_FORM_RESET
     };
