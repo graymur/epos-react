@@ -10,7 +10,7 @@ import reducer from './rootReducer.js';
 
 export default function configureStore(initialState, api) {
     const middleware = [
-        createLogger(),
+        //createLogger(),
         thunk,
         createApiMiddleware(api)
     ];

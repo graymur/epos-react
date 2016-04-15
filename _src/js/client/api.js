@@ -20,7 +20,7 @@ export default function (endpoint, data = {}, method = 'GET') {
                 body: JSON.stringify(data)
             };
 
-            console.log(config);
+            //console.log(config);
         }
 
 

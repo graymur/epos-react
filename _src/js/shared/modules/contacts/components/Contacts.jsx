@@ -1,7 +1,9 @@
 import React from 'react';
-import Form from './Form.jsx';
+import Form from '../../contacts-form/container.jsx';
 import PageLayout from '../../../components/PageLayout.jsx';
 import getDangerousHtml from '../../../util/get-dangerous-html.js';
+
+//console.log(Form.render);
 
 const Contacts = ({ contacts }) => {
     return (

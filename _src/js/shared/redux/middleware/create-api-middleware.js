@@ -13,7 +13,7 @@ export default api => store => next => action => {
 
     let method = action.method === 'POST' ? 'POST' : 'GET';
 
-    console.log(method);
+    //console.log(method);
 
     next({ type: ASYNC_PENDING });
 

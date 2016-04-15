@@ -8,6 +8,7 @@ import speakers from '../modules/speakers/reducer.js';
 import gallery from '../modules/gallery/reducer.js';
 import index from '../modules/index/reducer.js';
 import contacts from '../modules/contacts/reducer.js';
+import contactsForm from '../modules/contacts-form/reducer.js';
 
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
@@ -19,6 +20,7 @@ const reducer = combineReducers({
     gallery,
     index,
     contacts,
+    contactsForm,
     form: formReducer,
     routing: routeReducer
 });
