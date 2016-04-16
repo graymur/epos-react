@@ -4,7 +4,7 @@ import { errorAction } from '../../modules/app/actions.js';
 export const CALL_API = 'CALL_API';
 export const ASYNC_ERROR = 'ASYNC_ERROR';
 export const ASYNC_PENDING = 'ASYNC_PENDING';
-export const ASYNC_SUCCESS = 'ASYNC_SUCESS';
+export const ASYNC_SUCCESS = 'ASYNC_SUCCESS';
 
 export default api => store => next => action => {
     if (action.type !== CALL_API) {
@@ -31,8 +31,8 @@ export default api => store => next => action => {
                     type: action.types.fetchedType,
                     data
                 },
-                { type: ASYNC_SUCCESS },
-                errorAction(false)
+                { type: ASYNC_SUCCESS }/*,
+                errorAction(false)*/
             ]));
         })
         .catch(error => {

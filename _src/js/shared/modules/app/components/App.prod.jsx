@@ -5,8 +5,15 @@ import ErrorComponent from './ErrorComponent.jsx';
 
 const App = (props) => {
     let content = props.meta.error ? <ErrorComponent {...props.meta.error}/> : props.children;
+    let loaderClassName = ['loading'];
+
+    if (props.asyncLoading) {
+        loaderClassName.push('_active');
+    }
+
     return (
         <div className="page-container">
+            <div className={loaderClassName.join(' ')}></div>
             <header className="header">
                 <h1 className="header__title">Epos</h1>
                 <Languages items={props.meta.languages} currentLanguage={props.meta.currentLanguage}/>

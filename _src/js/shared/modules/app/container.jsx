@@ -11,14 +11,22 @@ class AppContainer extends React.Component {
         }
     }
 
-    //shouldComponentUpdate(nextProps, nextState) {
-    //    return nextProps.location.pathname !== this.props.location.pathname;
-    //}
+    getChildContext() {
+        return {
+            asyncLoading: this.props.meta.asyncLoading,
+            activeLink: this.props.location.pathname.split('/')[2]
+        };
+    }
 
     render() {
-        return <App {...this.props} activeLink={this.props.location.pathname.split('/')[2]}/>;
+        return <App {...this.props} asyncLoading={this.props.meta.asyncLoading && !this.props.meta.error} activeLink={this.props.location.pathname.split('/')[2]}/>;
     }
 }
+
+AppContainer.childContextTypes = {
+    asyncLoading: React.PropTypes.bool.isRequired,
+    activeLink: React.PropTypes.string.isRequired
+};
 
 const mapStateToProps = (state) => {
     return {

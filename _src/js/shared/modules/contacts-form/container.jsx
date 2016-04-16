@@ -15,13 +15,17 @@ function validationClass(classes = [], state = {}) {
 class ContactsForm extends React.Component {
     componentDidMount() {
         this.form = this.refs.form;
+        this.message = this.refs.message;
         this.resetTimeout = null;
     }
 
     componentDidUpdate() {
         if (this.props.contactsForm.submitted && !this.resetTimeout) {
-            this.form.reset();
+            this.props.resetForm();
+            // some bug in redux-form won't clear value from a textarea
+            this.message.value = '';
 
+            // remove success message after 5 seconds
             this.resetTimeout = setTimeout(() => {
                 this.props.dispatch(resetForm());
                 this.resetTimeout = null;
@@ -62,7 +66,7 @@ class ContactsForm extends React.Component {
                         <label className={validationClass(['form__row'], message)}>
                             <span className="form__row__label">Your message:</span>
                             <span className="form__row__input">
-                                <textarea name="message" {...message}></textarea>
+                                <textarea name="message" ref="message" {...message}></textarea>
                             </span>
                         </label>
                         <label className="form__row _submit">
@@ -98,11 +102,11 @@ export default reduxForm({
     fields: ['name', 'email', 'phone', 'message'],
     asyncValidate: createAsyncValidator(rules),
     asyncBlurFields: ['name', 'email', 'phone', 'message']
-}, state => ({
+}/*, state => ({
     initialValues: {
         name: 'Sergey',
         email: 'graymur@mail.ru',
         phone: '1234567890',
         message: 'Hello, world!'
     }
-}))(ContactsForm);
+})*/)(ContactsForm);
