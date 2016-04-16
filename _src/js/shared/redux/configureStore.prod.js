@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { syncHistory } from 'react-router-redux';
+import { routerMiddleware } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
@@ -11,13 +11,10 @@ import reducer from './rootReducer.js';
 export default function configureStore(initialState, api) {
     const middleware = [
         //createLogger(),
+        routerMiddleware(browserHistory),
         thunk,
-        createApiMiddleware(api)
+        createApiMiddleware(api),
     ];
-
-    if (typeof window !== 'undefined') {
-        middleware.push(syncHistory(browserHistory));
-    }
 
     const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);
 
