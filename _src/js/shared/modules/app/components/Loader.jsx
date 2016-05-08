@@ -13,7 +13,7 @@ export default class Loader extends React.Component {
 
     render() {
         return (
-            <div className={this.getClass()}></div>
+            <div className={this.getClass()}>{/*this.props.location.pathname*/}</div>
         )
     }
 }

@@ -1,5 +1,4 @@
 import { SPEAKERS_REQUEST, SPEAKERS_SUCCESS, SPEAKERS_FAILURE } from './actions.js';
-//import { ASYNC_PENDING } from '../../redux/middleware/create-api-middleware.js';
 
 const initialState = {
     title: '',
@@ -12,10 +11,6 @@ export default function speakers(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        //case ASYNC_PENDING:
-        //    retval = Object.assign({}, state, { title: '' });
-        //    break;
-
         case SPEAKERS_SUCCESS:
             retval = action.data;
             break;

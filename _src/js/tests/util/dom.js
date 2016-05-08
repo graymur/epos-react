@@ -1,4 +1,4 @@
-import jsdom from 'jsdom';
+var jsdom = require('jsdom');
 
 // Define some html to be our basic document
 // JSDOM will consume this and act as if we were in a browser

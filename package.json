@@ -2,10 +2,8 @@
   "name": "epos-react",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register --require ./_src/js/tests/util/dom.js ./_src/js/tests/**/*.js*",
-    "testcalculateAutoProducts": "mocha --compilers js:babel-core/register --require ./_src/js/tests/util/dom.js ./_src/js/tests/unit/components/PageLayout_spec.js",
+    "test": "mocha-webpack _src/js/tests/**/*.js* --webpack-config webpack.config-test.js --require _src/js/tests/util/dom.js --colors",
     "tw": "npm run test -- --watch"
   },
   "keywords": [],
@@ -19,6 +17,7 @@
     "isomorphic-fetch": "^2.2.1",
     "node-sass": "^3.4.2",
     "react": "^15.0.1",
+    "react-addons-css-transition-group": "^15.0.1",
     "react-dom": "^15.0.1",
     "react-modal": "^1.1.1",
     "react-redux": "^4.4.5",
@@ -50,12 +49,12 @@
     "jquery": "^2.2.3",
     "jsdom": "^8.4.0",
     "mocha": "^2.4.5",
+    "mocha-webpack": "^0.3.0",
     "react-addons-test-utils": "^15.0.1",
     "redux-devtools": "^3.2.0",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.0.10",
     "webpack": "^1.13.0",
-    "webpack-dev-middleware": "^1.6.1",
-    "webpack-hot-middleware": "^2.10.0"
+    "webpack-node-externals": "^1.2.0"
   }
 }
