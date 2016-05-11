@@ -4,7 +4,7 @@ import { reduxForm } from 'redux-form';
 import { submitForm, resetForm } from './actions.js';
 import { createAsyncValidator } from '../../util/validate/validate.js';
 
-function validationClass(classes = [], state = {}) {
+export function validationClass(classes = [], state = {}) {
     if (state.touched && !state.valid) {
         classes.push('_invalid');
     }
@@ -12,7 +12,7 @@ function validationClass(classes = [], state = {}) {
     return classes.join(' ');
 }
 
-class ContactsForm extends React.Component {
+export class ContactsForm extends React.Component {
     componentDidMount() {
         this.form = this.refs.form;
         this.message = this.refs.message;
@@ -92,7 +92,7 @@ const rules = {
     message: "required"
 };
 
-ContactsForm = connect(
+const ContactsFormConnected = connect(
     state => ( { contactsForm: state.contactsForm } ),
     dispatch => ( { onSubmit: values => dispatch(submitForm(values)) } )
 )(ContactsForm);
@@ -109,4 +109,4 @@ export default reduxForm({
         phone: '1234567890',
         message: 'Hello, world!'
     }
-})*/)(ContactsForm);
+})*/)(ContactsFormConnected);

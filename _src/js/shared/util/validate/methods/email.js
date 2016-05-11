@@ -1,5 +1,3 @@
-import { isEmail } from 'validator';
-
 export default (value, rule) => {
-    return isEmail(value.toString());
-}
+    return /\S+@\S+/.test(value);
+};
