@@ -1,5 +1,13 @@
 var webpack = require('webpack');
 
+var plugins = [];
+
+if (process.env.NODE_ENV === 'production') {
+    plugins.push(new webpack.DefinePlugin({
+        'process.env.NODE_ENV': '"production"'
+    }));
+}
+
 module.exports = {
     entry: {
         'main': './_src/js/client/main.jsx'
@@ -23,9 +31,5 @@ module.exports = {
         publicPath: '/',
         filename: '[name].js'
     },
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"production"'
-        })
-    ]
+    plugins: plugins
 };

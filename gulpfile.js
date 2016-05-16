@@ -31,8 +31,8 @@ gulp.task('svg', function () {
         .pipe(gulp.dest('./img/svg'));
 });
 
-gulp.task('webpack-watch', shell.task(['webpack --watch']));
-gulp.task('webpack-min', shell.task(['webpack -p']));
+gulp.task('webpack-watch', shell.task(['set NODE_ENV=development&& webpack --watch']));
+gulp.task('webpack-min', shell.task(['set NODE_ENV=production&& webpack -p']));
 
 gulp.task('min', ['webpack-min'], function() {
     gulp.src(['css/main.css'])
