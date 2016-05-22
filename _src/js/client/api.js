@@ -19,8 +19,6 @@ export default function (endpoint, data = {}, method = 'GET') {
                 method,
                 body: JSON.stringify(data)
             };
-
-            //console.log(config);
         }
 
 

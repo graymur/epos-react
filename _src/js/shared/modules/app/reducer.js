@@ -24,7 +24,6 @@ export default function meta(state = initialState, action = {}) {
             break;
 
         case ASYNC_SUCCESS:
-            //console.log(action);
             retval = Object.assign({}, state, {
                 error: false,
                 asyncLoading: false
@@ -34,8 +33,7 @@ export default function meta(state = initialState, action = {}) {
 
         case ASYNC_ERROR:
             retval = Object.assign({}, state, {
-                error: action.error,
-                //asyncLoading: false
+                error: action.error
             });
 
             break;

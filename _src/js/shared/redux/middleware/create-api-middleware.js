@@ -31,8 +31,7 @@ export default api => store => next => action => {
                     type: action.types.fetchedType,
                     data
                 },
-                { type: ASYNC_SUCCESS }/*,
-                errorAction(false)*/
+                { type: ASYNC_SUCCESS }
             ]));
         })
         .catch(error => {

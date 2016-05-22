@@ -1,4 +1,3 @@
-// TODO: move all this to some actual storage
 import getPages from '../../../api-js/data/pages.js';
 import getGalleries from './../../../api-js/data/gallery.js';
 import getIndex from '../../../api-js/data/index.js';
