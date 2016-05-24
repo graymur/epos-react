@@ -39,9 +39,11 @@ describe('Gallery', () => {
         assert.equal(el.find('h2').text(), state.title);
         assert.equal(el.find('.gallery__section').length, 2);
 
-        [0, 1].forEach((index) => {
-            assert.equal(el.find('.gallery__section').eq(index).find('.gallery__section__title').text(), state.galleries[index].title);
-            assert.equal(el.find('.gallery__section').eq(index).find('.gallery__section__previews IMG').length, state.galleries[index].images.length);
+        state.galleries.forEach((gallery, index) => {
+            let element = el.find('.gallery__section').eq(index);
+
+            assert.equal(element.find('.gallery__section__title').text(), gallery.title);
+            assert.equal(element.find('.gallery__section__previews IMG').length, gallery.images.length);
         });
     });
 });

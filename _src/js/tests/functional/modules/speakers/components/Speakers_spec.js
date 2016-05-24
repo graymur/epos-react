@@ -30,13 +30,13 @@ describe('Speakers', () => {
         assert.equal(el.find('h2').text(), state.title);
         assert.equal(el.find('.speakers__list__item').length, state.speakers.length);
 
-        [0, 1].forEach(index => {
-            let item = el.find('.speakers__list__item').eq(index);
+        state.speakers.forEach((speaker, index) => {
+            let element = el.find('.speakers__list__item').eq(index);
 
-            assert.equal(item.find('.speakers__list__item__image IMG').attr('src'), state.speakers[index].image);
-            assert.equal(item.find('.speakers__list__item__title').text(), state.speakers[index].name);
-            assert.equal(item.find('.speakers__list__item__position').text(), state.speakers[index].position);
-            assert.equal(item.find('.speakers__list__item__text').text(), state.speakers[index].content);
+            assert.equal(element.find('.speakers__list__item__image IMG').attr('src'), speaker.image);
+            assert.equal(element.find('.speakers__list__item__title').text(), speaker.name);
+            assert.equal(element.find('.speakers__list__item__position').text(), speaker.position);
+            assert.equal(element.find('.speakers__list__item__text').text(), speaker.content);
         });
     });
 });
