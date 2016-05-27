@@ -9,6 +9,7 @@ import { RouterContext, match } from 'react-router';
 import { Provider } from 'react-redux';
 import configureStore from './_src/js/shared/redux/configureStore.js';
 import api from './_src/js/server/api.js';
+import compression from 'compression';
 
 const port = 3000;
 
@@ -22,6 +23,8 @@ fs.readFile('./_src/js/server/layout.html', 'utf8', (err, data) => {
 });
 
 try {
+    app.use(compression());
+
     app.use('/css', express.static('./css'));
     app.use('/files', express.static('./files'));
     app.use('/img', express.static('./img'));
@@ -78,7 +81,9 @@ try {
 
         });
     });
-} catch (error) { }
+} catch (error) {
+    console.log(error);
+}
 
 app.listen(port, () => {
     console.log(`Epos app listening on port ${port}!`);

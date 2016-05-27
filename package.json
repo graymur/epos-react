@@ -5,13 +5,15 @@
   "scripts": {
     "test": "mocha-webpack _src/js/tests/**/*.js* --webpack-config webpack.config-test.js --require _src/js/tests/util/dom.js --colors",
     "tw": "npm run test -- --watch",
-    "babel-node": "babel-node --presets=es2015 --modulesDirectorie='_src/js,node_modules'"
+    "babel-node": "babel-node --presets=es2015 --modulesDirectorie='_src/js,node_modules'",
+    "mon": "nodemon --exec npm run babel-node -- server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "babel-es6-polyfill": "^1.0.1",
+    "compression": "^1.6.2",
     "express": "^4.13.4",
     "history": "^2.0.2",
     "isomorphic-fetch": "^2.2.1",
