@@ -24,8 +24,8 @@ class AppContainer extends React.Component {
 }
 
 AppContainer.childContextTypes = {
-    asyncLoading: React.PropTypes.bool.isRequired,
-    activeLink: React.PropTypes.string.isRequired
+    asyncLoading: React.PropTypes.bool,
+    activeLink: React.PropTypes.string
 };
 
 const mapStateToProps = (state) => {
