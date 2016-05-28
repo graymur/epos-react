@@ -9,18 +9,15 @@ import { RouterContext, match } from 'react-router';
 import { Provider } from 'react-redux';
 import configureStore from './_src/js/shared/redux/configureStore.js';
 import api from './_src/js/server/api.js';
+import resizeImages from './_src/js/server/resize-images.js';
 import compression from 'compression';
 
 const port = 3000;
 
 let app = express();
-let layout;
+let layout = fs.readFileSync('./_src/js/server/layout.html', 'utf8');
 
 const dv = console.log.bind(console);
-
-fs.readFile('./_src/js/server/layout.html', 'utf8', (err, data) => {
-    layout = data;
-});
 
 try {
     app.use(compression());
@@ -29,6 +26,8 @@ try {
     app.use('/files', express.static('./files'));
     app.use('/img', express.static('./img'));
     app.use('/js', express.static('./js'));
+
+    app.use('/resize', resizeImages(__dirname + '/files', __dirname + '/resize'));
 
     app.get('/api/1/:endpoint', (req, res) => {
         api(req.params.endpoint, req.query).then(data => {
