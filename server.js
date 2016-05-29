@@ -27,7 +27,11 @@ try {
     app.use('/img', express.static('./img'));
     app.use('/js', express.static('./js'));
 
-    app.use('/resize', resizeImages(__dirname + '/files', __dirname + '/resize'));
+    app.use('/resize', resizeImages({
+        sourceDir: __dirname + '/files',
+        targetDir: __dirname + '/resize',
+        ImageMagickPath: /^win/.test(process.platform) ? 'D:/www/util/ImageMagick/convert.exe' : 'convert'
+    }));
 
     app.get('/api/1/:endpoint', (req, res) => {
         api(req.params.endpoint, req.query).then(data => {
@@ -76,8 +80,6 @@ try {
                 res.setHeader('Content-Type', 'text/html');
                 res.send('error');
             });
-
-
         });
     });
 } catch (error) {
