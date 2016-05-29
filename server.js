@@ -9,7 +9,7 @@ import { RouterContext, match } from 'react-router';
 import { Provider } from 'react-redux';
 import configureStore from './_src/js/shared/redux/configureStore.js';
 import api from './_src/js/server/api.js';
-import resizeImages from './_src/js/server/resize-images.js';
+import cropperExpress from 'cropper-express';
 import compression from 'compression';
 
 const port = 3000;
@@ -27,7 +27,7 @@ try {
     app.use('/img', express.static('./img'));
     app.use('/js', express.static('./js'));
 
-    app.use('/resize', resizeImages({
+    app.use('/resize', cropperExpress({
         sourceDir: __dirname + '/files',
         targetDir: __dirname + '/resize',
         ImageMagickPath: /^win/.test(process.platform) ? 'D:/www/util/ImageMagick/convert.exe' : 'convert'
