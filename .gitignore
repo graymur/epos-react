@@ -6,3 +6,5 @@
 /.idea
 /api-js
 /.tmp
+/public/files
+/public/resize

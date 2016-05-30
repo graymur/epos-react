@@ -22,14 +22,14 @@ const dv = console.log.bind(console);
 try {
     app.use(compression());
 
-    app.use('/css', express.static('./css'));
-    app.use('/files', express.static('./files'));
-    app.use('/img', express.static('./img'));
-    app.use('/js', express.static('./js'));
+    app.use('/css', express.static('./public/css'));
+    app.use('/files', express.static('./public/files'));
+    app.use('/img', express.static('./public/img'));
+    app.use('/js', express.static('./public/js'));
 
     app.use('/resize', cropperExpress({
-        sourceDir: __dirname + '/files',
-        targetDir: __dirname + '/resize',
+        sourceDir: __dirname + '/public/files',
+        targetDir: __dirname + '/public/resize',
         ImageMagickPath: /^win/.test(process.platform) ? 'D:/www/util/ImageMagick/convert.exe' : 'convert'
     }));
 

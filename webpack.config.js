@@ -43,7 +43,7 @@ module.exports = {
         modulesDirectories: ['_src/js', 'node_modules']
     },
     output: {
-        path: __dirname + '/js',
+        path: __dirname + '/public/js',
         publicPath: '/',
         filename: '[name].js'
     },

@@ -21,14 +21,14 @@ gulp.task('css', function() {
             remove: false
         }))
         //.pipe(csso())
-        .pipe(gulp.dest('./css'))
+        .pipe(gulp.dest('./public/css'))
     ;
 });
 
 gulp.task('svg', function () {
     return gulp.src('./_src/svg/*.svg')
         .pipe(svgmin())
-        .pipe(gulp.dest('./img/svg'));
+        .pipe(gulp.dest('./public/img/svg'));
 });
 
 gulp.task('webpack-watch', shell.task(['set NODE_ENV=development&& webpack --watch']));
@@ -37,7 +37,7 @@ gulp.task('webpack-min', shell.task(['set NODE_ENV=production&& webpack -p']));
 gulp.task('min', ['webpack-min'], function() {
     gulp.src(['css/main.css'])
         .pipe(csso())
-        .pipe(gulp.dest('./css'))
+        .pipe(gulp.dest('./public/css'))
     ;
 });
 
