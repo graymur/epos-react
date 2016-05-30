@@ -12,7 +12,7 @@ const endpoints = {
     'gallery': getGalleries,
     'meta': getMeta,
     'speakers': getSpeakers,
-    'contacts': getContacts,
+    'contacts': getContacts
 };
 
 export default function(endpoint, params, method) {
@@ -24,7 +24,6 @@ export default function(endpoint, params, method) {
 
             // check if endpoint exists
             if (typeof endpoints[endpoint] !== 'function') {
-                console.log(endpoint);
                 throw 'No action is mapped to this endpoint';
             }
 

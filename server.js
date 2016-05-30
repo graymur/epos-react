@@ -85,7 +85,7 @@ try {
             }).then(data => {
                 render(renderProps, res, store);
             }).catch(e => {
-                // refetch meta info with predefined languaage
+                // refetch meta info with predefined language
                 api('meta', { lang: 'en' }).then(meta => {
                     meta.error = String(e);
                     store = configureStore({ meta: meta }, api);
