@@ -71,10 +71,9 @@ try {
                 res.redirect(redirectLocation.pathname)
             }
 
-            let store, meta;
+            let store;
 
-            api('meta', { lang: renderProps.params.lang }).then(data => {
-                meta = data;
+            api('meta', { lang: renderProps.params.lang }).then(meta => {
                 store = configureStore({ meta: meta }, api);
 
                 let { query, params } = renderProps;
@@ -86,9 +85,12 @@ try {
             }).then(data => {
                 render(renderProps, res, store);
             }).catch(e => {
-                meta.error = String(e);
-                store = configureStore({ meta: meta }, api);
-                render(renderProps, res, store);
+                // refetch meta info with predefined languaage
+                api('meta', { lang: 'en' }).then(meta => {
+                    meta.error = String(e);
+                    store = configureStore({ meta: meta }, api);
+                    render(renderProps, res, store);
+                });
             });
         });
     });
