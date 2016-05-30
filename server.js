@@ -11,6 +11,7 @@ import configureStore from './_src/js/shared/redux/configureStore.js';
 import api from './_src/js/server/api.js';
 import cropperExpress from 'cropper-express';
 import compression from 'compression';
+import { errorAction } from './_src/js/shared/modules/app/actions.js';
 
 const port = 3000;
 
@@ -40,6 +41,26 @@ try {
         });
     });
 
+    function render(renderProps, res, store) {
+        const InitialComponent = (
+            <Provider store={store}>
+                <RouterContext {...renderProps} />
+            </Provider>
+        );
+
+        let content = renderToString(InitialComponent);
+
+        let response = layout.replace('{{content}}', content);
+        response = response.replace('{{state}}', JSON.stringify(store.getState()));
+
+        if (store.getState().meta.error) {
+            res.status(404);
+        }
+
+        res.setHeader('Content-Type', 'text/html');
+        res.send(response);
+    }
+
     app.get('*', (req, res) => {
         match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
             if (err) {
@@ -50,9 +71,10 @@ try {
                 res.redirect(redirectLocation.pathname)
             }
 
-            let store;
+            let store, meta;
 
-            api('meta', { lang: renderProps.params.lang }).then(meta => {
+            api('meta', { lang: renderProps.params.lang }).then(data => {
+                meta = data;
                 store = configureStore({ meta: meta }, api);
 
                 let { query, params } = renderProps;
@@ -62,23 +84,11 @@ try {
 
                 return comp.fetch ? comp.fetch(params) : Promise.resolve();
             }).then(data => {
-                const InitialComponent = (
-                    <Provider store={store}>
-                        <RouterContext {...renderProps} />
-                    </Provider>
-                );
-
-                let content = renderToString(InitialComponent);
-
-                let response = layout.replace('{{content}}', content);
-                response = response.replace('{{state}}', JSON.stringify(store.getState()));
-
-                res.setHeader('Content-Type', 'text/html');
-                res.send(response);
+                render(renderProps, res, store);
             }).catch(e => {
-                // TODO: handle wrong requests
-                res.setHeader('Content-Type', 'text/html');
-                res.send('error');
+                meta.error = String(e);
+                store = configureStore({ meta: meta }, api);
+                render(renderProps, res, store);
             });
         });
     });
