@@ -28,7 +28,7 @@ export default function (endpoint, data = {}, method = 'GET') {
             cache[cacheKey] = data;
             return data;
         }).catch(error => {
-            console.log(error);
+            //console.log(error);
             throw error;
         });
     }

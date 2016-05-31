@@ -33,10 +33,8 @@ export default api => store => next => action => {
                 },
                 { type: ASYNC_SUCCESS }
             ]));
-        })
-        .catch(error => {
-            next(errorAction(error))
+        }).catch(error => {
+            next(errorAction(String(error)))
         });
-
 }
 
