@@ -24,12 +24,12 @@ export default function(endpoint, params, method) {
 
             // check if endpoint exists
             if (typeof endpoints[endpoint] !== 'function') {
-                throw 'No action is mapped to this endpoint';
+                throw new Error('No action is mapped to this endpoint');
             }
 
             // check language
             if (!~getLanguages().indexOf(params.lang)) {
-                throw 'Wrong language';
+                throw new Error('Wrong language');
             }
 
             let result = endpoints[endpoint](params);

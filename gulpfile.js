@@ -35,7 +35,7 @@ gulp.task('webpack-watch', shell.task(['set NODE_ENV=development&& webpack --wat
 gulp.task('webpack-min', shell.task(['set NODE_ENV=production&& webpack -p']));
 
 gulp.task('min', ['webpack-min'], function() {
-    gulp.src(['css/main.css'])
+    gulp.src(['./public/css/main.css'])
         .pipe(csso())
         .pipe(gulp.dest('./public/css'))
     ;

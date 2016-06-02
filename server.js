@@ -29,10 +29,13 @@ app.use('/js', express.static('./public/js'));
 app.use('/resize', cropperExpress({
     sourceDir: __dirname + '/public/files',
     targetDir: __dirname + '/public/resize',
-    ImageMagickPath: /^win/.test(process.platform) ? 'D:/www/util/ImageMagick/convert.exe' : 'convert'
+    ImageMagickPath: /^win/.test(process.platform) ? 'D:/www/util/ImageMagick/convert.exe' : 'convert',
+    on404: (req, res, next) => {
+        return next('Cropper error');
+    }
 }));
 
-app.get('/api/1/:endpoint', (req, res) => {
+app.all('/api/1/:endpoint', (req, res) => {
     api(req.params.endpoint, req.query).then(data => {
         res.setHeader('Content-Type', 'application/json');
         res.send(JSON.stringify(data), null, 4);
@@ -41,25 +44,14 @@ app.get('/api/1/:endpoint', (req, res) => {
 
 // request meta in middleware so it's available to render methods
 // without nesting promises
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
     let path = req.path.split('/', 2);
     let lang = path.length ? path[1] : defaultLanguage;
 
     api('meta', { lang: lang }).then(meta => {
         req.meta = meta;
         return next();
-    }).catch(e => {
-        // if lang is wrong - request meta for default lang
-        api('meta', { lang: defaultLanguage }).then(meta => {
-            // set error so we show 404 page
-            req.meta = meta || {};
-            req.meta.error = 'Wrong language';
-            return next();
-        }).catch(e => {
-            // something is really wrong, give up
-            return next(String(e));
-        });
-    });
+    }).catch(e => next(e));
 });
 
 function render(renderProps, res, store) {
@@ -82,10 +74,10 @@ function render(renderProps, res, store) {
     res.send(response);
 }
 
-app.get('*', (req, res, next) => {
+app.use('*', (req, res, next) => {
     match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
         if (err) {
-            throw err;
+            return next(e);
         }
 
         if (redirectLocation && redirectLocation.pathname) {
@@ -101,10 +93,16 @@ app.get('*', (req, res, next) => {
 
         (comp.fetch ? comp.fetch(params) : Promise.resolve()).then(data => {
             render(renderProps, res, store);
-        }).catch(e => {
-            // catch error in data fetching
-            req.meta.error = String(e);
-            store = configureStore({ meta: req.meta }, api);
+        }).catch(e => next(e));
+    });
+});
+
+// catch all error and render 404 page
+app.use(function(err, req, res, next) {
+    api('meta', { lang: defaultLanguage }).then(meta => {
+        match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
+            meta.error = true;
+            let store = configureStore({ meta: meta }, api);
             render(renderProps, res, store);
         });
     });
