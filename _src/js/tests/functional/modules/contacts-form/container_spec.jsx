@@ -2,10 +2,17 @@ import { validationClass, ContactsForm } from 'shared/modules/contacts-form/cont
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-addons-test-utils';
-import { assert } from 'chai';
+import chai from 'chai';
+import spies from 'chai-spies';
 import $ from 'jquery';
 
-let submitCalls = 0;
+chai.use(spies);
+
+const should = chai.should();
+const assert = chai.assert;
+const expect = chai.expect;
+const submitHandler = () => {};
+const submitHandlerSpy = chai.spy(submitHandler);
 
 const defaultState = {
     fields: {
@@ -18,9 +25,7 @@ const defaultState = {
         submitting: false
     },
     handleSubmit: fn => fn('submit'),
-    onSubmit: () => {
-        return () => submitCalls++;
-    }
+    onSubmit: submitHandlerSpy
 };
 
 function render(state) {
@@ -52,10 +57,8 @@ describe('ContactsForm', () => {
     it('calls submit hander', () => {
         let el = render(defaultState);
 
-        submitCalls = 0;
-
         ReactTestUtils.Simulate.submit(el.find('form').get(0));
 
-        assert.equal(submitCalls, 1);
+        submitHandlerSpy.should.have.been.called();
     });
 });
