@@ -81,7 +81,7 @@ app.use('*', (req, res, next) => {
         }
 
         if (redirectLocation && redirectLocation.pathname) {
-            res.redirect(redirectLocation.pathname)
+            return res.redirect(redirectLocation.pathname)
         }
 
         let store = configureStore({ meta: req.meta }, api);
@@ -101,6 +101,10 @@ app.use('*', (req, res, next) => {
 app.use(function(err, req, res, next) {
     api('meta', { lang: defaultLanguage }).then(meta => {
         match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
+            if (redirectLocation && redirectLocation.pathname) {
+                return res.redirect(redirectLocation.pathname)
+            }
+
             meta.error = true;
             let store = configureStore({ meta: meta }, api);
             render(renderProps, res, store);
