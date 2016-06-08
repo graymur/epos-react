@@ -1,5 +1,7 @@
 require('dotenv').config();
 
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 import express from 'express';
 import fs from 'fs';
 

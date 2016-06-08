@@ -1,3 +1,7 @@
+require('dotenv').config();
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 var gulp = require('gulp');
 var util = require('gulp-util');
 var webpack = require('webpack');
@@ -31,7 +35,7 @@ gulp.task('svg', function () {
         .pipe(gulp.dest('./public/img/svg'));
 });
 
-gulp.task('webpack-watch', shell.task(['set NODE_ENV=development&& webpack --watch']));
+gulp.task('webpack-watch', shell.task(['set NODE_ENV=' + process.env.NODE_ENV + '&& webpack --watch']));
 gulp.task('webpack-min', shell.task(['set NODE_ENV=production&& webpack -p']));
 
 gulp.task('min', ['webpack-min'], function() {
