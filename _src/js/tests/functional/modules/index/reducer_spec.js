@@ -1,4 +1,4 @@
-import { INDEX_REQUEST, INDEX_SUCCESS, INDEX_FAILURE } from 'shared/modules/index/actions.js';
+import * as constants from 'shared/modules/index/constants.js';
 import reducer from 'shared/modules/index/reducer.js';
 
 import {assert} from 'chai';
@@ -10,7 +10,7 @@ let initialState = {
 };
 
 let action = {
-    type: INDEX_SUCCESS,
+    type: constants.INDEX_SUCCESS,
     data: {
         test: "test"
     }

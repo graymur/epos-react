@@ -1,16 +1,13 @@
 import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
-
-export const PAGE_REQUEST = 'PAGE_REQUEST';
-export const PAGE_SUCCESS = 'PAGE_SUCCESS';
-export const PAGE_FAILURE = 'PAGE_FAILURE';
+import * as constants from './constants.js';
 
 export function fetchPageAction(lang, pageName) {
     return {
         type: CALL_API,
         types: {
-            fetchingType: PAGE_REQUEST,
-            fetchedType: PAGE_SUCCESS,
-            errorType: PAGE_FAILURE
+            fetchingType: constants.PAGE_REQUEST,
+            fetchedType: constants.PAGE_SUCCESS,
+            errorType: constants.PAGE_FAILURE
         },
         lang,
         payload: {

@@ -1,4 +1,4 @@
-import { GALLERY_REQUEST, GALLERY_SUCCESS, GALLERY_FAILURE } from './actions.js';
+import * as constants from './constants.js';
 
 const initialState = {
     title: '',
@@ -12,7 +12,7 @@ export default function page(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        case GALLERY_SUCCESS:
+        case constants.GALLERY_SUCCESS:
             retval = action.data;
             break;
 

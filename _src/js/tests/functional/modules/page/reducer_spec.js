@@ -1,4 +1,4 @@
-import { PAGE_REQUEST, PAGE_SUCCESS, PAGE_FAILURE } from 'shared/modules/page/actions.js';
+import * as constants from 'shared/modules/page/constants.js';
 import reducer from 'shared/modules/page/reducer.js';
 
 import {assert} from 'chai';
@@ -10,7 +10,7 @@ let initialState = {
 };
 
 let action = {
-    type: PAGE_SUCCESS,
+    type: constants.PAGE_SUCCESS,
     data: {
         test: 'test'
     }

@@ -1,4 +1,4 @@
-import { CONTACTS_FORM_REQUEST, CONTACTS_FORM_SUCCESS, CONTACTS_FORM_FAILURE, CONTACTS_FORM_RESET } from './actions.js';
+import * as constants from './constants.js';
 import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
 
 const initialState = {
@@ -11,12 +11,12 @@ export default function contactsForm(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        case CONTACTS_FORM_REQUEST:
+        case constants.CONTACTS_FORM_REQUEST:
             retval = Object.assign({}, { submitting: true });
 
             break;
 
-        case CONTACTS_FORM_SUCCESS:
+        case constants.CONTACTS_FORM_SUCCESS:
             retval = Object.assign({}, {
                 submitted: true,
                 submitting: false
@@ -24,8 +24,7 @@ export default function contactsForm(state = initialState, action = {}) {
 
             break;
 
-
-        case CONTACTS_FORM_RESET:
+        case constants.CONTACTS_FORM_RESET:
             retval = Object.assign({}, initialState);
             break;
 

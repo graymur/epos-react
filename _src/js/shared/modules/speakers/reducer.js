@@ -1,4 +1,5 @@
 import { SPEAKERS_REQUEST, SPEAKERS_SUCCESS, SPEAKERS_FAILURE } from './actions.js';
+import * as constants from './constants.js';
 
 const initialState = {
     title: '',
@@ -11,7 +12,7 @@ export default function speakers(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        case SPEAKERS_SUCCESS:
+        case constants.SPEAKERS_SUCCESS:
             retval = action.data;
             break;
 

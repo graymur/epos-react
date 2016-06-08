@@ -1,4 +1,5 @@
-import { PAGE_REQUEST, PAGE_SUCCESS, PAGE_FAILURE } from './actions.js';
+//import { PAGE_REQUEST, PAGE_SUCCESS, PAGE_FAILURE } from './actions.js';
+import * as constants from './constants.js';
 
 const initialState = {
     title: '',
@@ -11,7 +12,7 @@ export default function page(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        case PAGE_SUCCESS:
+        case constants.PAGE_SUCCESS:
             retval =  action.data || initialState;
             break;
 

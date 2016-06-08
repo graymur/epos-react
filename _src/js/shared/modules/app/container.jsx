@@ -1,17 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchMetaAction, clearErrorAction } from './actions.js';
+import * as actions from './actions.js';
 
 import App from './components/App.jsx';
 
 class AppContainer extends React.Component {
     componentWillReceiveProps(props) {
         if (props.params.lang !== this.props.params.lang) {
-            this.props.dispatch(fetchMetaAction(props.params.lang));
+            this.props.dispatch(actions.fetchMetaAction(props.params.lang));
         }
 
         if (this.props.meta.error && props.location.pathname !== this.props.location.pathname) {
-            this.props.dispatch(clearErrorAction());
+            this.props.dispatch(actions.clearErrorAction());
         }
     }
 

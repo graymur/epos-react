@@ -1,4 +1,4 @@
-import { CONTACTS_REQUEST, CONTACTS_SUCCESS, CONTACTS_FAILURE } from './actions.js';
+import * as constants from './constants.js';
 
 const initialState = {
     title: '',
@@ -12,7 +12,7 @@ export default function contacts(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        case CONTACTS_SUCCESS:
+        case constants.CONTACTS_SUCCESS:
             retval = action.data;
             break;
 

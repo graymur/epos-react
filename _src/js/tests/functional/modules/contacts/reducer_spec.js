@@ -1,4 +1,4 @@
-import { CONTACTS_REQUEST, CONTACTS_SUCCESS, CONTACTS_FAILURE } from 'shared/modules/contacts/actions.js';
+import * as constants from 'shared/modules/contacts/constants.js';
 import reducer from 'shared/modules/contacts/reducer.js';
 
 import {assert} from 'chai';
@@ -10,7 +10,7 @@ let initialState = {
 };
 
 let action = {
-    type: CONTACTS_SUCCESS,
+    type: constants.CONTACTS_SUCCESS,
     data: {
         test: "test"
     }

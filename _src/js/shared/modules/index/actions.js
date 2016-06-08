@@ -1,16 +1,13 @@
 import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
-
-export const INDEX_REQUEST = 'INDEX_REQUEST';
-export const INDEX_SUCCESS = 'INDEX_SUCCESS';
-export const INDEX_FAILURE = 'INDEX_FAILURE';
+import * as constants from './constants.js';
 
 export function fetchIndexAction(lang) {
     return {
         type: CALL_API,
         types: {
-            fetchingType: INDEX_REQUEST,
-            fetchedType: INDEX_SUCCESS,
-            errorType: INDEX_FAILURE
+            fetchingType: constants.INDEX_REQUEST,
+            fetchedType: constants.INDEX_SUCCESS,
+            errorType: constants.INDEX_FAILURE
         },
         lang,
         endpoint: 'index'

@@ -1,5 +1,5 @@
-import { META_REQUEST, META_SUCCESS, META_FAILURE, CLEAR_ERROR } from './actions.js';
-import { ASYNC_PENDING, ASYNC_SUCCESS, ASYNC_ERROR } from '../../redux/middleware/create-api-middleware.js';
+import * as constants from './constants.js';
+import * as apiConstants from '../../redux/middleware/create-api-middleware.js';
 
 const initialState = {
     error: false,
@@ -10,12 +10,12 @@ export default function meta(state = initialState, action = {}) {
     let retval;
 
     switch(action.type) {
-        case META_SUCCESS:
+        case constants.META_SUCCESS:
             retval = Object.assign({}, state, action.data, { error: false });
 
             break;
 
-        case ASYNC_PENDING:
+        case apiConstants.ASYNC_PENDING:
             retval = Object.assign({}, state, {
                 error: false,
                 asyncLoading: true
@@ -23,7 +23,7 @@ export default function meta(state = initialState, action = {}) {
 
             break;
 
-        case ASYNC_SUCCESS:
+        case apiConstants.ASYNC_SUCCESS:
             retval = Object.assign({}, state, {
                 error: false,
                 asyncLoading: false
@@ -31,14 +31,14 @@ export default function meta(state = initialState, action = {}) {
 
             break;
 
-        case ASYNC_ERROR:
+        case apiConstants.ASYNC_ERROR:
             retval = Object.assign({}, state, {
                 error: action.error
             });
 
             break;
 
-        case CLEAR_ERROR:
+        case constants.CLEAR_ERROR:
             retval = Object.assign({}, state, {
                 error: false
             });

@@ -1,4 +1,4 @@
-import { SPEAKERS_REQUEST, SPEAKERS_SUCCESS, SPEAKERS_FAILURE } from 'shared/modules/speakers/actions.js';
+import * as constants from 'shared/modules/speakers/constants.js';
 import reducer from 'shared/modules/speakers/reducer.js';
 
 import {assert} from 'chai';
@@ -11,7 +11,7 @@ let initialState = {
 };
 
 let action = {
-    type: SPEAKERS_SUCCESS,
+    type: constants.SPEAKERS_SUCCESS,
     data: {
         title: 'speakers',
         content: 'content',

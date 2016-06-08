@@ -1,6 +1,5 @@
-import { GALLERY_REQUEST, GALLERY_SUCCESS, GALLERY_FAILURE } from 'shared/modules/gallery/actions.js';
+import * as constants from 'shared/modules/gallery/constants.js';
 import reducer from 'shared/modules/gallery/reducer.js';
-
 import {assert} from 'chai';
 
 let initialState = {
@@ -11,7 +10,7 @@ let initialState = {
 };
 
 let action = {
-    type: GALLERY_SUCCESS,
+    type: constants.GALLERY_SUCCESS,
     data: {
         title: 'gallery',
         content: 'content',

@@ -1,18 +1,13 @@
 import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
-
-export const ASYNC_ERROR = 'ASYNC_ERROR';
-export const META_REQUEST = 'META_REQUEST';
-export const META_SUCCESS = 'META_SUCCESS';
-export const META_FAILURE = 'META_FAILURE';
-export const CLEAR_ERROR = 'CLEAR_ERROR';
+import * as constants from './constants.js';
 
 export function fetchMetaAction(lang) {
     return {
         type: CALL_API,
         types: {
-            fetchingType: META_REQUEST,
-            fetchedType: META_SUCCESS,
-            errorType: META_FAILURE
+            fetchingType: constants.META_REQUEST,
+            fetchedType: constants.META_SUCCESS,
+            errorType: constants.META_FAILURE
         },
         lang,
         endpoint: 'meta'
@@ -21,13 +16,13 @@ export function fetchMetaAction(lang) {
 
 export function errorAction(error) {
     return {
-        type: ASYNC_ERROR,
+        type: constants.ASYNC_ERROR,
         error
     };
 }
 
 export function clearErrorAction() {
     return {
-        type: CLEAR_ERROR,
+        type: constants.CLEAR_ERROR,
     };
 }
