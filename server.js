@@ -1,22 +1,28 @@
+require('dotenv').config();
+
 import express from 'express';
 import fs from 'fs';
 
 import React from 'react';
 import createLocation from 'history/lib/createLocation';
-import routes from './_src/js/shared/routes.jsx';
 import { renderToString } from 'react-dom/server'
 import { RouterContext, match } from 'react-router';
 import { Provider } from 'react-redux';
-import configureStore from './_src/js/shared/redux/configureStore.js';
-import api from './_src/js/server/api.js';
 import cropperExpress from 'cropper-express';
 import compression from 'compression';
-import { errorAction } from './_src/js/shared/modules/app/actions.js';
+
+// require is used here instead of import because imports are asynchronous and
+// in node 6.1.0 some modules are imported before dotenv and do not receive
+// env variables
+const routes = require('./_src/js/shared/routes.jsx').default;
+const configureStore = require('./_src/js/shared/redux/configureStore.js').default;
+const api = require('./_src/js/server/api.js').default;
+const errorAction = require('./_src/js/shared/modules/app/actions.js').errorAction;
 
 const port = 3000;
 const layout = fs.readFileSync('./_src/js/server/layout.html', 'utf8');
-const dv = console.log.bind(console);
 const defaultLanguage = 'en';
+
 let app = express();
 
 app.use(compression());
