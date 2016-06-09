@@ -31,11 +31,11 @@ export function normalizeRule(rule) {
     if (typeof ruleData === 'string') {
         ruleData = {
             message: ruleData
-        }
+        };
     } else if (typeof ruleData !== 'object') {
         ruleData = {
             data: ruleData
-        }
+        };
     }
 
     ruleData = Object.assign({}, { message: 'Wrong value'}, ruleData);
@@ -75,12 +75,12 @@ export function createValidator(fields, additionalMethods = {}, messages = {}) {
         }
 
         return errors;
-    }
+    };
 }
 
 export function createAsyncValidator(fields, additionalMethods = {}, messages = {}) {
     return (values, dispatch, props) => {
         var result = createValidator(fields, additionalMethods = {}, messages = {})(values);
         return Object.keys(result).length === 0 ? Promise.resolve(result) : Promise.reject(result);
-    }
+    };
 }

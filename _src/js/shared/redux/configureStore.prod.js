@@ -13,7 +13,7 @@ export default function configureStore(initialState, api) {
         //createLogger(),
         routerMiddleware(browserHistory),
         thunk,
-        createApiMiddleware(api),
+        createApiMiddleware(api)
     ];
 
     const createStoreWithMiddleware = applyMiddleware(...middleware)(createStore);

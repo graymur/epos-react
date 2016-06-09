@@ -23,6 +23,6 @@ export function errorAction(error) {
 
 export function clearErrorAction() {
     return {
-        type: constants.CLEAR_ERROR,
+        type: constants.CLEAR_ERROR
     };
 }

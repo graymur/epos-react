@@ -1,3 +1,5 @@
+/*eslint-env node*/
+
 require('dotenv').config();
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
@@ -7,7 +9,7 @@ import fs from 'fs';
 
 import React from 'react';
 import createLocation from 'history/lib/createLocation';
-import { renderToString } from 'react-dom/server'
+import { renderToString } from 'react-dom/server';
 import { RouterContext, match } from 'react-router';
 import { Provider } from 'react-redux';
 import cropperExpress from 'cropper-express';
@@ -38,6 +40,7 @@ app.use('/resize', cropperExpress({
     sourceDir: __dirname + '/public/files',
     targetDir: __dirname + '/public/resize',
     ImageMagickPath: /^win/.test(process.platform) ? 'D:/www/util/ImageMagick/convert.exe' : 'convert',
+    quality: 80,
     on404: (req, res, next) => {
         return next('Cropper error');
     }
@@ -85,11 +88,11 @@ function render(renderProps, res, store) {
 app.use('*', (req, res, next) => {
     match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
         if (err) {
-            return next(e);
+            return next(err);
         }
 
         if (redirectLocation && redirectLocation.pathname) {
-            return res.redirect(redirectLocation.pathname)
+            return res.redirect(redirectLocation.pathname);
         }
 
         let store = configureStore({ meta: req.meta }, api);
@@ -110,7 +113,7 @@ app.use(function(err, req, res, next) {
     api('meta', { lang: defaultLanguage }).then(meta => {
         match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
             if (redirectLocation && redirectLocation.pathname) {
-                return res.redirect(redirectLocation.pathname)
+                return res.redirect(redirectLocation.pathname);
             }
 
             meta.error = true;

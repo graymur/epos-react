@@ -69,7 +69,7 @@ gulp.task('lint', function () {
 gulp.task('watch', function() {
     gulp.watch(['_src/sass/**/*.sass', '_src/sass/**/*.scss'], ['css']);
     gulp.watch(['_src/svg/*.svg'], ['svg']);
-    //gulp.watch(['_src/js/**/*.js*'], ['lint']);
+    gulp.watch(['_src/js/**/*.js*'], ['lint']);
 });
 
 gulp.task('default', ['watch', 'webpack-watch']);
