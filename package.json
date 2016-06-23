@@ -33,7 +33,6 @@
     "redux-batched-actions": "^0.1.2",
     "redux-form": "^5.0.1",
     "redux-logger": "^2.6.1",
-    "redux-thunk": "^2.0.1",
     "validator": "^5.2.0"
   },
   "devDependencies": {
