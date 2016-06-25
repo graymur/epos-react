@@ -13,7 +13,7 @@ class IndexContainer extends React.Component {
     }
 
     fetchIfNeeded(props) {
-        if (this.props.routeParams.lang !== props.routeParams.lang || !props.index.length) {
+        if (this.props.routeParams.lang !== props.routeParams.lang || (!props.index.items)) {
             this.constructor.fetch({
                 dispatch: props.dispatch,
                 lang: props.params.lang
@@ -26,7 +26,7 @@ class IndexContainer extends React.Component {
     }
 
     render() {
-        return <Index index={this.props.index} lang={this.props.params.lang}/>
+        return <Index items={this.props.index.items} lang={this.props.params.lang}/>
     }
 }
 

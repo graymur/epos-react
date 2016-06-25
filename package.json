@@ -13,6 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "babel-es6-polyfill": "^1.0.1",
+    "babel-plugin-transform-regenerator": "^6.9.0",
+    "babel-polyfill": "^6.9.1",
     "babel-register": "^6.9.0",
     "compression": "^1.6.2",
     "cropper": "github:graymur/cropper",
@@ -21,6 +23,9 @@
     "express": "^4.13.4",
     "history": "^2.0.2",
     "isomorphic-fetch": "^2.2.1",
+    "koa": "^1.2.0",
+    "koa-joi-router": "^3.1.1",
+    "koa-static": "^2.0.0",
     "node-sass": "^3.4.2",
     "react": "^15.0.1",
     "react-addons-css-transition-group": "^15.0.1",
