@@ -30,8 +30,137 @@ app.use(koaStatic(__dirname + '/public'));
 import joiRouter from 'koa-joi-router';
 const router = joiRouter();
 
-router.get('/resize/*', function *() {
+var path = require('path');
+var mime = require('mime');
+var Cropper = require('cropper');
 
+function parseOptions(optionsString, allowedParams) {
+    return optionsString.split('-').reduce((carry, item) => {
+        var key = item[0];
+
+        // check if key is good
+        if (allowedParams && allowedParams.indexOf(key) === -1) {
+            throw new Error('Unexpected param');
+        }
+
+        if (!carry[key]) {
+            carry[key] = [];
+        }
+
+        carry[key].push(item.slice(1));
+        return carry;
+    }, {});
+}
+
+router.get('/resize/*', function *() {
+    var allowedParams = ['w', 'h', 't', 'm', 's', 'f'];
+
+    let sourceDir = __dirname + '/public/files';
+    let targetDir = __dirname + '/public/resize';
+    let ImageMagickPath = /^win/.test(process.platform) ? 'D:/www/util/ImageMagick/convert.exe' : 'convert';
+    let quality = 80;
+    let _, optionsString, sourceName, options, width, height, mimeType;
+
+    [_, optionsString, sourceName] = this.request.url.replace(/^\/+|\/+$/g, '').split('/');
+    let sourcePath = path.normalize(sourceDir + '/' + sourceName);
+
+    let targetFullDir = path.normalize(targetDir + '/' + optionsString);
+    let targetPath = path.normalize(targetFullDir + '/' + sourceName);
+
+    // check if file was previously created
+    if (fs.existsSync(targetPath)) {
+        this.body = fs.createReadStream(targetPath);
+        return true;
+        //return config.onSuccess.call(null, targetPath, response, mime.lookup(targetPath));
+    }
+
+    console.log('noe');
+
+    if (!fs.existsSync(sourcePath)) {
+        return config.on404.call(null, response, next);
+    }
+
+    try {
+        options = parseOptions(optionsString, allowedParams);
+    } catch (e) {
+        console.log(e);
+        //return config.on404.call(null, request, response, next, e);
+    }
+
+    mimeType = mime.lookup(sourcePath);
+
+    if (mimeType.indexOf('image') === -1) {
+        return config.on404.call(null, request, response, next, new Error('Wrong source mime type'));
+    }
+
+    if (!fs.existsSync(targetFullDir)) {
+        fs.mkdirSync(targetFullDir);
+    }
+
+    width = options.w && options.w[0] ? options.w[0] : 0;
+    height = options.h && options.h[0] ? options.h[0] : 0;
+
+    // either width or height has to be defined
+    if (!width && !height) {
+        return config.on404.call(null, request, response, next);
+    }
+
+    var cropper = (new Cropper())
+        .setIMPath(ImageMagickPath)
+        .setSource(sourcePath)
+        .setTarget(targetPath)
+        .setQuality(quality)
+    ;
+
+    // apply resize
+    switch (options.t && options.t[0])
+    {
+        case 'square':
+            cropper.square(width || height);
+            break;
+
+        case 'square_put':
+            cropper.putIntoSquare(width);
+            break;
+
+        case 'put':
+            cropper.putIntoSize(width, height);
+            break;
+
+        case 'put_out':
+            cropper.cutIntoSize(width, height);
+            break;
+
+        default:
+            var mode = cropper.RESIZE_PROPORTIONAL, w, h;
+
+            if (!width) {
+                mode = cropper.RESIZE_HEIGHT;
+            } else if (!height) {
+                mode = cropper.RESIZE_WIDTH;
+            } else {
+                mode = !options.m ? cropper.RESIZE_PROPORTIONAL : options.m
+            }
+
+            cropper.resize(width || height, height || width, mode);
+
+            break;
+    }
+
+    // apply filters
+    (options.f || []).forEach(function (filter) {
+        switch (filter) {
+            case 'gs':
+                cropper.grayscale();
+                break;
+        }
+    });
+
+    let filePath = yield cropper.commit();
+
+    this.type = mimeType;
+
+    this.body = fs.createReadStream(filePath);
 });
 
 router.get('/api/1/:endpoint', function *() {
@@ -70,7 +199,7 @@ router.route({
     method: ['GET', 'POST'],
     handler: function *() {
         const context = this;
-        let store, renderProps;
+        let store, redirectLocation, renderProps;
 
         let pathname = '/' + this.request.path.replace(/^\/+|\/+$/g, '');
 
@@ -90,6 +219,7 @@ router.route({
 
                     if (redirectLocation && redirectLocation.pathname) {
                         context.redirect(redirectLocation.pathname);
+                        resolve([redirectLocation]);
                     }
 
                     let { query, params } = renderProps;
@@ -98,12 +228,12 @@ router.route({
                     params.dispatch = store.dispatch;
 
                     (comp.fetch ? comp.fetch(params) : Promise.resolve())
-                        .then(data => resolve(renderProps))
-                        .catch(e => resolve(renderProps));
+                        .then(data => resolve([redirectLocation, renderProps]))
+                        .catch(e => resolve([redirectLocation, renderProps]));
                 });
             });
 
-            renderProps = yield matchPromise;
+            [redirectLocation, renderProps] = yield matchPromise;
         } catch (e) {
             let meta = yield api('meta', { lang: defaultLanguage });
             meta.error = String(e);
@@ -111,22 +241,22 @@ router.route({
 
             let matchPromise = new Promise((resolve, reject) => {
                 match({ routes, location: pathname }, (err, redirectLocation, renderProps) => {
-                    if (redirectLocation && redirectLocation.pathname) {
-                        context.redirect(redirectLocation.pathname);
-                    }
-
-                    resolve(renderProps);
+                    resolve([redirectLocation, renderProps]);
                 });
             });
 
-            renderProps = yield matchPromise;
+            [redirectLocation, renderProps] = yield matchPromise;
         } finally {
-            if (store.getState().meta.error) {
-                context.status = 404;
-            }
+            if (redirectLocation && redirectLocation.pathname) {
+                this.redirect(redirectLocation.pathname);
+            } else {
+                if (store.getState().meta.error) {
+                    context.status = 404;
+                }
 
-            this.body = layout.replace('{{content}}', render(store, renderProps));
-            this.body = this.body.replace('{{state}}', JSON.stringify(store.getState()));
+                this.body = layout.replace('{{content}}', render(store, renderProps));
+                this.body = this.body.replace('{{state}}', JSON.stringify(store.getState()));
+            }
         }
     }
 });
