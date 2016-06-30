@@ -74,8 +74,6 @@ router.get('/resize/*', function *() {
         //return config.onSuccess.call(null, targetPath, response, mime.lookup(targetPath));
     }
 
-    console.log('noe');
-
     if (!fs.existsSync(sourcePath)) {
         return config.on404.call(null, response, next);
     }

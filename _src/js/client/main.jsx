@@ -7,6 +7,10 @@ import configureStore from '../shared/redux/configureStore.js';
 import Root from '../shared/Root.jsx';
 import api from './api.js';
 
+window.Perf = require('react-addons-perf');
+
+//alert(window.Perf);
+
 const store = configureStore(window.__INITIAL_STATE__, api);
 
 render((
