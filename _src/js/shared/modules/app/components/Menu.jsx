@@ -11,13 +11,13 @@ export default class Menu extends React.Component {
         console.log('render');
         return (
             <ul className="main-menu">
-                {this.props.items.map(item => <MenuItem key={item.link} lang={this.props.currentLanguage} active={item.link === this.props.activeLink} {...item}/>)}
+                {this.props.items.map(item => <MenuItem key={item.link} lang={this.props.currentLanguage} active={item.link === this.props.activeLink} {...item} />)}
             </ul>
         );
     }
 }
 
 const MenuItem = ({ lang, active, link, title }) =>
-    active ?
-        <li className="main-menu__item main-menu__item--active"><span>{title}</span></li> :
-        <li className="main-menu__item"><Link to={'/' + lang + '/' + link }>{title}</Link></li>;
+    active
+        ? <li className="main-menu__item main-menu__item--active"><span>{title}</span></li>
+        : <li className="main-menu__item"><Link to={'/' + lang + '/' + link}>{title}</Link></li>;

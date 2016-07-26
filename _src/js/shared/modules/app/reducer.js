@@ -9,7 +9,7 @@ const initialState = {
 export default function meta(state = initialState, action = {}) {
     let retval;
 
-    switch(action.type) {
+    switch (action.type) {
         case constants.META_SUCCESS:
             retval = Object.assign({}, state, action.data, { error: false });
 

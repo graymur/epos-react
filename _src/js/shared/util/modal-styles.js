@@ -2,7 +2,7 @@ const modalStyles = {
     overlay: {
         backgroundColor: ''
     },
-    content : {
+    content: {
         top: '',
         left: '',
         right: '',

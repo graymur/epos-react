@@ -28,14 +28,12 @@ class GalleryContainer extends React.Component {
     }
 
     render() {
-        return <Gallery gallery={this.props.gallery}/>;
+        return <Gallery gallery={this.props.gallery} />;
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        gallery: state.gallery
-    }
-};
+const mapStateToProps = state => ({
+    gallery: state.gallery
+});
 
 export default connect(mapStateToProps)(GalleryContainer);

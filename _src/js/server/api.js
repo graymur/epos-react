@@ -1,8 +1,7 @@
 import getPages from '../../../api-js/data/pages.js';
 import getGalleries from './../../../api-js/data/gallery.js';
 import getIndex from '../../../api-js/data/index.js';
-import getMeta from '../../../api-js/data/meta.js';
-import { getLanguages } from '../../../api-js/data/meta.js';
+import getMeta, { getLanguages } from '../../../api-js/data/meta.js';
 import getSpeakers from '../../../api-js/data/speakers.js';
 import getContacts from '../../../api-js/data/contacts.js';
 

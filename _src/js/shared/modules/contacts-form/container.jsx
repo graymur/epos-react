@@ -41,26 +41,26 @@ export class ContactsForm extends React.Component {
         return (
             <div className="form-container">
                 <h3>Contacts form</h3>
-                { this.props.contactsForm.submitted ? <h4>Thank you, our message has been sent, we will contact you shortly.</h4> : null }
+                {this.props.contactsForm.submitted ? <h4>Thank you, our message has been sent, we will contact you shortly.</h4> : null}
 
                 <form ref="form" method="post" onSubmit={handleSubmit(this.props.onSubmit)}>
                     <div className="contacts__form form">
                         <label className={validationClass(['form__row'], name)}>
                             <span className="form__row__label">Your name:</span>
                             <span className="form__row__input">
-                                <input name="name" {...name}/>
+                                <input name="name" {...name} />
                             </span>
                         </label>
                         <label className={validationClass(['form__row'], email)}>
                             <span className="form__row__label">Your email:</span>
                             <span className="form__row__input">
-                                <input name="email" {...email}/>
+                                <input name="email" {...email} />
                             </span>
                         </label>
                         <label className={validationClass(['form__row'], phone)}>
                             <span className="form__row__label">Your phone:</span>
                             <span className="form__row__input">
-                                <input name="phone" {...phone}/>
+                                <input name="phone" {...phone} />
                             </span>
                         </label>
                         <label className={validationClass(['form__row'], message)}>

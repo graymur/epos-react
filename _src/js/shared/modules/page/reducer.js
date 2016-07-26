@@ -11,9 +11,9 @@ const initialState = {
 export default function page(state = initialState, action = {}) {
     let retval;
 
-    switch(action.type) {
+    switch (action.type) {
         case constants.PAGE_SUCCESS:
-            retval =  action.data || initialState;
+            retval = action.data || initialState;
             break;
 
         default:

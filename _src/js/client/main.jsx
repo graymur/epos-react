@@ -9,15 +9,10 @@ import api from './api.js';
 
 window.Perf = require('react-addons-perf');
 
-//alert(window.Perf);
-
 const store = configureStore(window.__INITIAL_STATE__, api);
 
 render((
     <Provider store={store}>
-        <Root/>
+        <Root />
     </Provider>
 ), document.getElementById('root'));
-
-
-

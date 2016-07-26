@@ -46,22 +46,8 @@ gulp.task('min', ['webpack-min'], function() {
 });
 
 gulp.task('lint', function () {
-    return gulp.src(['_src/js/**/*.js', './server.js', '!_src/js/tests/**', '!_src/js/main/vendor/**'])
-        .pipe(eslint({
-            extends: 'eslint:recommended',
-            ecmaFeatures: {
-                'modules': true
-            },
-            parser: 'babel-eslint',
-            rules: {
-                strict: 2,
-                semi: 2,
-                'no-console': 0,
-                'no-unused-vars': 0
-            },
-            globals: {},
-            envs: ['browser']
-        }))
+    return gulp.src(['_src/js/**/*.js*', './server.js', '!_src/js/tests/**', '!_src/js/main/vendor/**'])
+        .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 });

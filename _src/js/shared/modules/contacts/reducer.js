@@ -11,7 +11,7 @@ const initialState = {
 export default function contacts(state = initialState, action = {}) {
     let retval;
 
-    switch(action.type) {
+    switch (action.type) {
         case constants.CONTACTS_SUCCESS:
             retval = action.data;
             break;

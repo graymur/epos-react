@@ -9,7 +9,7 @@ export default class Image extends React.Component {
 
         this.state = {
             opened: false
-        }
+        };
     }
 
     toggleOpened(event) {
@@ -28,13 +28,13 @@ export default class Image extends React.Component {
         return (
             <a href={'/files/' + source} onClick={this.toggleOpened.bind(this)}>
                 <picture>
-                    <source media="(min-width: 769px)" srcSet={'/resize/w150-h150-tput_out-fgs/' + source}/>
-                    <source media="(min-width: 401px)" srcSet={'/resize/w768-fgs/' + source}/>
-                    <source media="(min-width: 0)" srcSet={'/resize/w400-fgs/' + source}/>
-                    <img src={'/resize/w150-h150-tput_out-fgs/' + source}/>
+                    <source media="(min-width: 769px)" srcSet={'/resize/w150-h150-tput_out-fgs/' + source} />
+                    <source media="(min-width: 401px)" srcSet={'/resize/w768-fgs/' + source} />
+                    <source media="(min-width: 0)" srcSet={'/resize/w400-fgs/' + source} />
+                    <img src={'/resize/w150-h150-tput_out-fgs/' + source} />
                 </picture>
                 <Modal isOpen={this.state.opened} onRequestClose={this.toggleOpened.bind(this)} style={modalStyles}>
-                    <ImageFull source={source} onClick={this.toggleOpened.bind(this)}/>
+                    <ImageFull source={source} onClick={this.toggleOpened.bind(this)} />
                 </Modal>
             </a>
         );

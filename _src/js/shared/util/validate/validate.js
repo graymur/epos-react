@@ -38,7 +38,7 @@ export function normalizeRule(rule) {
         };
     }
 
-    ruleData = Object.assign({}, { message: 'Wrong value'}, ruleData);
+    ruleData = Object.assign({}, { message: 'Wrong value' }, ruleData);
 
     return ruleData;
 }
@@ -47,7 +47,10 @@ export function createValidator(fields, additionalMethods = {}, messages = {}) {
     let localMethods = Object.assign({}, methods, additionalMethods);
 
     return (values) => {
-        let key, rule, errors = {}, isValid = true;
+        let key;
+        let rule;
+        let errors = {};
+        let isValid = true;
 
         for (key in fields) {
             if (!fields.hasOwnProperty(key)) continue;

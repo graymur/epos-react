@@ -38,15 +38,13 @@ class ContactsContainer extends React.Component {
     }
 
     render() {
-        return <Contacts contacts={this.props.contacts}/>;
+        return <Contacts contacts={this.props.contacts} />;
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        contacts: state.contacts
-    }
-};
+const mapStateToProps = (state) => ({
+    contacts: state.contacts
+});
 
 ContactsContainer.childContextTypes = {
     onFormSubmit: React.PropTypes.func

@@ -6,6 +6,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
 import express from 'express';
 import fs from 'fs';
+import path from 'path';
 
 import React from 'react';
 import createLocation from 'history/lib/createLocation';
@@ -37,8 +38,8 @@ app.use('/img', express.static('./public/img'));
 app.use('/js', express.static('./public/js'));
 
 app.use('/resize', cropperExpress({
-    sourceDir: __dirname + '/public/files',
-    targetDir: __dirname + '/public/resize',
+    sourceDir: path.join(__dirname, '/public/files'),
+    targetDir: path.join(__dirname, '/public/resize'),
     ImageMagickPath: /^win/.test(process.platform) ? 'D:/www/util/ImageMagick/convert.exe' : 'convert',
     quality: 80,
     on404: (req, res, next) => {
@@ -110,8 +111,16 @@ app.use('*', (req, res, next) => {
 
 // catch all error and render 404 page
 app.use(function(err, req, res, next) {
+    if (err) {
+        return false;
+    }
+
     api('meta', { lang: defaultLanguage }).then(meta => {
         match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
+            if (err) {
+                return false;
+            }
+
             if (redirectLocation && redirectLocation.pathname) {
                 return res.redirect(redirectLocation.pathname);
             }

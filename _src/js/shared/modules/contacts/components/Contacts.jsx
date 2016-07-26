@@ -7,8 +7,8 @@ import getDangerousHtml from '../../../../shared/util/get-dangerous-html.js';
 const Contacts = ({ contacts }) => {
     return (
         <PageLayout title={contacts.title}>
-            <div dangerouslySetInnerHTML={ getDangerousHtml(contacts.content) } />
-            {contacts.title ? <Form/> : ''}
+            <div dangerouslySetInnerHTML={getDangerousHtml(contacts.content)} />
+            {contacts.title ? <Form /> : ''}
         </PageLayout>
     );
 };

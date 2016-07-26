@@ -7,7 +7,7 @@ const Page = ({ page }) => {
 
     return (
         <PageLayout title={page.title}>
-            <div dangerouslySetInnerHTML={ getDangerousHtml(page.content) } />
+            <div dangerouslySetInnerHTML={getDangerousHtml(page.content)} />
         </PageLayout>
     );
 };

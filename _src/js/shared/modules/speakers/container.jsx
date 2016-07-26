@@ -27,14 +27,12 @@ class SpeakersContainer extends React.Component {
     }
 
     render() {
-        return <Speakers speakers={this.props.speakers}/>
+        return <Speakers speakers={this.props.speakers} />;
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        speakers: state.speakers
-    }
-};
+const mapStateToProps = state => ({
+    speakers: state.speakers
+});
 
 export default connect(mapStateToProps)(SpeakersContainer);

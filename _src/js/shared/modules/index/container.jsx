@@ -17,7 +17,7 @@ class IndexContainer extends React.Component {
             this.constructor.fetch({
                 dispatch: props.dispatch,
                 lang: props.params.lang
-            })
+            });
         }
     }
 
@@ -26,14 +26,12 @@ class IndexContainer extends React.Component {
     }
 
     render() {
-        return <Index items={this.props.index.items} lang={this.props.params.lang}/>
+        return <Index items={this.props.index.items} lang={this.props.params.lang} />;
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        index: state.index
-    }
-};
+const mapStateToProps = state => ({
+    index: state.index
+});
 
 export default connect(mapStateToProps)(IndexContainer);

@@ -1,6 +1,5 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
-import { combineReducers } from 'redux';
 //import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import createApiMiddleware from './middleware/create-api-middleware.js';
@@ -11,7 +10,7 @@ import reducer from './rootReducer.js';
 import { persistState } from 'redux-devtools';
 import DevTools from '../containers/DevTools.jsx';
 
-let enhancer = undefined;
+let enhancer;
 
 if (typeof window !== 'undefined' && window.location) {
     enhancer = compose(

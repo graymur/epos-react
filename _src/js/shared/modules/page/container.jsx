@@ -31,14 +31,12 @@ class PageContainer extends React.Component {
     }
 
     render() {
-        return this.props.page.title ? <Page page={this.props.page}/> : <span></span>;
+        return this.props.page.title ? <Page page={this.props.page} /> : <span></span>;
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        page: state.page
-    }
-};
+const mapStateToProps = state => ({
+    page: state.page
+});
 
 export default connect(mapStateToProps)(PageContainer);

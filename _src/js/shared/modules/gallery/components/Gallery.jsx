@@ -8,13 +8,12 @@ const Gallery = ({ gallery }) => {
 
     return (
         <PageLayout title={gallery.title}>
-            <div dangerouslySetInnerHTML={ getDangerousHtml(gallery.content) } />
+            <div dangerouslySetInnerHTML={getDangerousHtml(gallery.content)} />
             <div className="gallery">
-                {gallery.galleries.map(gallery => <Item key={gallery.title} gallery={gallery}/>)}
+                {gallery.galleries.map(gallery => <Item key={gallery.title} gallery={gallery} />)}
             </div>
         </PageLayout>
     );
 };
-
 
 export default Gallery;

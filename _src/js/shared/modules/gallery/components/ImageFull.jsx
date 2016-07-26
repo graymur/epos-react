@@ -6,7 +6,7 @@ export default class ImageFull extends React.Component {
 
         this.state = {
             loaded: false
-        }
+        };
     }
 
     componentDidMount() {
@@ -20,13 +20,13 @@ export default class ImageFull extends React.Component {
     }
 
     getSrc() {
-        return '/resize/w1000-h1000/' + this.props.source
+        return '/resize/w1000-h1000/' + this.props.source;
     }
 
     render() {
         return (
             this.state.loaded
-                ? <img src={this.getSrc()} className="gallery__big-image" onClick={this.props.onClick}/>
+                ? <img src={this.getSrc()} className="gallery__big-image" onClick={this.props.onClick} />
                 : <div className="gallery__big-image__preloader"></div>
         );
     }

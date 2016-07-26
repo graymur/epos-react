@@ -1,7 +1,5 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
-import { combineReducers } from 'redux';
-//import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import createApiMiddleware from './middleware/create-api-middleware.js';
 import { browserHistory } from 'react-router';
@@ -12,7 +10,6 @@ export default function configureStore(initialState, api) {
     const middleware = [
         //createLogger(),
         routerMiddleware(browserHistory),
-        //thunk,
         createApiMiddleware(api)
     ];
 
@@ -20,5 +17,3 @@ export default function configureStore(initialState, api) {
 
     return createStoreWithMiddleware(enableBatching(reducer), initialState);
 }
-
-

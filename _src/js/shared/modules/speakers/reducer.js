@@ -11,7 +11,7 @@ const initialState = {
 export default function speakers(state = initialState, action = {}) {
     let retval;
 
-    switch(action.type) {
+    switch (action.type) {
         case constants.SPEAKERS_SUCCESS:
             retval = action.data;
             break;

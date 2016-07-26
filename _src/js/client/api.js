@@ -4,7 +4,7 @@ let cache = {};
 const host = `${window.location.protocol}//${window.location.host}`;
 
 export default function (endpoint, data = {}, method = 'GET') {
-    let cacheKey = JSON.stringify(Object.assign({}, data, { __e__: endpoint}));
+    let cacheKey = JSON.stringify(Object.assign({}, data, { __e__: endpoint }));
 
     if (cache[cacheKey] && method === 'GET') {
         return Promise.resolve(cache[cacheKey]);
@@ -20,7 +20,6 @@ export default function (endpoint, data = {}, method = 'GET') {
                 body: JSON.stringify(data)
             };
         }
-
 
         return fetch(url, config).then(response => {
             return response.json();

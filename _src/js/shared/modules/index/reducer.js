@@ -5,7 +5,7 @@ const initialState = [];
 export default function page(state = initialState, action = {}) {
     let retval;
 
-    switch(action.type) {
+    switch (action.type) {
         case constants.INDEX_SUCCESS:
             retval = action.data;
             break;

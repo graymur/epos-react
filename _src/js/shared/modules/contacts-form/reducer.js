@@ -10,7 +10,7 @@ const initialState = {
 export default function contactsForm(state = initialState, action = {}) {
     let retval;
 
-    switch(action.type) {
+    switch (action.type) {
         case constants.CONTACTS_FORM_REQUEST:
             retval = Object.assign({}, { submitting: true });
 

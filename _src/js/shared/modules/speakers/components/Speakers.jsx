@@ -8,7 +8,7 @@ const Speakers = ({ speakers }) => {
     return (
         <PageLayout title={speakers.title}>
             <ul className="speakers__list">
-                {speakers.speakers.map(speaker => <Item key={speaker.name} speaker={speaker}/>)}
+                {speakers.speakers.map(speaker => <Item key={speaker.name} speaker={speaker} />)}
             </ul>
         </PageLayout>
     );

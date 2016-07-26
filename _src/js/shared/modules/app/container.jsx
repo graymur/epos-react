@@ -23,7 +23,7 @@ class AppContainer extends React.Component {
     }
 
     render() {
-        return <App {...this.props} asyncLoading={this.getChildContext().asyncLoading} activeLink={this.getChildContext().activeLink}/>;
+        return <App {...this.props} asyncLoading={this.getChildContext().asyncLoading} activeLink={this.getChildContext().activeLink} />;
     }
 }
 
@@ -32,10 +32,8 @@ AppContainer.childContextTypes = {
     activeLink: React.PropTypes.string
 };
 
-const mapStateToProps = (state) => {
-    return {
-        meta: state.meta
-    }
-};
+const mapStateToProps = (state) => ({
+    meta: state.meta
+});
 
 export default connect(mapStateToProps, null)(AppContainer);
