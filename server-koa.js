@@ -23,14 +23,20 @@ import koa from 'koa';
 const app = koa();
 
 // static files
-import koaStatic from 'koa-static';
-app.use(koaStatic(__dirname + '/public'));
+//import koaStatic from 'koa-static';
+//app.use(koaStatic(__dirname + '/public'));
+
+var path = require('path');
+var staticCache = require('koa-static-cache');
+
+app.use(staticCache(path.join(__dirname, 'public'), {
+    maxAge: 365 * 24 * 60 * 60
+}));
 
 // routes
 import joiRouter from 'koa-joi-router';
 const router = joiRouter();
 
-var path = require('path');
 var mime = require('mime');
 var Cropper = require('cropper');
 
