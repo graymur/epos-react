@@ -8,7 +8,6 @@ export default class Menu extends React.Component {
     }
 
     render() {
-        console.log('render');
         return (
             <ul className="main-menu">
                 {this.props.items.map(item => <MenuItem key={item.link} lang={this.props.currentLanguage} active={item.link === this.props.activeLink} {...item} />)}

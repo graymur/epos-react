@@ -8,7 +8,6 @@ export default class Languages extends React.Component {
     }
 
     render() {
-        console.log('render');
         return (
             <ul className="lang-menu">
                 {this.props.items.map(item => <LanguageItem key={item.code} active={item.code === this.props.currentLanguage} {...item} />)}

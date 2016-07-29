@@ -15,7 +15,7 @@ const App = (props) => {
 
             <header className="header">
                 <h1 className="header__title">Epos</h1>
-                <Languages items={props.meta.languages} currentLanguage={props.meta.currentLanguage} />
+                {/*<Languages items={props.meta.languages} currentLanguage={props.meta.currentLanguage} />*/}
                 <Menu items={props.meta.menu} currentLanguage={props.meta.currentLanguage} activeLink={props.activeLink} />
             </header>
 
