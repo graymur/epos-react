@@ -7,7 +7,7 @@ import { assert } from 'chai';
 import $ from 'jquery';
 
 const state = {
-    'items': [{
+    items: [{
         title: 'Item1',
         link: 'link1'
     }, {
@@ -16,12 +16,13 @@ const state = {
     }, {
         title: 'Item3',
         link: 'link3'
-    }]
+    }],
+    lang: 'en'
 };
 
 describe('Index', () => {
     it ('Renders items', () => {
-        let component = ReactTestUtils.renderIntoDocument(<div><Index index={state}/></div>);
+        let component = ReactTestUtils.renderIntoDocument(<div><Index {...state}/></div>);
         let el = $(ReactDOM.findDOMNode(component));
 
         assert.equal(el.find('.main-page__list__item').length, 3);

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "mocha-webpack _src/js/tests/**/*.js* --webpack-config webpack.config-test.js --require _src/js/tests/util/dom.js --colors",
+    "test": "mocha-webpack _src/js/tests/**/*.js* --webpack-config webpack.config-test.js --require _src/js/tests/bootstrap.js --colors",
     "tw": "npm run test -- --watch",
     "babel-node": "babel-node --presets=es2015 --modulesDirectorie='_src/js,node_modules'",
     "start": "nodemon ./server-wrapper.js"
