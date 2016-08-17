@@ -16,7 +16,7 @@ gulp.task('css', function() {
     gulp.src(['_src/sass/**/*.sass', '_src/sass/**/*.scss'])
         .pipe(compass({
             //sourcemap: true,
-            css: 'css',
+            css: './public/css',
             sass: '_src/sass',
             image: 'img'
         }))
