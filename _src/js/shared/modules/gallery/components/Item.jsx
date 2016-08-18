@@ -1,5 +1,5 @@
 import React from 'react';
-import Image from './Image.jsx';
+import Image from '../../../components/Image/Image.jsx';
 import getDangerousHtml from '../../../util/get-dangerous-html.js';
 
 const Item = ({ gallery }) => {

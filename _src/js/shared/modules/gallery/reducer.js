@@ -8,7 +8,7 @@ const initialState = {
     galleries: []
 };
 
-export default function page(state = initialState, action = {}) {
+export default function gallery(state = initialState, action = {}) {
     let retval;
 
     switch (action.type) {

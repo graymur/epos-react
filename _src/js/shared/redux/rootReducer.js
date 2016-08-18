@@ -6,6 +6,7 @@ import meta from '../modules/app/reducer.js';
 import page from '../modules/page/reducer.js';
 import speakers from '../modules/speakers/reducer.js';
 import gallery from '../modules/gallery/reducer.js';
+import news from '../modules/news/reducer.js';
 import index from '../modules/index/reducer.js';
 import contacts from '../modules/contacts/reducer.js';
 import contactsForm from '../modules/contacts-form/reducer.js';
@@ -15,6 +16,7 @@ const reducer = combineReducers({
     page,
     speakers,
     gallery,
+    news,
     index,
     contacts,
     contactsForm,

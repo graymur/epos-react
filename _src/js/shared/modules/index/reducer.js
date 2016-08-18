@@ -2,7 +2,7 @@ import * as constants from './constants.js';
 
 const initialState = [];
 
-export default function page(state = initialState, action = {}) {
+export default function index(state = initialState, action = {}) {
     let retval;
 
     switch (action.type) {
