@@ -2,14 +2,16 @@ import React from 'react';
 import PageLayout from '../../../components/PageLayout.jsx';
 import getDangerousHtml from '../../../util/get-dangerous-html.js';
 
-const Page = ({ page }) => {
-    if (page.content.length === 0) return <span></span>;
+export default class Page extends React.PureComponent {
+    render() {
+        const { page } = this.props;
 
-    return (
-        <PageLayout title={page.title}>
-            <div dangerouslySetInnerHTML={getDangerousHtml(page.content)} />
-        </PageLayout>
-    );
-};
+        if (page.content.length === 0) return <span></span>;
 
-export default Page;
+        return (
+            <PageLayout title={page.title}>
+                <div dangerouslySetInnerHTML={getDangerousHtml(page.content)} />
+            </PageLayout>
+        );
+    }
+}

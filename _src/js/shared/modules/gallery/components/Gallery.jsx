@@ -3,17 +3,19 @@ import Item from './Item.jsx';
 import PageLayout from '../../../components/PageLayout.jsx';
 import getDangerousHtml from '../../../util/get-dangerous-html.js';
 
-const Gallery = ({ gallery }) => {
-    if (gallery.galleries.length === 0) return <span></span>;
+export default class Gallery extends React.PureComponent {
+    render() {
+        const { gallery: { title, content, galleries } } = this.props;
 
-    return (
-        <PageLayout title={gallery.title}>
-            <div dangerouslySetInnerHTML={getDangerousHtml(gallery.content)} />
-            <div className="gallery">
-                {gallery.galleries.map(gallery => <Item key={gallery.title} gallery={gallery} />)}
-            </div>
-        </PageLayout>
-    );
-};
+        if (galleries.length === 0) return <span></span>;
 
-export default Gallery;
+        return (
+            <PageLayout title={title}>
+                <div dangerouslySetInnerHTML={getDangerousHtml(content)} />
+                <div className="gallery">
+                    {galleries.map(gallery => <Item key={gallery.title} gallery={gallery} />)}
+                </div>
+            </PageLayout>
+        );
+    }
+}

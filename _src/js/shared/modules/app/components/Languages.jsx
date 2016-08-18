@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-export default class Languages extends React.Component {
-    shouldComponentUpdate(nextProps) {
-        return this.props.currentLanguage !== nextProps.currentLanguage;
-    }
+export default class Languages extends React.PureComponent {
+    //shouldComponentUpdate(nextProps) {
+    //    return this.props.currentLanguage !== nextProps.currentLanguage;
+    //}
 
     render() {
         return (
@@ -16,7 +16,14 @@ export default class Languages extends React.Component {
     }
 }
 
-const LanguageItem = ({ active, code, title }) =>
-    active
-        ? <li className="lang-menu__item lang-menu__item--active"><span>{code}</span></li>
-        : <li className="lang-menu__item"><Link to={'/' + code}>{code}</Link></li>;
+class LanguageItem extends React.PureComponent {
+    render() {
+        let { active, code, title } = this.props;
+
+        return (
+            active
+                ? <li className="lang-menu__item lang-menu__item--active"><span>{code}</span></li>
+                : <li className="lang-menu__item"><Link to={'/' + code}>{code}</Link></li>
+        );
+    }
+}
