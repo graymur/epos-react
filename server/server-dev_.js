@@ -1,8 +1,8 @@
 /*eslint-env node*/
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+require('dotenv').config();
 
-const publicPath = path.resolve(__dirname + '/../public');
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
 import express from 'express';
 import fs from 'fs';
@@ -19,41 +19,42 @@ import compression from 'compression';
 // require is used here instead of import because imports are asynchronous and
 // in node 6.1.0 some modules are imported before dotenv and do not receive
 // env variables
-import routes from '../_src/js/shared/routes.jsx';
-import configureStore from '../_src/js/shared/redux/configureStore.prod.js';
-import api from '../_src/js/server/api.js';
-import { errorAction } from '../_src/js/shared/modules/app/actions.js';
+const routes = require('../_src/js/shared/routes.jsx').default;
+const configureStore = require('../_src/js/shared/redux/configureStore.js').default;
+const api = require('../_src/js/server/api.js').default;
+const errorAction = require('../_src/js/shared/modules/app/actions.js').errorAction;
 
 const port = 3000;
 const layout = fs.readFileSync('./_src/js/server/layout.html', 'utf8');
 const defaultLanguage = 'en';
 
-let app = express();
+const app = express();
 
-//app.use(compression());
+app.use(compression());
 
 /* --------------------- */
-var bundle = require('./bundle.js');
-bundle('localhost', port + 1);
+//var bundle = require('./bundle.js');
+//bundle(port + 1);
+//
+//var httpProxy = require('http-proxy');
+//var proxy = httpProxy.createProxyServer();
+//
+//app.all('/js/*', function (req, res) {
+//    proxy.web(req, res, {
+//        target: 'http://localhost:3001'
+//    });
+//});
 
-var httpProxy = require('http-proxy');
-var proxy = httpProxy.createProxyServer();
-
-app.all('/js/*', function (req, res) {
-    proxy.web(req, res, {
-        target: 'http://localhost:3001'
-    });
-});
-
-proxy.on('error', function(e) {
-    console.log('Could not connect to proxy, please try again...');
-});
+//proxy.on('error', function(e) {
+//    console.log('Could not connect to proxy, please try again...');
+//});
 /* --------------------- */
 
-app.use('/css', express.static(path.join(publicPath, 'css')));
-app.use('/files', express.static(path.join(publicPath, 'files')));
-app.use('/img', express.static(path.join(publicPath, 'img')));
-//app.use('/js', express.static(path.join(publicPath, 'js')));
+
+app.use('/css', express.static('../public/css'));
+app.use('/files', express.static('../public/files'));
+app.use('/img', express.static('../public/img'));
+app.use('/js', express.static('../public/js'));
 
 app.use('/resize', cropperExpress({
     sourceDir: path.join(__dirname, '/../public/files'),

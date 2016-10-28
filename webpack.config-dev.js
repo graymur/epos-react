@@ -1,112 +1,65 @@
+var Webpack = require('webpack');
 var path = require('path');
-var webpack = require('webpack');
-
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var CleanWebpackPlugin = require('clean-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-var autoprefixer = require('autoprefixer');
-var precss = require('precss');
-
-var validate = require('webpack-validator');
-var pkg = require('./package.json');
-
-const PATHS = {
-    app: path.join(__dirname, '_src', 'js', 'client', 'main.jsx'),
-    build: path.join(__dirname, 'public')
-};
-
-const sassLoaders = [
-    'style-loader',
-    'css-loader',
-    'postcss-loader',
-    'sass-loader'
-];
-
-var plugins = [];
+var nodeModulesPath = path.resolve(__dirname, 'node_modules');
+var buildPath = path.resolve(__dirname, 'public', 'js');
+var mainPath = path.resolve(__dirname, '_src/js/client', 'main.jsx');
 
 var config = {
-    entry: {
-        main: PATHS.app
+
+    // Makes sure errors in console map to the correct file
+    // and line number
+    devtool: 'eval',
+    entry: [
+
+        // For hot style updates
+        'webpack/hot/dev-server',
+
+        // The script refreshing the browser on none hot updates
+        'webpack-dev-server/client?http://localhost:3001',
+
+        // Our application
+        mainPath],
+    output: {
+
+        // We need to give Webpack a path. It does not actually need it,
+        // because files are kept in memory in webpack-dev-server, but an
+        // error will occur if nothing is specified. We use the buildPath
+        // as that points to where the files will eventually be bundled
+        // in production
+        path: buildPath,
+        filename: 'main.js',
+
+        // Everything related to Webpack should go through a build path,
+        // localhost:3000/build. That makes proxying easier to handle
+        publicPath: '/js/'
     },
     module: {
-        loaders: [{
-            test: /\.(scss|sass)$/,
-            loaders: sassLoaders
-        },{
-            test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
-            loader: 'url?limit=10000&mimetype=application/font-woff&name=fonts/[name].[ext]'
-        }, {
-            test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-            loader: 'url?limit=10000&mimetype=application/octet-stream&name=fonts/[name].[ext]'
-        }, {
-            test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            loader: 'file?name=fonts/[name].[ext]&name=fonts/[name].[ext]'
-        },{
-            test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-            loader: 'url?limit=10000&mimetype=image/svg+xml&name=img/[name].[ext]'
-        }]
+
+        loaders: [
+            // I highly recommend using the babel-loader as it gives you
+            // ES6/7 syntax and JSX transpiling out of the box
+            {
+                test: /\.jsx?$/,
+                loader: 'babel',
+                exclude: [nodeModulesPath],
+                query: {
+                    presets: ['es2015', 'react', 'react-hmre']
+                }
+            },
+
+            // Let us also add the style-loader and css-loader, which you can
+            // expand with less-loader etc.
+            {
+                test: /\.css$/,
+                loader: 'style!css'
+            }
+
+        ]
     },
-    output: {
-        publicPath: '/',
-        path: PATHS.build,
-        filename: '[name].js'
-    },
-    postcss: function () {
-        return [autoprefixer, precss];
-    }
+
+    // We have to manually add the Hot Replacement plugin when running
+    // from Node
+    plugins: [new Webpack.HotModuleReplacementPlugin()]
 };
-
-        var host = 'localhost';
-        var port = 3000;
-        var url = `http://${host}:${port}/`;
-
-        config.module.loaders.unshift({
-            test: /\.jsx?$/,
-            exclude: /node_modules/,
-            loaders: ['babel']
-        });
-
-        config.devtool = 'eval-source-map';
-        config.output.publicPath = url;
-
-        config.devServer = {
-            historyApiFallback: true,
-            hot: true,
-            inline: true,
-            stats: 'errors-only',
-            host: host,
-            port: port,
-            publicPath: config.output.publicPath
-        };
-
-        plugins.push(new ExtractTextPlugin('[name].css', {
-            allChunks: true
-        }));
-
-        plugins.push(new webpack.HotModuleReplacementPlugin());
-
-        config.entry.main.app = [
-            `webpack-dev-server/client/?${url}`,
-            'webpack/hot/dev-server',
-            config.entry.main.app
-        ];
-
-        config.module.preLoaders = [{
-            test: /\.(js|jsx)$/,
-            loader: 'eslint',
-            exclude: /node_modules/
-        }];
-
-        config.eslint = {
-            configFile: './.eslintrc',
-            emitWarning: true
-        };
-
-plugins.push(new HtmlWebpackPlugin({
-    template: './_src/js/server/layout.html'
-}));
-
-config.plugins = plugins;
 
 module.exports = config;
