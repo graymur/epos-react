@@ -1,4 +1,3 @@
-import { SPEAKERS_REQUEST, SPEAKERS_SUCCESS, SPEAKERS_FAILURE } from './actions.js';
 import * as constants from './constants.js';
 
 const initialState = {

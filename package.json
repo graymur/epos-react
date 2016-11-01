@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "mocha-webpack _src/js/tests/**/*.js* --webpack-config webpack.config-test.js --require _src/js/tests/bootstrap.js --colors",
+    "test": "mocha-webpack _src/js/tests/**/*.js* --webpack-config webpack/webpack.config-test.js --require _src/js/tests/bootstrap.js --colors",
     "tw": "npm run test -- --watch",
     "babel-node": "babel-node --presets=es2015 --modulesDirectorie='_src/js,node_modules'",
     "start": "better-npm-run start",
-    "dev": "better-npm-run dev"
+    "dev": "better-npm-run dev",
+    "build": "better-npm-run build"
   },
   "betterScripts": {
     "start": {
@@ -17,9 +18,15 @@
       }
     },
     "dev": {
-      "command": "nodemon ./server/server-dev-wrapper.js",
+      "command": "nodemon ./server/server-wrapper.js",
       "env": {
         "NODE_ENV": "development"
+      }
+    },
+    "build": {
+      "command": "webpack -p --config ./webpack/webpack.config-prod.js",
+      "env": {
+        "NODE_ENV": "production"
       }
     }
   },
@@ -34,7 +41,6 @@
     "compression": "^1.6.2",
     "cropper": "github:graymur/cropper",
     "cropper-express": "github:graymur/cropper-express",
-    "dotenv": "^2.0.0",
     "express": "^4.13.4",
     "history": "^2.0.2",
     "isomorphic-fetch": "^2.2.1",
@@ -47,11 +53,10 @@
     "react-modal": "^1.1.1",
     "react-redux": "^4.4.5",
     "react-router": "^2.2.4",
-    "react-router-redux": "^4.0.2",
+    "react-router-redux": "^4.0.1",
     "redux": "^3.4.0",
     "redux-batched-actions": "^0.1.2",
     "redux-form": "^5.0.1",
-    "redux-logger": "^2.6.1",
     "validator": "^5.2.0"
   },
   "devDependencies": {
@@ -64,6 +69,7 @@
     "better-npm-run": "0.0.12",
     "chai": "^3.5.0",
     "chai-spies": "^0.7.1",
+    "css-loader": "^0.25.0",
     "eslint": "^3.1.1",
     "eslint-config-standard": "^5.3.5",
     "eslint-config-standard-react": "^3.0.0",
@@ -71,28 +77,28 @@
     "eslint-plugin-promise": "^2.0.0",
     "eslint-plugin-react": "^5.2.2",
     "eslint-plugin-standard": "^2.0.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.0",
-    "gulp-compass": "^2.1.0",
-    "gulp-csso": "^2.0.0",
-    "gulp-eslint": "^2.0.0",
-    "gulp-shell": "^0.5.2",
     "gulp-svgmin": "^1.2.2",
     "gulp-util": "^3.0.7",
+    "html-webpack-plugin": "^2.24.1",
     "jquery": "^2.2.3",
     "jsdom": "^9.1.0",
     "jsx-loader": "^0.13.2",
     "koa-static-cache": "^3.1.7",
-    "koa-webpack-hot-middleware": "^1.0.3",
     "mocha": "^2.4.5",
     "mocha-webpack": "^0.3.0",
+    "postcss-loader": "^1.1.0",
+    "precss": "^1.4.0",
     "react-addons-perf": "^15.1.0",
     "react-addons-test-utils": "^15.0.1",
+    "react-hot-loader": "^3.0.0-beta.6",
     "redux-devtools": "^3.2.0",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.0.10",
+    "sass-loader": "^4.0.2",
+    "style-loader": "^0.13.1",
     "webpack": "^1.13.0",
-    "webpack-dev-middleware": "^1.8.4",
     "webpack-dev-server": "^1.16.2",
     "webpack-node-externals": "^1.2.0"
   }

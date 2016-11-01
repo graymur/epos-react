@@ -16,9 +16,6 @@ import { Provider } from 'react-redux';
 import cropperExpress from 'cropper-express';
 import compression from 'compression';
 
-// require is used here instead of import because imports are asynchronous and
-// in node 6.1.0 some modules are imported before dotenv and do not receive
-// env variables
 import routes from '../_src/js/shared/routes.jsx';
 import configureStore from '../_src/js/shared/redux/configureStore.prod.js';
 import api from '../_src/js/server/api.js';
@@ -35,7 +32,28 @@ app.use(compression());
 app.use('/css', express.static(path.join(publicPath, 'css')));
 app.use('/files', express.static(path.join(publicPath, 'files')));
 app.use('/img', express.static(path.join(publicPath, 'img')));
-app.use('/js', express.static(path.join(publicPath, 'js')));
+
+if (process.env.NODE_ENV === 'development') {
+    const wpPort = port + 1;
+    const wpHost = 'localhost';
+    var bundle = require('./webpack-dev-server.js');
+    bundle(wpHost, wpPort);
+
+    var httpProxy = require('http-proxy');
+    var proxy = httpProxy.createProxyServer();
+
+    app.all('/js/*', function (req, res) {
+        proxy.web(req, res, {
+            target: `http://${wpHost}:${wpPort}`
+        });
+    });
+
+    proxy.on('error', function(e) {
+        console.log('Could not connect to proxy, please try again...');
+    });
+} else {
+    app.use('/js', express.static(path.join(publicPath, 'js')));
+}
 
 app.use('/resize', cropperExpress({
     sourceDir: path.join(__dirname, '/../public/files'),

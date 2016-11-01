@@ -30,7 +30,7 @@ const App = (props) => {
              })}
              </ReactCSSTransitionGroup>*/}
             {content}
-            {/*<DevTools />*/}
+            {<DevTools />}
         </div>
     );
 };

@@ -1,12 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
 export default class Languages extends React.PureComponent {
-    //shouldComponentUpdate(nextProps) {
-    //    return this.props.currentLanguage !== nextProps.currentLanguage;
-    //}
-
     render() {
         return (
             <ul className="lang-menu">
@@ -18,7 +13,7 @@ export default class Languages extends React.PureComponent {
 
 class LanguageItem extends React.PureComponent {
     render() {
-        let { active, code, title } = this.props;
+        let { active, code } = this.props;
 
         return (
             active

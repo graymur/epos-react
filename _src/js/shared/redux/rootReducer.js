@@ -1,4 +1,4 @@
-import { routeReducer } from 'react-router-redux';
+import { routerReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 
@@ -21,7 +21,7 @@ const reducer = combineReducers({
     contacts,
     contactsForm,
     form: formReducer,
-    routing: routeReducer
+    routing: routerReducer
 });
 
 export default reducer;

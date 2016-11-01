@@ -50,7 +50,7 @@ export function createValidator(fields, additionalMethods = {}, messages = {}) {
         let key;
         let rule;
         let errors = {};
-        let isValid = true;
+        //let isValid = true;
 
         for (key in fields) {
             if (!fields.hasOwnProperty(key)) continue;
@@ -66,7 +66,7 @@ export function createValidator(fields, additionalMethods = {}, messages = {}) {
                 let result = localMethods[rule](values[key] || '', fieldRules[rule]);
 
                 if (!result) {
-                    isValid = false;
+                    //isValid = false;
 
                     if (messages[key] && messages[key][rule]) {
                         errors[key] = messages[key][rule];

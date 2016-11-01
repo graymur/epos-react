@@ -1,6 +1,5 @@
 import React from 'react';
-//import Form from 'shared/modules/contacts-form/container.jsx';
-import Form from '../../contacts-form/container.jsx';
+//import Form from '../../contacts-form/container.jsx';
 import PageLayout from '../../../../shared/components/PageLayout.jsx';
 import getDangerousHtml from '../../../../shared/util/get-dangerous-html.js';
 

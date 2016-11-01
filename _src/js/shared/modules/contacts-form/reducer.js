@@ -1,5 +1,5 @@
 import * as constants from './constants.js';
-import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
+//import { CALL_API } from '../../redux/middleware/create-api-middleware.js';
 
 const initialState = {
     submitting: false,

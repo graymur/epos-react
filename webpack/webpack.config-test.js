@@ -1,8 +1,11 @@
 var nodeExternals = require('webpack-node-externals');
+var path = require('path');
+
+const basePath = path.resolve(path.join(__dirname, '..'));
 
 module.exports = {
     entry: {
-        'main': './_src/js/client/main.jsx'
+        main: path.join(basePath, '_src/js/client/main.jsx')
     },
     module: {
         loaders: [{
@@ -16,8 +19,8 @@ module.exports = {
     },
     resolve: {
         extensions: ['', '.js', '.jsx'],
-        modulesDirectories: ['_src/js', 'node_modules']
+        modulesDirectories: [path.join(basePath, '_src/js'), 'node_modules']
     },
-    target: 'node', // in order to ignore built-in modules like path, fs, etc.
-    externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
+    target: 'node',
+    externals: [nodeExternals()]
 };
