@@ -74,7 +74,7 @@ app.all('/api/1/:endpoint', (req, res) => {
 // without nesting promises
 app.use((req, res, next) => {
     let path = req.path.split('/', 2);
-    let lang = path.length ? path[1] : defaultLanguage;
+    let lang = path[1] || defaultLanguage;
 
     api('meta', { lang: lang }).then(meta => {
         req.meta = meta;
@@ -125,11 +125,11 @@ app.use('*', (req, res, next) => {
     });
 });
 
-// catch all error and render 404 page
+// catch all errors and render 404 page
 app.use(function(err, req, res, next) {
-    if (err) {
-        return false;
-    }
+    //if (err) {
+    //    return false;
+    //}
 
     api('meta', { lang: defaultLanguage }).then(meta => {
         match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
