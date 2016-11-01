@@ -5,6 +5,13 @@ import * as actions from './actions.js';
 import App from './components/App.jsx';
 
 class AppContainer extends React.Component {
+    componentWillMount() {
+        const { menu } = this.props.meta;
+        if (!menu) {
+            this.props.dispatch(actions.fetchMetaAction(this.props.params.lang));
+        }
+    }
+
     componentWillReceiveProps(props) {
         if (props.params.lang !== this.props.params.lang) {
             this.props.dispatch(actions.fetchMetaAction(props.params.lang));
@@ -23,7 +30,8 @@ class AppContainer extends React.Component {
     }
 
     render() {
-        return <App {...this.props} asyncLoading={this.getChildContext().asyncLoading} activeLink={this.getChildContext().activeLink} />;
+        const { menu } = this.props.meta;
+        return menu ? <App {...this.props} asyncLoading={this.getChildContext().asyncLoading} activeLink={this.getChildContext().activeLink} /> : null;
     }
 }
 

@@ -8,6 +8,7 @@
     "babel-node": "babel-node --presets=es2015 --modulesDirectorie='_src/js,node_modules'",
     "start": "better-npm-run start",
     "dev": "better-npm-run dev",
+    "dev-no-ssr": "better-npm-run dev-no-ssr",
     "build": "better-npm-run build"
   },
   "betterScripts": {
@@ -21,6 +22,13 @@
       "command": "nodemon ./server/server-wrapper.js",
       "env": {
         "NODE_ENV": "development"
+      }
+    },
+    "dev-no-ssr": {
+      "command": "nodemon ./server/server-wrapper.js",
+      "env": {
+        "NODE_ENV": "development",
+        "DISABLE_SSR": true
       }
     },
     "build": {

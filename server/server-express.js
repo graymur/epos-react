@@ -83,20 +83,28 @@ app.use((req, res, next) => {
 });
 
 function render(renderProps, res, store) {
-    const InitialComponent = (
-        <Provider store={store}>
-            <RouterContext {...renderProps} />
-        </Provider>
-    );
+    let response = '';
 
-    let content = renderToString(InitialComponent);
+    if (process.env.DISABLE_SSR) {
+        response = layout.replace('{{content}}', '');
+        response = response.replace('{{state}}', '');
+    } else {
+        const InitialComponent = (
+            <Provider store={store}>
+                <RouterContext {...renderProps} />
+            </Provider>
+        );
 
-    let response = layout.replace('{{content}}', content);
-    response = response.replace('{{state}}', JSON.stringify(store.getState()));
+        let content = renderToString(InitialComponent);
+        response = layout.replace('{{content}}', content);
+        response = response.replace('{{state}}', `<script>var __INITIAL_STATE__ = ${JSON.stringify(store.getState())}</script>`);
+    }
 
     if (store.getState().meta.error) {
         res.status(404);
     }
+
+    console.log(response);
 
     res.setHeader('Content-Type', 'text/html');
     res.send(response);
