@@ -104,8 +104,6 @@ function render(renderProps, res, store) {
         res.status(404);
     }
 
-    console.log(response);
-
     res.setHeader('Content-Type', 'text/html');
     res.send(response);
 }

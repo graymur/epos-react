@@ -1,10 +1,14 @@
 import fetch from 'isomorphic-fetch';
 
 let cache = {};
+let promises = {};
+
 const host = `${window.location.protocol}//${window.location.host}`;
 
 export default function (endpoint, data = {}, method = 'GET') {
     let cacheKey = JSON.stringify(Object.assign({}, data, { __e__: endpoint }));
+
+    if (promises[cacheKey]) return promises[cacheKey];
 
     if (cache[cacheKey] && method === 'GET') {
         return Promise.resolve(cache[cacheKey]);
@@ -21,14 +25,19 @@ export default function (endpoint, data = {}, method = 'GET') {
             };
         }
 
-        return fetch(url, config).then(response => {
+        let retval = fetch(url, config).then(response => {
+            if (response.status >= 400) {
+                return Promise.reject(new Error(`${response.statusText}: ${url}`));
+            }
+
             return response.json();
         }).then(data => {
             cache[cacheKey] = data;
             return data;
-        }).catch(error => {
-            //console.log(error);
-            throw error;
         });
+
+        promises[cacheKey] = retval;
+
+        return retval;
     }
 }

@@ -24,13 +24,8 @@ const port = 3000;
 const defaultLanguage = 'en';
 const layout = fs.readFileSync(__dirname + '/../_src/js/server/layout.html', 'utf8');
 
-const json = arg => {
-    return JSON.stringify(arg, null, 4);
-};
-
-const dv = arg => {
-    console.log(json(arg));
-};
+const json = arg => JSON.stringify(arg, null, 4);
+const dv = arg => console.log(json(arg));
 
 const app = koa();
 
