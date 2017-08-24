@@ -39,7 +39,5 @@ export default function(endpoint, params, method) {
         } catch (e) {
             reject(e);
         }
-    }).catch(e => {
-        console.log(e);
     });
 }

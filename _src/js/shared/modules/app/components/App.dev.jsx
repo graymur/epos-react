@@ -1,6 +1,6 @@
 import React from 'react';
 import Menu from './Menu.jsx';
-import Languages from './Languages.jsx';
+// import Languages from './Languages.jsx';
 import ErrorComponent from './ErrorComponent.jsx';
 import Loader from './Loader.jsx';
 //import DevTools from '../../../containers/DevTools.jsx';
@@ -13,8 +13,8 @@ const App = (props) => {
             <Loader asyncLoading={props.asyncLoading} key="loader" />
 
             <header className="header">
-                <h1 className="header__title">Epos</h1>
-                <Languages items={props.meta.languages} currentLanguage={props.meta.currentLanguage} />
+                <h1 className="header__title"><img src="/img/logo.png" className="header__logo" /> Epos</h1>
+                {/*<Languages items={props.meta.languages} currentLanguage={props.meta.currentLanguage} />*/}
                 <Menu items={props.meta.menu} currentLanguage={props.meta.currentLanguage} activeLink={props.activeLink} />
             </header>
             {content}
