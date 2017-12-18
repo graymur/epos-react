@@ -5,15 +5,15 @@ import Page from './components/Page.jsx';
 
 class PageContainer extends React.Component {
     componentWillMount() {
-        this.fetchIfNeeded(this.props);
+        this.fetchIfNeeded(this.props, true);
     }
 
     componentWillReceiveProps(props) {
         this.fetchIfNeeded(props);
     }
 
-    fetchIfNeeded(props) {
-        if (this.props.page.lang !== props.params.lang || props.page.title !== this.props.page.title || this.props.params.splat !== props.params.splat || !this.props.page.title) {
+    fetchIfNeeded(props, forceFetch = false) {
+        if (forceFetch || this.props.page.lang !== props.params.lang || props.page.title !== this.props.page.title || this.props.params.splat !== props.params.splat || !this.props.page.title) {
             this.constructor.fetch({
                 dispatch: props.dispatch,
                 lang: props.params.lang,

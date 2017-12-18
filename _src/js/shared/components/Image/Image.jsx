@@ -33,7 +33,7 @@ export default class Image extends React.Component {
                     <source media="(min-width: 0)" srcSet={'/resize/w400-fgs/' + source} />
                     <img src={'/resize/w150-h150-tput_out-fgs/' + source} />
                 </picture>
-                <Modal isOpen={this.state.opened} onRequestClose={this.toggleOpened.bind(this)} style={modalStyles}>
+                <Modal contentLabel="" isOpen={this.state.opened} onRequestClose={this.toggleOpened.bind(this)} style={modalStyles}>
                     <ImageFull source={source} onClick={this.toggleOpened.bind(this)} />
                 </Modal>
             </a>
